@@ -68,9 +68,24 @@ def inject_styles() -> None:
           width: 200px !important;
           min-width: 200px !important;
           max-width: 200px !important;
+          transform: none !important;
+          visibility: visible !important;
         }
         section[data-testid="stSidebar"] > div:first-child {
           width: 200px !important;
+        }
+        /* Hide collapse arrow so the sidebar can't be closed */
+        button[data-testid="stSidebarCollapseButton"],
+        button[data-testid="stSidebarCollapsedControl"],
+        button[data-testid="collapsedControl"],
+        div[data-testid="stSidebarCollapseButton"],
+        div[data-testid="stSidebarCollapsedControl"] {
+          display: none !important;
+        }
+        /* Neutralise the collapsed state if it ever gets applied */
+        section[data-testid="stSidebar"][aria-expanded="false"] {
+          margin-left: 0 !important;
+          transform: none !important;
         }
         /* Hide the "nav" / radio group label above the sidebar nav */
         section[data-testid="stSidebar"] .stRadio > label,
