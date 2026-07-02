@@ -119,6 +119,55 @@ function renderRulesBar() {
   }
 }
 
+var editorHeight = 320;
+function setupResize(defaultHeight) {
+  var stored = null;
+  try { stored = parseInt(localStorage.getItem("vo_editor_height") || "", 10); } catch (e) {}
+  editorHeight = (stored && stored >= 160) ? stored : defaultHeight;
+  applyEditorHeight();
+  var handle = document.getElementById("resize-handle");
+  if (!handle) return;
+  var startY = 0;
+  var startH = editorHeight;
+  var dragging = false;
+  handle.addEventListener("pointerdown", function(e) {
+    dragging = true;
+    startY = e.clientY;
+    startH = editorHeight;
+    handle.setPointerCapture(e.pointerId);
+    document.body.style.cursor = "ns-resize";
+    e.preventDefault();
+  });
+  handle.addEventListener("pointermove", function(e) {
+    if (!dragging) return;
+    var next = startH + (e.clientY - startY);
+    if (next < 160) next = 160;
+    if (next > 1400) next = 1400;
+    editorHeight = next;
+    applyEditorHeight();
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    try { handle.releasePointerCapture(e.pointerId); } catch (err) {}
+    document.body.style.cursor = "";
+    try { localStorage.setItem("vo_editor_height", String(editorHeight)); } catch (err) {}
+    Streamlit.setFrameHeight(document.body.scrollHeight);
+    if (cm) cm.refresh();
+  }
+  handle.addEventListener("pointerup", endDrag);
+  handle.addEventListener("pointercancel", endDrag);
+}
+
+function applyEditorHeight() {
+  var cmEl = document.querySelector("#cm-wrap .CodeMirror");
+  if (cmEl) cmEl.style.height = editorHeight + "px";
+  var preview = document.getElementById("preview-panel");
+  if (preview) preview.style.height = editorHeight + "px";
+  if (cm) cm.refresh();
+  Streamlit.setFrameHeight(document.body.scrollHeight);
+}
+
 function scheduleRepaint() {
   requestAnimationFrame(function() {
     if (cm) cm.refresh();
@@ -148,7 +197,9 @@ function mountEditor(args) {
     '    <div id="preview-label">Live Preview</div>' +
     '    <div id="preview-content"></div>' +
     '  </div>' +
-    '</div>';
+    '</div>' +
+    '<div id="resize-handle" title="Drag to resize editor height"></div>';
+  setupResize(Number(args.height) || 320);
 
   counter = document.getElementById("counter");
   previewContent = document.getElementById("preview-content");

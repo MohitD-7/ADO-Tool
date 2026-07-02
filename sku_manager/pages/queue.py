@@ -82,20 +82,20 @@ def render() -> None:
         done_by  = str(row["Done By"])
 
         row_cols = st.columns([0.6, 1.9, 3.4, 1.9, 1.5, 1.3, 1.2])
-        pos_style = "padding-top:0.35rem;color:#6f8090;font-weight:700;"
+        pos_style = "padding-top:0.55rem;color:#6f8090;font-weight:700;"
         if picked_orig == orig_idx:
-            pos_style = "padding-top:0.35rem;color:#2f6f73;font-weight:800;background:#e8f4f4;border-radius:6px;padding-left:6px;"
+            pos_style = "padding-top:0.55rem;color:#2f6f73;font-weight:800;background:#e8f4f4;border-radius:6px;padding-left:6px;"
         row_cols[0].markdown(f"<div style='{pos_style}'>{pos}</div>", unsafe_allow_html=True)
         row_cols[1].markdown(
-            f"<div style='padding-top:0.35rem;font-weight:700;color:#1a2330;'>{item_no}</div>",
+            f"<div style='padding-top:0.55rem;font-weight:700;color:#1a2330;'>{item_no}</div>",
             unsafe_allow_html=True,
         )
         row_cols[2].markdown(
-            f"<div style='padding-top:0.35rem;'>{title[:90]}</div>",
+            f"<div style='padding-top:0.55rem;'>{title[:90]}</div>",
             unsafe_allow_html=True,
         )
         row_cols[3].markdown(
-            f"<div style='padding-top:0.35rem;color:#6f8090;'>{mfg}</div>",
+            f"<div style='padding-top:0.55rem;color:#6f8090;'>{mfg}</div>",
             unsafe_allow_html=True,
         )
         current_status = status if status in STATUS_OPTIONS else STATUS_OPTIONS[0]

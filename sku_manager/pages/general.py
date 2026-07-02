@@ -45,6 +45,7 @@ def render(show_header: bool = True) -> None:
             details["short_title"] = st.text_input("Short Title", value=details.get("short_title", ""), key=f"short_title_{details['item_no']}")
             character_counter(details["short_title"], LIMITS["short_title"])
         with c2:
+            st.markdown("<div class='vo-spacer-btn'></div>", unsafe_allow_html=True)
             if st.button("Copy Title", width="stretch"):
                 details["short_title"] = details["title"]
                 st.rerun()
@@ -71,14 +72,29 @@ def render(show_header: bool = True) -> None:
                 BATTERY_INFO_OPTIONS,
                 index=BATTERY_INFO_OPTIONS.index(details.get("battery_info", "no battery used")) if details.get("battery_info", "no battery used") in BATTERY_INFO_OPTIONS else 0,
             )
+        battery_disabled = details["battery_info"] == "no battery used"
         with b2:
             materials = _select_options(st.session_state["battery_materials_df"], "Battery Material")
-            details["battery_material"] = st.selectbox("Battery Material", materials, index=materials.index(details.get("battery_material", materials[0])) if details.get("battery_material", materials[0]) in materials else 0)
+            details["battery_material"] = st.selectbox(
+                "Battery Material",
+                materials,
+                index=materials.index(details.get("battery_material", materials[0])) if details.get("battery_material", materials[0]) in materials else 0,
+                disabled=battery_disabled,
+            )
         with b3:
-            details["battery_quantity"] = st.text_input("Battery Quantity", value=details.get("battery_quantity", ""), disabled=details["battery_info"] == "no battery used")
+            details["battery_quantity"] = st.text_input(
+                "Battery Quantity",
+                value=details.get("battery_quantity", ""),
+                disabled=battery_disabled,
+            )
         with b4:
             types = _select_options(st.session_state["battery_types_df"], "Battery Type")
-            details["battery_type"] = st.selectbox("Battery Type", types, index=types.index(details.get("battery_type", types[0])) if details.get("battery_type", types[0]) in types else 0)
+            details["battery_type"] = st.selectbox(
+                "Battery Type",
+                types,
+                index=types.index(details.get("battery_type", types[0])) if details.get("battery_type", types[0]) in types else 0,
+                disabled=battery_disabled,
+            )
         st.markdown("</div>", unsafe_allow_html=True)
 
         if st.button("Format Visible Text", width="stretch"):

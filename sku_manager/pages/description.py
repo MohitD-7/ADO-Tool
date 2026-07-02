@@ -30,14 +30,13 @@ def render(show_header: bool = True) -> None:
         'border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
         unsafe_allow_html=True,
     )
-    th1, th2, th3 = st.columns([4, 1, 1])
+    th1, th2 = st.columns([5, 1])
     with th1:
         st.markdown("### Product Description")
         st.caption("Use the toolbar to insert HTML tags. Type directly in HTML.")
     with th2:
-        fmt_desc = st.button("Format Description", use_container_width=True, key=f"fmt_desc_{ino}")
-    with th3:
-        fmt_all = st.button("Format All Text", use_container_width=True, key=f"fmt_all_{ino}")
+        st.markdown("<div class='vo-spacer-btn'></div>", unsafe_allow_html=True)
+        fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
 
     details["description"] = html_editor(
         value=details.get("description", ""),
@@ -48,21 +47,21 @@ def render(show_header: bool = True) -> None:
     hidden_notes(item, "description")
     st.markdown("</div>", unsafe_allow_html=True)
 
-    if fmt_desc:
-        current = sync_description_state(item)
-        formatted = format_text(current, st.session_state["special_rules_df"])
-        st.session_state[force_key] = formatted
-        details["description"] = formatted
-        st.rerun()
-    if fmt_all:
+    if fmt_click:
         current = sync_description_state(item)
         rules_df = st.session_state["special_rules_df"]
-        formatted = format_text(current, rules_df)
-        st.session_state[force_key] = formatted
-        details["description"] = formatted
+        for key in ["title", "short_title", "mfg_model", "description"]:
+            details[key] = format_text(details.get(key, ""), rules_df)
+        details["description"] = format_text(current, rules_df)
+        st.session_state[force_key] = details["description"]
         for entry in item.setdefault("includes", []):
             if entry.get("text"):
                 entry["text"] = format_text(entry["text"], rules_df)
+        item["features"]   = [format_text(str(f), rules_df) for f in item.get("features", [])]
+        item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
+        for spec in item.get("specs", []):
+            spec["Spec"]  = format_text(str(spec.get("Spec",  "") or ""), rules_df)
+            spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
         st.rerun()
 
     st.markdown(

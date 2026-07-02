@@ -84,6 +84,7 @@ def item_warnings(
         if not quantity.isdigit():
             warnings.append("Battery quantity must be numeric when battery info is selected.")
     for key, limit in [
+        ("title", LIMITS["title"]),
         ("short_title", LIMITS["short_title"]),
         ("description", LIMITS["description"]),
         ("mfg_model", LIMITS["mfg_model"]),

@@ -28,30 +28,73 @@ def inject_styles() -> None:
         }
         /* Remove the huge top padding Streamlit puts above the main content */
         .stApp > div > div > div > div {
-          padding-top: 0.5rem !important;
+          padding-top: 0 !important;
         }
+        /* Newer Streamlit builds use these testids for the main container padding */
+        div[data-testid="stMainBlockContainer"],
+        section[data-testid="stMain"] > div,
+        div[data-testid="stAppViewContainer"] > section > div,
+        div[data-testid="stAppViewBlockContainer"] {
+          padding-top: 0.25rem !important;
+          padding-bottom: 0 !important;
+        }
+        /* Kill the invisible header spacer that used to sit under the top bar */
+        div[data-testid="stHeader"] { height: 0 !important; }
         /* Tighten the gap between every block element */
         div[data-testid="stVerticalBlock"] > div {
-          gap: 0.35rem !important;
+          gap: 0.2rem !important;
         }
         div[data-testid="stVerticalBlockBorderWrapper"] {
           padding: 0 !important;
         }
         /* Column gaps */
         div[data-testid="stHorizontalBlock"] {
-          gap: 0.5rem !important;
+          gap: 0.4rem !important;
         }
         /* Expander padding */
         div[data-testid="stExpander"] details summary {
-          padding: 0.35rem 0.6rem !important;
+          padding: 0.3rem 0.6rem !important;
         }
         div[data-testid="stExpander"] details div[data-testid="stVerticalBlock"] {
-          padding: 0.4rem 0.6rem !important;
+          padding: 0.35rem 0.6rem !important;
         }
         /* Caption / small text vertical margin */
         div[data-testid="stCaptionContainer"] {
           margin-bottom: 0 !important;
           margin-top: 0 !important;
+        }
+        div[data-testid="stMarkdownContainer"] p {
+          margin-bottom: 0.2rem !important;
+        }
+
+        /* â”€â”€ Unify button heights and align with inputs â”€â”€ */
+        /* Streamlit inputs render as label + input; labels sit ~24px tall
+           (0.8rem font, line-height 1.5, plus 2px bottom margin).
+           A button next to an input has no label so it starts 24px higher.
+           .vo-spacer-btn fills that gap so button + input share a baseline. */
+        .vo-spacer-btn {
+          height: 24px !important;
+          display: block !important;
+          margin: 0 !important;
+        }
+        /* Make sure the injected spacer div doesn't get collapsed by
+           stVerticalBlock's gap rule */
+        div[data-testid="stVerticalBlock"] > div:has(> .vo-spacer-btn) {
+          margin-bottom: 0 !important;
+        }
+        /* All buttons: fixed height matches input height so rows line up. */
+        div[data-testid="stButton"] > button,
+        div[data-testid="stDownloadButton"] > button {
+          height: 34px !important;
+          min-height: 34px !important;
+          padding: 0 0.75rem !important;
+          font-size: 0.85rem !important;
+          line-height: 1 !important;
+        }
+        /* Match input height too so alignment is exact */
+        .stTextInput input, .stNumberInput input, .stSelectbox > div > div,
+        .stDateInput input {
+          min-height: 34px !important;
         }
 
         /* â”€â”€ Hide Streamlit top toolbar (Share, star, edit, GitHub, menu) â”€â”€ */
@@ -89,8 +132,12 @@ def inject_styles() -> None:
         }
         /* Hide the "nav" / radio group label above the sidebar nav */
         section[data-testid="stSidebar"] .stRadio > label,
-        section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] {
+        section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"],
+        section[data-testid="stSidebar"] div[data-testid="stWidgetLabel"],
+        section[data-testid="stSidebar"] .stRadio div[data-baseweb="form-control-label"] {
           display: none !important;
+          visibility: hidden !important;
+          height: 0 !important;
         }
         /* Nav radio items: clean, no bullets */
         section[data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
@@ -171,6 +218,22 @@ def inject_styles() -> None:
           font-weight: 700;
           font-size: .72rem;
           margin-left: .3rem;
+        }
+
+        /* Kill orphan card-wrapper divs: st.markdown('<div style="...">')
+           calls emit an unterminated <div>. The browser auto-closes it,
+           leaving an empty coloured strip. Match any div (anywhere in
+           the tree) whose inline style declares a 4px left border. */
+        div[style*="border-left:4px"],
+        div[style*="border-left: 4px"] {
+          border: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          background: transparent !important;
+          min-height: 0 !important;
+          height: 0 !important;
+          overflow: hidden !important;
+          display: none !important;
         }
 
         /* â”€â”€ Section headings â”€â”€ */
@@ -258,6 +321,18 @@ def inject_styles() -> None:
         .stSelectbox > div > div:focus-within {
           border-color: var(--vo-input-focus) !important;
           box-shadow: 0 0 0 3px rgba(47,111,115,0.18) !important;
+        }
+        /* Disabled selectboxes â€” match disabled text inputs */
+        .stSelectbox div[data-baseweb="select"][aria-disabled="true"],
+        .stSelectbox:has([aria-disabled="true"]) > div > div,
+        .stSelectbox:has(> div[disabled]) > div > div {
+          background-color: var(--vo-disabled-bg) !important;
+          border-color: #ccc !important;
+          color: var(--vo-disabled-text) !important;
+          cursor: not-allowed !important;
+        }
+        .stSelectbox:has([aria-disabled="true"]) svg {
+          opacity: 0.4 !important;
         }
 
         /* â”€â”€ Character counter â”€â”€ */

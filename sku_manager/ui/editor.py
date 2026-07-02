@@ -199,6 +199,19 @@ html, body { margin: 0; padding: 0; background: transparent;
 .bar label { display: flex; align-items: center; gap: 3px; font-size: 11px; white-space: nowrap; }
 .bar-lbl   { font-size: 11px; font-weight: 700; color: #555; white-space: nowrap; }
 #find-status { font-size: 11px; color: #555; margin-left: 4px; }
+#resize-handle {
+  height: 10px; cursor: ns-resize; user-select: none;
+  background: linear-gradient(#f4f6f8, #dde3ea);
+  border: 1px solid #8fa3b8; border-top: none;
+  border-radius: 0 0 6px 6px;
+  position: relative;
+}
+#resize-handle::before {
+  content: ""; position: absolute; left: 50%; top: 3px; transform: translateX(-50%);
+  width: 42px; height: 3px; background: #8fa3b8; border-radius: 2px;
+}
+#resize-handle:hover { background: linear-gradient(#e8f0f7, #c5d0da); }
+#resize-handle:hover::before { background: #2f6f73; }
 .rules-bar-flex { background: #fdf4e6; border-color: #e5c894; }
 .rules-label { font-size: 11px; font-weight: 800; color: #8a4d00; text-transform: uppercase; letter-spacing: .04em; margin-right: 4px; }
 .rules-empty { font-size: 11px; color: #6f8090; font-style: italic; }
