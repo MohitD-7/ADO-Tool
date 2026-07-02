@@ -17,7 +17,7 @@ def render(show_header: bool = True) -> None:
     details = item["details"]
     if show_header:
         page_header("Item Details Extraction", "Features", status=details.get("item_no"))
-    main, pane = st.columns([2.4, 1])
+    main, pane = st.columns([3.5, 1])
 
     with main:
         st.markdown(

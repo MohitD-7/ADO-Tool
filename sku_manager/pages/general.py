@@ -25,7 +25,7 @@ def render(show_header: bool = True) -> None:
     details = item["details"]
     if show_header:
         page_header("Editing SKU", details.get("title") or details.get("item_no", ""), status="In Progress")
-    main, pane = st.columns([2.4, 1])
+    main, pane = st.columns([3.5, 1])
 
     with main:
         # ── Identity section ──────────────────────────────────────────

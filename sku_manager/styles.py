@@ -54,13 +54,27 @@ def inject_styles() -> None:
           margin-top: 0 !important;
         }
 
+        /* â”€â”€ Hide Streamlit top toolbar (Share, star, edit, GitHub, menu) â”€â”€ */
+        header[data-testid="stHeader"] { display: none !important; }
+        div[data-testid="stToolbar"]  { display: none !important; }
+        div[data-testid="stDecoration"] { display: none !important; }
+        div[data-testid="stStatusWidget"] { display: none !important; }
+        #MainMenu, footer { display: none !important; }
+
         /* â”€â”€ Sidebar â”€â”€ */
         section[data-testid="stSidebar"] {
           background: #ffffff;
           border-right: 2px solid var(--vo-border);
+          width: 200px !important;
+          min-width: 200px !important;
+          max-width: 200px !important;
         }
-        /* Hide the "Workflow" radio group label */
-        section[data-testid="stSidebar"] .stRadio > label {
+        section[data-testid="stSidebar"] > div:first-child {
+          width: 200px !important;
+        }
+        /* Hide the "nav" / radio group label above the sidebar nav */
+        section[data-testid="stSidebar"] .stRadio > label,
+        section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"] {
           display: none !important;
         }
         /* Nav radio items: clean, no bullets */
