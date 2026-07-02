@@ -68,7 +68,7 @@ def render(show_header: bool = True) -> None:
             st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-    links_panel(item)
+    links_panel(item, key_suffix="features")
 
     with pane:
         right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="features_feedback")

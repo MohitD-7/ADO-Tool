@@ -166,7 +166,7 @@ def drag_reorder(labels: list[str]) -> list[int] | None:
     return coerced
 
 
-def links_panel(item: dict) -> None:
+def links_panel(item: dict, key_suffix: str = "shared") -> None:
     """
     Shared 'Links' section for every workspace tab.
 
@@ -188,7 +188,7 @@ def links_panel(item: dict) -> None:
     updated = st.text_area(
         "Links",
         value=text_value,
-        key=f"links_shared_{ino}",
+        key=f"links_{key_suffix}_{ino}",
         height=140,
         label_visibility="collapsed",
         placeholder="https://example.com/source-1\nhttps://example.com/source-2",
