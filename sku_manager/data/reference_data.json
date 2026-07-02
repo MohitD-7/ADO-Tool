@@ -1,0 +1,8924 @@
+{
+  "manufacturers": [
+    {
+      "Manufacturer": "New Brand"
+    },
+    {
+      "Manufacturer": "1010 Music"
+    },
+    {
+      "Manufacturer": "12 Survivors"
+    },
+    {
+      "Manufacturer": "16x9"
+    },
+    {
+      "Manufacturer": "1More"
+    },
+    {
+      "Manufacturer": "44401"
+    },
+    {
+      "Manufacturer": "24shots"
+    },
+    {
+      "Manufacturer": "2Box"
+    },
+    {
+      "Manufacturer": "2K"
+    },
+    {
+      "Manufacturer": "2nd Sense"
+    },
+    {
+      "Manufacturer": "3 Legged Thing"
+    },
+    {
+      "Manufacturer": "360 Electrical"
+    },
+    {
+      "Manufacturer": "360 Smart Network"
+    },
+    {
+      "Manufacturer": "360fly"
+    },
+    {
+      "Manufacturer": "360RIZE"
+    },
+    {
+      "Manufacturer": "3D Robotics"
+    },
+    {
+      "Manufacturer": "3D Systems"
+    },
+    {
+      "Manufacturer": "3Dio"
+    },
+    {
+      "Manufacturer": "3DVista"
+    },
+    {
+      "Manufacturer": "3M"
+    },
+    {
+      "Manufacturer": "3Pod"
+    },
+    {
+      "Manufacturer": "4Hawks"
+    },
+    {
+      "Manufacturer": "4id"
+    },
+    {
+      "Manufacturer": "5.11 Tactical"
+    },
+    {
+      "Manufacturer": "505 Games"
+    },
+    {
+      "Manufacturer": "7artisans"
+    },
+    {
+      "Manufacturer": "8Sinn"
+    },
+    {
+      "Manufacturer": "9.Solutions"
+    },
+    {
+      "Manufacturer": "A&J Cases"
+    },
+    {
+      "Manufacturer": "AAdynTech"
+    },
+    {
+      "Manufacturer": "Able Cine"
+    },
+    {
+      "Manufacturer": "Able Planet"
+    },
+    {
+      "Manufacturer": "Accessory Power"
+    },
+    {
+      "Manufacturer": "Accsoon"
+    },
+    {
+      "Manufacturer": "Accusonus"
+    },
+    {
+      "Manufacturer": "Accusys"
+    },
+    {
+      "Manufacturer": "AccuTrans"
+    },
+    {
+      "Manufacturer": "Acebil"
+    },
+    {
+      "Manufacturer": "Acer"
+    },
+    {
+      "Manufacturer": "Acetek"
+    },
+    {
+      "Manufacturer": "Acon Digital"
+    },
+    {
+      "Manufacturer": "Acoustica"
+    },
+    {
+      "Manufacturer": "Acoustik Attak"
+    },
+    {
+      "Manufacturer": "Acratech"
+    },
+    {
+      "Manufacturer": "ACTi"
+    },
+    {
+      "Manufacturer": "Actiontec"
+    },
+    {
+      "Manufacturer": "Active Thermal Management"
+    },
+    {
+      "Manufacturer": "Activision"
+    },
+    {
+      "Manufacturer": "Acufine"
+    },
+    {
+      "Manufacturer": "Acumen Robot Intelligence"
+    },
+    {
+      "Manufacturer": "Acute Angle"
+    },
+    {
+      "Manufacturer": "Adam Audio"
+    },
+    {
+      "Manufacturer": "ADATA"
+    },
+    {
+      "Manufacturer": "Adesso"
+    },
+    {
+      "Manufacturer": "ADJ"
+    },
+    {
+      "Manufacturer": "ADK Microphones"
+    },
+    {
+      "Manufacturer": "Adobe"
+    },
+    {
+      "Manufacturer": "Adorama"
+    },
+    {
+      "Manufacturer": "Adox"
+    },
+    {
+      "Manufacturer": "Advanced Communication System"
+    },
+    {
+      "Manufacturer": "Advantage Gripware"
+    },
+    {
+      "Manufacturer": "Aee"
+    },
+    {
+      "Manufacturer": "AEO Photo"
+    },
+    {
+      "Manufacturer": "Aeon Rabbit"
+    },
+    {
+      "Manufacturer": "AER"
+    },
+    {
+      "Manufacturer": "AeroVironment"
+    },
+    {
+      "Manufacturer": "AFI Technology"
+    },
+    {
+      "Manufacturer": "Afterglow"
+    },
+    {
+      "Manufacturer": "Agfa Photo"
+    },
+    {
+      "Manufacturer": "AIAIAI"
+    },
+    {
+      "Manufacturer": "AIDA"
+    },
+    {
+      "Manufacturer": "Aide De Camp"
+    },
+    {
+      "Manufacturer": "AIM Sports"
+    },
+    {
+      "Manufacturer": "AiPower"
+    },
+    {
+      "Manufacturer": "Air Science"
+    },
+    {
+      "Manufacturer": "Air Selfie"
+    },
+    {
+      "Manufacturer": "Airbooth"
+    },
+    {
+      "Manufacturer": "Airbox"
+    },
+    {
+      "Manufacturer": "Airfree"
+    },
+    {
+      "Manufacturer": "Airo by K-Tek"
+    },
+    {
+      "Manufacturer": "AJA"
+    },
+    {
+      "Manufacturer": "Akai"
+    },
+    {
+      "Manufacturer": "AKASO"
+    },
+    {
+      "Manufacturer": "AKG Acoustics"
+    },
+    {
+      "Manufacturer": "Akiles"
+    },
+    {
+      "Manufacturer": "AKiTiO"
+    },
+    {
+      "Manufacturer": "AKRacing"
+    },
+    {
+      "Manufacturer": "Aladdin"
+    },
+    {
+      "Manufacturer": "Alan Gordon Enterprises"
+    },
+    {
+      "Manufacturer": "Alcidae"
+    },
+    {
+      "Manufacturer": "Alctron"
+    },
+    {
+      "Manufacturer": "Alera"
+    },
+    {
+      "Manufacturer": "Aleratec"
+    },
+    {
+      "Manufacturer": "Alesis"
+    },
+    {
+      "Manufacturer": "Alfatron"
+    },
+    {
+      "Manufacturer": "Alhambra Guitars"
+    },
+    {
+      "Manufacturer": "Alibi"
+    },
+    {
+      "Manufacturer": "All Brand"
+    },
+    {
+      "Manufacturer": "Allen & Heath"
+    },
+    {
+      "Manufacturer": "Allsop"
+    },
+    {
+      "Manufacturer": "Alm"
+    },
+    {
+      "Manufacturer": "Alpen"
+    },
+    {
+      "Manufacturer": "Alphatron Broadcast Electronics"
+    },
+    {
+      "Manufacturer": "Alpine Innovations"
+    },
+    {
+      "Manufacturer": "Alpine Labs"
+    },
+    {
+      "Manufacturer": "Alter"
+    },
+    {
+      "Manufacturer": "Altman"
+    },
+    {
+      "Manufacturer": "Alto Professional"
+    },
+    {
+      "Manufacturer": "Aluratek"
+    },
+    {
+      "Manufacturer": "Alva"
+    },
+    {
+      "Manufacturer": "Alvarez"
+    },
+    {
+      "Manufacturer": "Alvin"
+    },
+    {
+      "Manufacturer": "Alzo Digital"
+    },
+    {
+      "Manufacturer": "Amaryllo"
+    },
+    {
+      "Manufacturer": "AmazFit"
+    },
+    {
+      "Manufacturer": "Amazon"
+    },
+    {
+      "Manufacturer": "Ambient Recording"
+    },
+    {
+      "Manufacturer": "Ambir"
+    },
+    {
+      "Manufacturer": "Amcrest"
+    },
+    {
+      "Manufacturer": "AMD"
+    },
+    {
+      "Manufacturer": "American DJ"
+    },
+    {
+      "Manufacturer": "American Grip"
+    },
+    {
+      "Manufacturer": "American Power Conversion (APC)"
+    },
+    {
+      "Manufacturer": "American Recorder Tech"
+    },
+    {
+      "Manufacturer": "Ampeg"
+    },
+    {
+      "Manufacturer": "Ampere"
+    },
+    {
+      "Manufacturer": "AmpliVox"
+    },
+    {
+      "Manufacturer": "AMX"
+    },
+    {
+      "Manufacturer": "An Ran"
+    },
+    {
+      "Manufacturer": "Analog Way"
+    },
+    {
+      "Manufacturer": "Anchor Audio"
+    },
+    {
+      "Manufacturer": "Andover Audio"
+    },
+    {
+      "Manufacturer": "AndyCine"
+    },
+    {
+      "Manufacturer": "A-Neutronics"
+    },
+    {
+      "Manufacturer": "A-NeuVideo"
+    },
+    {
+      "Manufacturer": "Angelbird"
+    },
+    {
+      "Manufacturer": "Angenieux"
+    },
+    {
+      "Manufacturer": "Animals Pedals"
+    },
+    {
+      "Manufacturer": "Anker"
+    },
+    {
+      "Manufacturer": "ANNSM"
+    },
+    {
+      "Manufacturer": "Ansmann"
+    },
+    {
+      "Manufacturer": "Antec"
+    },
+    {
+      "Manufacturer": "Antelope Audio"
+    },
+    {
+      "Manufacturer": "Anton Bauer"
+    },
+    {
+      "Manufacturer": "Anvil Cases"
+    },
+    {
+      "Manufacturer": "Anywhere Cart"
+    },
+    {
+      "Manufacturer": "AOC"
+    },
+    {
+      "Manufacturer": "aoni"
+    },
+    {
+      "Manufacturer": "Apache"
+    },
+    {
+      "Manufacturer": "Apai Genie"
+    },
+    {
+      "Manufacturer": "Apantac"
+    },
+    {
+      "Manufacturer": "Ape Case"
+    },
+    {
+      "Manufacturer": "Apex"
+    },
+    {
+      "Manufacturer": "Apex Gear"
+    },
+    {
+      "Manufacturer": "Aphex"
+    },
+    {
+      "Manufacturer": "Apogee Electronics"
+    },
+    {
+      "Manufacturer": "Apotop"
+    },
+    {
+      "Manufacturer": "Apple"
+    },
+    {
+      "Manufacturer": "Aputure"
+    },
+    {
+      "Manufacturer": "Aquapac"
+    },
+    {
+      "Manufacturer": "AquaTech"
+    },
+    {
+      "Manufacturer": "Arca Swiss"
+    },
+    {
+      "Manufacturer": "Arcade1Up"
+    },
+    {
+      "Manufacturer": "Archival Methods"
+    },
+    {
+      "Manufacturer": "Archivalware"
+    },
+    {
+      "Manufacturer": "Archos"
+    },
+    {
+      "Manufacturer": "Arco"
+    },
+    {
+      "Manufacturer": "Arista"
+    },
+    {
+      "Manufacturer": "Arkay"
+    },
+    {
+      "Manufacturer": "Arkon"
+    },
+    {
+      "Manufacturer": "Arlo"
+    },
+    {
+      "Manufacturer": "Arqspin"
+    },
+    {
+      "Manufacturer": "ARRI"
+    },
+    {
+      "Manufacturer": "Arriflex"
+    },
+    {
+      "Manufacturer": "Arrowhead Forensics"
+    },
+    {
+      "Manufacturer": "Arsenal"
+    },
+    {
+      "Manufacturer": "ars-imago"
+    },
+    {
+      "Manufacturer": "Art & Lutherie"
+    },
+    {
+      "Manufacturer": "Art Pro Audio"
+    },
+    {
+      "Manufacturer": "Art To Frames"
+    },
+    {
+      "Manufacturer": "Arte di Mano"
+    },
+    {
+      "Manufacturer": "Artel"
+    },
+    {
+      "Manufacturer": "Artesia"
+    },
+    {
+      "Manufacturer": "Artisan&Artist"
+    },
+    {
+      "Manufacturer": "Arturia"
+    },
+    {
+      "Manufacturer": "Aruba"
+    },
+    {
+      "Manufacturer": "Aryca"
+    },
+    {
+      "Manufacturer": "Ashdown"
+    },
+    {
+      "Manufacturer": "Ashly"
+    },
+    {
+      "Manufacturer": "Astell&Kern"
+    },
+    {
+      "Manufacturer": "Astera"
+    },
+    {
+      "Manufacturer": "Astro"
+    },
+    {
+      "Manufacturer": "Astro Gaming"
+    },
+    {
+      "Manufacturer": "ASUS"
+    },
+    {
+      "Manufacturer": "AT&T"
+    },
+    {
+      "Manufacturer": "Aten"
+    },
+    {
+      "Manufacturer": "Athentech"
+    },
+    {
+      "Manufacturer": "Athlon Optics"
+    },
+    {
+      "Manufacturer": "Atlas Camera Support"
+    },
+    {
+      "Manufacturer": "Atlas Sound"
+    },
+    {
+      "Manufacturer": "Atlona Technologies"
+    },
+    {
+      "Manufacturer": "Atmosphere Aerosol"
+    },
+    {
+      "Manufacturer": "ATN"
+    },
+    {
+      "Manufacturer": "Atoch"
+    },
+    {
+      "Manufacturer": "Atomos"
+    },
+    {
+      "Manufacturer": "ATTO Technology"
+    },
+    {
+      "Manufacturer": "Audessence"
+    },
+    {
+      "Manufacturer": "AUDEZE"
+    },
+    {
+      "Manufacturer": "Audient"
+    },
+    {
+      "Manufacturer": "Audinate"
+    },
+    {
+      "Manufacturer": "Audio & Design"
+    },
+    {
+      "Manufacturer": "Audio 2000s"
+    },
+    {
+      "Manufacturer": "Audio Developments"
+    },
+    {
+      "Manufacturer": "Audio Implements"
+    },
+    {
+      "Manufacturer": "Audio Ltd."
+    },
+    {
+      "Manufacturer": "Audionamix"
+    },
+    {
+      "Manufacturer": "AudioSource"
+    },
+    {
+      "Manufacturer": "Audio-Technica"
+    },
+    {
+      "Manufacturer": "Audiovox"
+    },
+    {
+      "Manufacturer": "Audix"
+    },
+    {
+      "Manufacturer": "August"
+    },
+    {
+      "Manufacturer": "Auralex"
+    },
+    {
+      "Manufacturer": "Auray"
+    },
+    {
+      "Manufacturer": "Auris"
+    },
+    {
+      "Manufacturer": "Auris Audio"
+    },
+    {
+      "Manufacturer": "Aurora Multimedia"
+    },
+    {
+      "Manufacturer": "Ausounds"
+    },
+    {
+      "Manufacturer": "Austin"
+    },
+    {
+      "Manufacturer": "Austrian Audio"
+    },
+    {
+      "Manufacturer": "Autel Robotics"
+    },
+    {
+      "Manufacturer": "Auto FX"
+    },
+    {
+      "Manufacturer": "Autocue/QTV"
+    },
+    {
+      "Manufacturer": "Autoscript"
+    },
+    {
+      "Manufacturer": "AV Toolbox"
+    },
+    {
+      "Manufacturer": "Avalon Design"
+    },
+    {
+      "Manufacturer": "Avanquest"
+    },
+    {
+      "Manufacturer": "Avantone Pro"
+    },
+    {
+      "Manufacturer": "Avaya"
+    },
+    {
+      "Manufacturer": "Avenger"
+    },
+    {
+      "Manufacturer": "Aver"
+    },
+    {
+      "Manufacturer": "Avermedia"
+    },
+    {
+      "Manufacturer": "Aviator"
+    },
+    {
+      "Manufacturer": "Avid"
+    },
+    {
+      "Manufacturer": "Avid Education"
+    },
+    {
+      "Manufacturer": "Avinair"
+    },
+    {
+      "Manufacturer": "Aviom"
+    },
+    {
+      "Manufacturer": "AViPAS"
+    },
+    {
+      "Manufacturer": "AVMatrix"
+    },
+    {
+      "Manufacturer": "AVPro Edge"
+    },
+    {
+      "Manufacturer": "AVtec"
+    },
+    {
+      "Manufacturer": "Awisco"
+    },
+    {
+      "Manufacturer": "Axiom"
+    },
+    {
+      "Manufacturer": "Axion"
+    },
+    {
+      "Manufacturer": "Axis Communications"
+    },
+    {
+      "Manufacturer": "Axler"
+    },
+    {
+      "Manufacturer": "Axxon"
+    },
+    {
+      "Manufacturer": "Azden"
+    },
+    {
+      "Manufacturer": "B & D"
+    },
+    {
+      "Manufacturer": "B + W"
+    },
+    {
+      "Manufacturer": "Baader Planetarium"
+    },
+    {
+      "Manufacturer": "Back-Bone"
+    },
+    {
+      "Manufacturer": "Backstage"
+    },
+    {
+      "Manufacturer": "BaLens"
+    },
+    {
+      "Manufacturer": "Bandai"
+    },
+    {
+      "Manufacturer": "Bankers Box"
+    },
+    {
+      "Manufacturer": "Barber Shop"
+    },
+    {
+      "Manufacturer": "Barber Tech"
+    },
+    {
+      "Manufacturer": "Barco"
+    },
+    {
+      "Manufacturer": "Barricks"
+    },
+    {
+      "Manufacturer": "Barska"
+    },
+    {
+      "Manufacturer": "Bartech"
+    },
+    {
+      "Manufacturer": "Bayit"
+    },
+    {
+      "Manufacturer": "BBS Lighting"
+    },
+    {
+      "Manufacturer": "BeachTek"
+    },
+    {
+      "Manufacturer": "Beats by Dr. Dre"
+    },
+    {
+      "Manufacturer": "bebob"
+    },
+    {
+      "Manufacturer": "Bebob Engineering"
+    },
+    {
+      "Manufacturer": "BEC Group"
+    },
+    {
+      "Manufacturer": "Behringer"
+    },
+    {
+      "Manufacturer": "Belden"
+    },
+    {
+      "Manufacturer": "Belkin"
+    },
+    {
+      "Manufacturer": "Bell & Howell"
+    },
+    {
+      "Manufacturer": "Bella"
+    },
+    {
+      "Manufacturer": "Belle Drape"
+    },
+    {
+      "Manufacturer": "BenQ"
+    },
+    {
+      "Manufacturer": "Benro"
+    },
+    {
+      "Manufacturer": "BeON Home"
+    },
+    {
+      "Manufacturer": "Berg"
+    },
+    {
+      "Manufacturer": "Bergger"
+    },
+    {
+      "Manufacturer": "Berkey System"
+    },
+    {
+      "Manufacturer": "Berlebach"
+    },
+    {
+      "Manufacturer": "Berrcom"
+    },
+    {
+      "Manufacturer": "Bescor"
+    },
+    {
+      "Manufacturer": "Beseler"
+    },
+    {
+      "Manufacturer": "Bespeco"
+    },
+    {
+      "Manufacturer": "Bessey"
+    },
+    {
+      "Manufacturer": "Best Service"
+    },
+    {
+      "Manufacturer": "Bestview"
+    },
+    {
+      "Manufacturer": "Beta Shell"
+    },
+    {
+      "Manufacturer": "Bethesda Softworks"
+    },
+    {
+      "Manufacturer": "Better Beamer"
+    },
+    {
+      "Manufacturer": "Beyerdynamic"
+    },
+    {
+      "Manufacturer": "B-Grip"
+    },
+    {
+      "Manufacturer": "Bianchi"
+    },
+    {
+      "Manufacturer": "Billingham"
+    },
+    {
+      "Manufacturer": "BirdDog"
+    },
+    {
+      "Manufacturer": "Birns & Sawyer"
+    },
+    {
+      "Manufacturer": "bitplay"
+    },
+    {
+      "Manufacturer": "Bittree"
+    },
+    {
+      "Manufacturer": "Black Bear Studio Systems"
+    },
+    {
+      "Manufacturer": "Black Box"
+    },
+    {
+      "Manufacturer": "Black Label Bag"
+    },
+    {
+      "Manufacturer": "Black Lion Audio"
+    },
+    {
+      "Manufacturer": "Blackhawk"
+    },
+    {
+      "Manufacturer": "Blackjet"
+    },
+    {
+      "Manufacturer": "Blackmagic Design"
+    },
+    {
+      "Manufacturer": "BlackRapid"
+    },
+    {
+      "Manufacturer": "Blackstar"
+    },
+    {
+      "Manufacturer": "BlackVue"
+    },
+    {
+      "Manufacturer": "Blade"
+    },
+    {
+      "Manufacturer": "Blindspot"
+    },
+    {
+      "Manufacturer": "Blizzard Lighting"
+    },
+    {
+      "Manufacturer": "Blockbattery"
+    },
+    {
+      "Manufacturer": "BlooPro"
+    },
+    {
+      "Manufacturer": "BLS"
+    },
+    {
+      "Manufacturer": "BLU"
+    },
+    {
+      "Manufacturer": "Blue"
+    },
+    {
+      "Manufacturer": "Blue Cat Audio"
+    },
+    {
+      "Manufacturer": "Blue Crane"
+    },
+    {
+      "Manufacturer": "Blue Jeans Cable"
+    },
+    {
+      "Manufacturer": "Blue Microphones"
+    },
+    {
+      "Manufacturer": "Blue Sky"
+    },
+    {
+      "Manufacturer": "Blue Vigil"
+    },
+    {
+      "Manufacturer": "BLUECANVAS"
+    },
+    {
+      "Manufacturer": "BlueShape"
+    },
+    {
+      "Manufacturer": "Blutec"
+    },
+    {
+      "Manufacturer": "Bodelin Technologies"
+    },
+    {
+      "Manufacturer": "Body Glove"
+    },
+    {
+      "Manufacturer": "bodymics"
+    },
+    {
+      "Manufacturer": "Bogen"
+    },
+    {
+      "Manufacturer": "BOGgear"
+    },
+    {
+      "Manufacturer": "boland"
+    },
+    {
+      "Manufacturer": "Bolex"
+    },
+    {
+      "Manufacturer": "Bolin Technology"
+    },
+    {
+      "Manufacturer": "Boling"
+    },
+    {
+      "Manufacturer": "Bolt"
+    },
+    {
+      "Manufacturer": "Bon Monitors"
+    },
+    {
+      "Manufacturer": "BongoTies"
+    },
+    {
+      "Manufacturer": "Boris FX"
+    },
+    {
+      "Manufacturer": "Bosch"
+    },
+    {
+      "Manufacturer": "Bose"
+    },
+    {
+      "Manufacturer": "Bosh"
+    },
+    {
+      "Manufacturer": "Boss"
+    },
+    {
+      "Manufacturer": "Boston Leather"
+    },
+    {
+      "Manufacturer": "Bounty Hunter"
+    },
+    {
+      "Manufacturer": "Bowens"
+    },
+    {
+      "Manufacturer": "Bower"
+    },
+    {
+      "Manufacturer": "BOYA"
+    },
+    {
+      "Manufacturer": "Boz Digital Labs"
+    },
+    {
+      "Manufacturer": "Bracket 1"
+    },
+    {
+      "Manufacturer": "Bracketron"
+    },
+    {
+      "Manufacturer": "Braun"
+    },
+    {
+      "Manufacturer": "Break-Free"
+    },
+    {
+      "Manufacturer": "Breakthrough Photography"
+    },
+    {
+      "Manufacturer": "Breathing Color"
+    },
+    {
+      "Manufacturer": "Breedlove"
+    },
+    {
+      "Manufacturer": "Brenthaven"
+    },
+    {
+      "Manufacturer": "Bresser"
+    },
+    {
+      "Manufacturer": "Bretford"
+    },
+    {
+      "Manufacturer": "Brickhouse Security"
+    },
+    {
+      "Manufacturer": "Briese Lichttechnik"
+    },
+    {
+      "Manufacturer": "Bright Tangerine"
+    },
+    {
+      "Manufacturer": "Brightcast"
+    },
+    {
+      "Manufacturer": "Brightin Star"
+    },
+    {
+      "Manufacturer": "BrightSign"
+    },
+    {
+      "Manufacturer": "BRINC Drones"
+    },
+    {
+      "Manufacturer": "Brinkmann"
+    },
+    {
+      "Manufacturer": "Brinno"
+    },
+    {
+      "Manufacturer": "Brite Strike"
+    },
+    {
+      "Manufacturer": "BRNO"
+    },
+    {
+      "Manufacturer": "Broadcast Pix"
+    },
+    {
+      "Manufacturer": "Bron Kobold"
+    },
+    {
+      "Manufacturer": "Broncolor"
+    },
+    {
+      "Manufacturer": "Brother"
+    },
+    {
+      "Manufacturer": "Browning"
+    },
+    {
+      "Manufacturer": "Brunton"
+    },
+    {
+      "Manufacturer": "Brydge"
+    },
+    {
+      "Manufacturer": "BSA Optics"
+    },
+    {
+      "Manufacturer": "BSS"
+    },
+    {
+      "Manufacturer": "Bubblebee Industries"
+    },
+    {
+      "Manufacturer": "BucknBear"
+    },
+    {
+      "Manufacturer": "Buffalo Technology"
+    },
+    {
+      "Manufacturer": "Bugera"
+    },
+    {
+      "Manufacturer": "Bulldog"
+    },
+    {
+      "Manufacturer": "BulletX"
+    },
+    {
+      "Manufacturer": "Burris Optics"
+    },
+    {
+      "Manufacturer": "Burson Audio"
+    },
+    {
+      "Manufacturer": "Burst Electronics"
+    },
+    {
+      "Manufacturer": "Bush Baby"
+    },
+    {
+      "Manufacturer": "Bushnell"
+    },
+    {
+      "Manufacturer": "BVDA America"
+    },
+    {
+      "Manufacturer": "BZB GEAR"
+    },
+    {
+      "Manufacturer": "C2G"
+    },
+    {
+      "Manufacturer": "Cable Techniques"
+    },
+    {
+      "Manufacturer": "Cactus"
+    },
+    {
+      "Manufacturer": "CAD Audio"
+    },
+    {
+      "Manufacturer": "CalDigit"
+    },
+    {
+      "Manufacturer": "Caldwell"
+    },
+    {
+      "Manufacturer": "Calibrated Software"
+    },
+    {
+      "Manufacturer": "Calibrite"
+    },
+    {
+      "Manufacturer": "Califone"
+    },
+    {
+      "Manufacturer": "Calumet"
+    },
+    {
+      "Manufacturer": "Cam Caddie"
+    },
+    {
+      "Manufacturer": "Cambo"
+    },
+    {
+      "Manufacturer": "Camdapter"
+    },
+    {
+      "Manufacturer": "Cameleon"
+    },
+    {
+      "Manufacturer": "Cameo"
+    },
+    {
+      "Manufacturer": "CAMEOGEAR"
+    },
+    {
+      "Manufacturer": "Camera Armor"
+    },
+    {
+      "Manufacturer": "Camera Motion Research"
+    },
+    {
+      "Manufacturer": "Camera Muzzle"
+    },
+    {
+      "Manufacturer": "Came-TV"
+    },
+    {
+      "Manufacturer": "Camgear"
+    },
+    {
+      "Manufacturer": "CampCo"
+    },
+    {
+      "Manufacturer": "Camplex"
+    },
+    {
+      "Manufacturer": "camRade"
+    },
+    {
+      "Manufacturer": "CamRanger"
+    },
+    {
+      "Manufacturer": "Camtree"
+    },
+    {
+      "Manufacturer": "CAMVATE"
+    },
+    {
+      "Manufacturer": "Canare"
+    },
+    {
+      "Manufacturer": "Canatrans"
+    },
+    {
+      "Manufacturer": "Candreva"
+    },
+    {
+      "Manufacturer": "CANLess"
+    },
+    {
+      "Manufacturer": "Canon"
+    },
+    {
+      "Manufacturer": "Canson Infinity"
+    },
+    {
+      "Manufacturer": "Canvia"
+    },
+    {
+      "Manufacturer": "CAO Group"
+    },
+    {
+      "Manufacturer": "Capcom"
+    },
+    {
+      "Manufacturer": "Capture One"
+    },
+    {
+      "Manufacturer": "Capturing Couture"
+    },
+    {
+      "Manufacturer": "Car and Driver"
+    },
+    {
+      "Manufacturer": "Caresour"
+    },
+    {
+      "Manufacturer": "Carl"
+    },
+    {
+      "Manufacturer": "Carlsbro"
+    },
+    {
+      "Manufacturer": "Carson"
+    },
+    {
+      "Manufacturer": "Cartoni"
+    },
+    {
+      "Manufacturer": "CasaCam"
+    },
+    {
+      "Manufacturer": "Cascade Microphones"
+    },
+    {
+      "Manufacturer": "Case Club"
+    },
+    {
+      "Manufacturer": "Case Logic"
+    },
+    {
+      "Manufacturer": "Casematix"
+    },
+    {
+      "Manufacturer": "CASEPH"
+    },
+    {
+      "Manufacturer": "Casio"
+    },
+    {
+      "Manufacturer": "Cassida"
+    },
+    {
+      "Manufacturer": "Cavision"
+    },
+    {
+      "Manufacturer": "CBL"
+    },
+    {
+      "Manufacturer": "Cecilia Gallery"
+    },
+    {
+      "Manufacturer": "CEDAR Audio"
+    },
+    {
+      "Manufacturer": "Celemony"
+    },
+    {
+      "Manufacturer": "Celestion"
+    },
+    {
+      "Manufacturer": "Celestron"
+    },
+    {
+      "Manufacturer": "Centrance"
+    },
+    {
+      "Manufacturer": "Century Optics"
+    },
+    {
+      "Manufacturer": "Cerevo"
+    },
+    {
+      "Manufacturer": "Cerwin Vega"
+    },
+    {
+      "Manufacturer": "Cesco"
+    },
+    {
+      "Manufacturer": "Cetis"
+    },
+    {
+      "Manufacturer": "Charvel"
+    },
+    {
+      "Manufacturer": "CHASING"
+    },
+    {
+      "Manufacturer": "CHAUVET DJ"
+    },
+    {
+      "Manufacturer": "CHAUVET Professional"
+    },
+    {
+      "Manufacturer": "CheetahStand"
+    },
+    {
+      "Manufacturer": "Chem Seal"
+    },
+    {
+      "Manufacturer": "Chiaro"
+    },
+    {
+      "Manufacturer": "Chief"
+    },
+    {
+      "Manufacturer": "Chimera"
+    },
+    {
+      "Manufacturer": "Christie Digital"
+    },
+    {
+      "Manufacturer": "ChromaCast"
+    },
+    {
+      "Manufacturer": "Chroma-Q"
+    },
+    {
+      "Manufacturer": "Chrome"
+    },
+    {
+      "Manufacturer": "Chrosziel"
+    },
+    {
+      "Manufacturer": "ChyTv"
+    },
+    {
+      "Manufacturer": "CI Games"
+    },
+    {
+      "Manufacturer": "CineBags"
+    },
+    {
+      "Manufacturer": "CineCoil"
+    },
+    {
+      "Manufacturer": "Cinegears"
+    },
+    {
+      "Manufacturer": "cinema [OXIDE]"
+    },
+    {
+      "Manufacturer": "Cinema Devices"
+    },
+    {
+      "Manufacturer": "CineMilled"
+    },
+    {
+      "Manufacturer": "Cineo Lighting"
+    },
+    {
+      "Manufacturer": "Cineroid"
+    },
+    {
+      "Manufacturer": "CineStill"
+    },
+    {
+      "Manufacturer": "Cinetactics"
+    },
+    {
+      "Manufacturer": "Cinetics"
+    },
+    {
+      "Manufacturer": "Cinevate"
+    },
+    {
+      "Manufacturer": "Cisco"
+    },
+    {
+      "Manufacturer": "CLAR"
+    },
+    {
+      "Manufacturer": "Clarity"
+    },
+    {
+      "Manufacturer": "Class On Demand"
+    },
+    {
+      "Manufacturer": "Clauss"
+    },
+    {
+      "Manufacturer": "Cleace"
+    },
+    {
+      "Manufacturer": "ClearBags"
+    },
+    {
+      "Manufacturer": "Clear-Com"
+    },
+    {
+      "Manufacturer": "ClearOne"
+    },
+    {
+      "Manufacturer": "ClearSonic"
+    },
+    {
+      "Manufacturer": "ClearSounds"
+    },
+    {
+      "Manufacturer": "Click Props"
+    },
+    {
+      "Manufacturer": "Clik Elite"
+    },
+    {
+      "Manufacturer": "Clipper Products"
+    },
+    {
+      "Manufacturer": "Clockaudio"
+    },
+    {
+      "Manufacturer": "Clocky"
+    },
+    {
+      "Manufacturer": "Cloud Microphones"
+    },
+    {
+      "Manufacturer": "CLX"
+    },
+    {
+      "Manufacturer": "CME"
+    },
+    {
+      "Manufacturer": "Coast"
+    },
+    {
+      "Manufacturer": "Cobalt"
+    },
+    {
+      "Manufacturer": "Cobra"
+    },
+    {
+      "Manufacturer": "CobraCrane"
+    },
+    {
+      "Manufacturer": "Cocoon"
+    },
+    {
+      "Manufacturer": "Codex"
+    },
+    {
+      "Manufacturer": "CODi"
+    },
+    {
+      "Manufacturer": "Coffin"
+    },
+    {
+      "Manufacturer": "Cokin"
+    },
+    {
+      "Manufacturer": "Coleman"
+    },
+    {
+      "Manufacturer": "Coles Electroacoustics"
+    },
+    {
+      "Manufacturer": "Collectors Gallery"
+    },
+    {
+      "Manufacturer": "Colorado Drone Chargers"
+    },
+    {
+      "Manufacturer": "Colorado Tripod Co."
+    },
+    {
+      "Manufacturer": "ColorKey"
+    },
+    {
+      "Manufacturer": "Comer"
+    },
+    {
+      "Manufacturer": "Comica"
+    },
+    {
+      "Manufacturer": "Command Arms"
+    },
+    {
+      "Manufacturer": "Commander Optics"
+    },
+    {
+      "Manufacturer": "Commlite"
+    },
+    {
+      "Manufacturer": "COMMON SENSE RC"
+    },
+    {
+      "Manufacturer": "Comprehensive"
+    },
+    {
+      "Manufacturer": "Comrex"
+    },
+    {
+      "Manufacturer": "Comtek"
+    },
+    {
+      "Manufacturer": "Conair"
+    },
+    {
+      "Manufacturer": "CONEQ"
+    },
+    {
+      "Manufacturer": "Conex Electro Systems"
+    },
+    {
+      "Manufacturer": "Connex"
+    },
+    {
+      "Manufacturer": "Contax"
+    },
+    {
+      "Manufacturer": "Contour Design"
+    },
+    {
+      "Manufacturer": "Convergent Design"
+    },
+    {
+      "Manufacturer": "Cooke"
+    },
+    {
+      "Manufacturer": "Cool Guy Lights"
+    },
+    {
+      "Manufacturer": "Cool Lights"
+    },
+    {
+      "Manufacturer": "CoolerMaster"
+    },
+    {
+      "Manufacturer": "Cool-Lux"
+    },
+    {
+      "Manufacturer": "Cooph"
+    },
+    {
+      "Manufacturer": "Copgear"
+    },
+    {
+      "Manufacturer": "CoPilot"
+    },
+    {
+      "Manufacturer": "COR Surf"
+    },
+    {
+      "Manufacturer": "Core Sound"
+    },
+    {
+      "Manufacturer": "Core SWX"
+    },
+    {
+      "Manufacturer": "Corel"
+    },
+    {
+      "Manufacturer": "Coronado"
+    },
+    {
+      "Manufacturer": "Corsair"
+    },
+    {
+      "Manufacturer": "Cortelco"
+    },
+    {
+      "Manufacturer": "Cosmicar"
+    },
+    {
+      "Manufacturer": "Cosori"
+    },
+    {
+      "Manufacturer": "Cotton Carrier"
+    },
+    {
+      "Manufacturer": "Cotytech"
+    },
+    {
+      "Manufacturer": "Cougar"
+    },
+    {
+      "Manufacturer": "Countryman"
+    },
+    {
+      "Manufacturer": "COURUI"
+    },
+    {
+      "Manufacturer": "Cowboy Studio"
+    },
+    {
+      "Manufacturer": "Craig"
+    },
+    {
+      "Manufacturer": "Creamsource"
+    },
+    {
+      "Manufacturer": "Creative Labs"
+    },
+    {
+      "Manufacturer": "Crest Audio"
+    },
+    {
+      "Manufacturer": "Crestron"
+    },
+    {
+      "Manufacturer": "Crimson AV"
+    },
+    {
+      "Manufacturer": "Crimson Trace"
+    },
+    {
+      "Manufacturer": "CRKT"
+    },
+    {
+      "Manufacturer": "Crown Audio"
+    },
+    {
+      "Manufacturer": "Crucial"
+    },
+    {
+      "Manufacturer": "Crumpler"
+    },
+    {
+      "Manufacturer": "Crush Drums"
+    },
+    {
+      "Manufacturer": "Crystal Video Technology"
+    },
+    {
+      "Manufacturer": "CSI Forensic Supply"
+    },
+    {
+      "Manufacturer": "CTA Digital"
+    },
+    {
+      "Manufacturer": "Cubix"
+    },
+    {
+      "Manufacturer": "Cuebi"
+    },
+    {
+      "Manufacturer": "Cullmann"
+    },
+    {
+      "Manufacturer": "Custom Brackets"
+    },
+    {
+      "Manufacturer": "Custom SLR"
+    },
+    {
+      "Manufacturer": "Cyber Acoustics"
+    },
+    {
+      "Manufacturer": "CyberLink"
+    },
+    {
+      "Manufacturer": "CyberPower"
+    },
+    {
+      "Manufacturer": "CyberPowerPC"
+    },
+    {
+      "Manufacturer": "Cymatic Audio"
+    },
+    {
+      "Manufacturer": "CYNOVA"
+    },
+    {
+      "Manufacturer": "Cytop"
+    },
+    {
+      "Manufacturer": "D&K"
+    },
+    {
+      "Manufacturer": "D|Focus Systems"
+    },
+    {
+      "Manufacturer": "D16 Group"
+    },
+    {
+      "Manufacturer": "D'Addario"
+    },
+    {
+      "Manufacturer": "Dahle"
+    },
+    {
+      "Manufacturer": "Dahua"
+    },
+    {
+      "Manufacturer": "Dakota Alert"
+    },
+    {
+      "Manufacturer": "Da-Lite"
+    },
+    {
+      "Manufacturer": "DanaDolly"
+    },
+    {
+      "Manufacturer": "D'Angelico Guitars"
+    },
+    {
+      "Manufacturer": "DARTdrones"
+    },
+    {
+      "Manufacturer": "Darter"
+    },
+    {
+      "Manufacturer": "Das Keyboard"
+    },
+    {
+      "Manufacturer": "Data Robotics"
+    },
+    {
+      "Manufacturer": "Datacard"
+    },
+    {
+      "Manufacturer": "Datacolor"
+    },
+    {
+      "Manufacturer": "Datavideo"
+    },
+    {
+      "Manufacturer": "Davidson"
+    },
+    {
+      "Manufacturer": "Davis & Sanford"
+    },
+    {
+      "Manufacturer": "dB Technologies"
+    },
+    {
+      "Manufacturer": "DBX"
+    },
+    {
+      "Manufacturer": "Ddrum"
+    },
+    {
+      "Manufacturer": "Dean Guitars"
+    },
+    {
+      "Manufacturer": "Dean Markley"
+    },
+    {
+      "Manufacturer": "Decimator"
+    },
+    {
+      "Manufacturer": "Decksaver"
+    },
+    {
+      "Manufacturer": "Dedolight"
+    },
+    {
+      "Manufacturer": "Deejay LED"
+    },
+    {
+      "Manufacturer": "Defense Technology"
+    },
+    {
+      "Manufacturer": "Definitive Technology"
+    },
+    {
+      "Manufacturer": "Defy"
+    },
+    {
+      "Manufacturer": "Deity"
+    },
+    {
+      "Manufacturer": "Deity Microphones"
+    },
+    {
+      "Manufacturer": "Dekoni Audio"
+    },
+    {
+      "Manufacturer": "Delkin Devices"
+    },
+    {
+      "Manufacturer": "Dell"
+    },
+    {
+      "Manufacturer": "Delsey"
+    },
+    {
+      "Manufacturer": "Delta"
+    },
+    {
+      "Manufacturer": "DeluxGear"
+    },
+    {
+      "Manufacturer": "Delvcam"
+    },
+    {
+      "Manufacturer": "Denecke"
+    },
+    {
+      "Manufacturer": "Denon"
+    },
+    {
+      "Manufacturer": "Denon Pro"
+    },
+    {
+      "Manufacturer": "DeSisti"
+    },
+    {
+      "Manufacturer": "DetectaChem"
+    },
+    {
+      "Manufacturer": "Dg Foto Art"
+    },
+    {
+      "Manufacturer": "DgFlick"
+    },
+    {
+      "Manufacturer": "DGK Color Tools"
+    },
+    {
+      "Manufacturer": "DiCAPac"
+    },
+    {
+      "Manufacturer": "Digieffects"
+    },
+    {
+      "Manufacturer": "DiGiGrid"
+    },
+    {
+      "Manufacturer": "DigiPower"
+    },
+    {
+      "Manufacturer": "Digital Advance"
+    },
+    {
+      "Manufacturer": "Digital Forecast"
+    },
+    {
+      "Manufacturer": "Digital Innovations"
+    },
+    {
+      "Manufacturer": "Digital Juice"
+    },
+    {
+      "Manufacturer": "Digital Watchdog"
+    },
+    {
+      "Manufacturer": "DigitalFoto Solution Limited"
+    },
+    {
+      "Manufacturer": "DigiTech"
+    },
+    {
+      "Manufacturer": "Dinkum Systems"
+    },
+    {
+      "Manufacturer": "Diva Ring Light"
+    },
+    {
+      "Manufacturer": "DiVal"
+    },
+    {
+      "Manufacturer": "Dixon"
+    },
+    {
+      "Manufacturer": "DIY Photography"
+    },
+    {
+      "Manufacturer": "DJ Tech"
+    },
+    {
+      "Manufacturer": "DJI"
+    },
+    {
+      "Manufacturer": "DLC"
+    },
+    {
+      "Manufacturer": "D-Link"
+    },
+    {
+      "Manufacturer": "DM Accessories"
+    },
+    {
+      "Manufacturer": "DMG Lumiere"
+    },
+    {
+      "Manufacturer": "DNP"
+    },
+    {
+      "Manufacturer": "Doiron Design"
+    },
+    {
+      "Manufacturer": "Doje's"
+    },
+    {
+      "Manufacturer": "Dolgin Engineering"
+    },
+    {
+      "Manufacturer": "Dolica"
+    },
+    {
+      "Manufacturer": "Domke"
+    },
+    {
+      "Manufacturer": "Don Zeck"
+    },
+    {
+      "Manufacturer": "Dot Line"
+    },
+    {
+      "Manufacturer": "Dotec Audio"
+    },
+    {
+      "Manufacturer": "DotProduct"
+    },
+    {
+      "Manufacturer": "Dotz"
+    },
+    {
+      "Manufacturer": "DPA Microphones"
+    },
+    {
+      "Manufacturer": "DPVR"
+    },
+    {
+      "Manufacturer": "Dr. Battery"
+    },
+    {
+      "Manufacturer": "Dracast"
+    },
+    {
+      "Manufacturer": "Draganfly Innovations"
+    },
+    {
+      "Manufacturer": "Dragon Frame"
+    },
+    {
+      "Manufacturer": "Draper"
+    },
+    {
+      "Manufacturer": "Dropcam"
+    },
+    {
+      "Manufacturer": "Dry Lam"
+    },
+    {
+      "Manufacturer": "DSAN"
+    },
+    {
+      "Manufacturer": "DSC Labs"
+    },
+    {
+      "Manufacturer": "D-Skin"
+    },
+    {
+      "Manufacturer": "DSTE"
+    },
+    {
+      "Manufacturer": "Dual Electronics"
+    },
+    {
+      "Manufacturer": "dubblefilm"
+    },
+    {
+      "Manufacturer": "Duclos"
+    },
+    {
+      "Manufacturer": "Dunlop"
+    },
+    {
+      "Manufacturer": "Duracell"
+    },
+    {
+      "Manufacturer": "Duracraft"
+    },
+    {
+      "Manufacturer": "DVTEC"
+    },
+    {
+      "Manufacturer": "Dwarf Connection"
+    },
+    {
+      "Manufacturer": "Dymo"
+    },
+    {
+      "Manufacturer": "Dynacord"
+    },
+    {
+      "Manufacturer": "Dynacore"
+    },
+    {
+      "Manufacturer": "Dynalite"
+    },
+    {
+      "Manufacturer": "Dynamic Perception"
+    },
+    {
+      "Manufacturer": "Dynamite"
+    },
+    {
+      "Manufacturer": "DynaMount"
+    },
+    {
+      "Manufacturer": "Dynaphos"
+    },
+    {
+      "Manufacturer": "Dynatran"
+    },
+    {
+      "Manufacturer": "Dynaudio"
+    },
+    {
+      "Manufacturer": "DZOFILM"
+    },
+    {
+      "Manufacturer": "e2Work"
+    },
+    {
+      "Manufacturer": "Eartec"
+    },
+    {
+      "Manufacturer": "Earthworks"
+    },
+    {
+      "Manufacturer": "Easiframe"
+    },
+    {
+      "Manufacturer": "easyCover"
+    },
+    {
+      "Manufacturer": "Easyrig"
+    },
+    {
+      "Manufacturer": "eBuynow"
+    },
+    {
+      "Manufacturer": "EC Technology"
+    },
+    {
+      "Manufacturer": "ECHOGEAR"
+    },
+    {
+      "Manufacturer": "Eclipse Shades"
+    },
+    {
+      "Manufacturer": "ECO STYLE"
+    },
+    {
+      "Manufacturer": "EcoFlow"
+    },
+    {
+      "Manufacturer": "Ecovacs Robotics Inc."
+    },
+    {
+      "Manufacturer": "EDEC Digital Forensics"
+    },
+    {
+      "Manufacturer": "edelkrone"
+    },
+    {
+      "Manufacturer": "Edimax"
+    },
+    {
+      "Manufacturer": "Educational Innovations"
+    },
+    {
+      "Manufacturer": "Edwal"
+    },
+    {
+      "Manufacturer": "E-Films"
+    },
+    {
+      "Manufacturer": "E-flite"
+    },
+    {
+      "Manufacturer": "Eggtronic"
+    },
+    {
+      "Manufacturer": "EgoDisk"
+    },
+    {
+      "Manufacturer": "Ehang"
+    },
+    {
+      "Manufacturer": "EiKO"
+    },
+    {
+      "Manufacturer": "E-Image"
+    },
+    {
+      "Manufacturer": "Eizo"
+    },
+    {
+      "Manufacturer": "ELAC"
+    },
+    {
+      "Manufacturer": "ELCAN Armament Technology"
+    },
+    {
+      "Manufacturer": "Electronic Arts"
+    },
+    {
+      "Manufacturer": "Electronic Theatre Controls"
+    },
+    {
+      "Manufacturer": "Electro-Voice"
+    },
+    {
+      "Manufacturer": "Elektron"
+    },
+    {
+      "Manufacturer": "Element Technica"
+    },
+    {
+      "Manufacturer": "Elgato"
+    },
+    {
+      "Manufacturer": "Eliminator"
+    },
+    {
+      "Manufacturer": "Elinchrom"
+    },
+    {
+      "Manufacturer": "Elite Projector"
+    },
+    {
+      "Manufacturer": "Elite Screens"
+    },
+    {
+      "Manufacturer": "Elmer's"
+    },
+    {
+      "Manufacturer": "Elmo"
+    },
+    {
+      "Manufacturer": "Elvex"
+    },
+    {
+      "Manufacturer": "Elvid"
+    },
+    {
+      "Manufacturer": "EMART"
+    },
+    {
+      "Manufacturer": "Emax"
+    },
+    {
+      "Manufacturer": "eMedia"
+    },
+    {
+      "Manufacturer": "Emerge Technologies"
+    },
+    {
+      "Manufacturer": "Emerson"
+    },
+    {
+      "Manufacturer": "Emerson Electric"
+    },
+    {
+      "Manufacturer": "EMI"
+    },
+    {
+      "Manufacturer": "Eminence Speakers"
+    },
+    {
+      "Manufacturer": "eMotimo"
+    },
+    {
+      "Manufacturer": "Enabot"
+    },
+    {
+      "Manufacturer": "Endust"
+    },
+    {
+      "Manufacturer": "Energen"
+    },
+    {
+      "Manufacturer": "Energizer"
+    },
+    {
+      "Manufacturer": "EnGenius"
+    },
+    {
+      "Manufacturer": "Enlaps"
+    },
+    {
+      "Manufacturer": "Entaniya"
+    },
+    {
+      "Manufacturer": "EOTech"
+    },
+    {
+      "Manufacturer": "ePadLink"
+    },
+    {
+      "Manufacturer": "Epiphan"
+    },
+    {
+      "Manufacturer": "Epson"
+    },
+    {
+      "Manufacturer": "Ergomotive"
+    },
+    {
+      "Manufacturer": "Ergotron"
+    },
+    {
+      "Manufacturer": "Eria"
+    },
+    {
+      "Manufacturer": "Escort"
+    },
+    {
+      "Manufacturer": "ESDDI"
+    },
+    {
+      "Manufacturer": "Ese"
+    },
+    {
+      "Manufacturer": "eSynic"
+    },
+    {
+      "Manufacturer": "ETC"
+    },
+    {
+      "Manufacturer": "Etekcity"
+    },
+    {
+      "Manufacturer": "Ethol"
+    },
+    {
+      "Manufacturer": "Eton"
+    },
+    {
+      "Manufacturer": "Etymotic Research"
+    },
+    {
+      "Manufacturer": "Eufy"
+    },
+    {
+      "Manufacturer": "Eve"
+    },
+    {
+      "Manufacturer": "EVE Audio"
+    },
+    {
+      "Manufacturer": "Evecase"
+    },
+    {
+      "Manufacturer": "EverFocus"
+    },
+    {
+      "Manufacturer": "Evertz"
+    },
+    {
+      "Manufacturer": "EVGA"
+    },
+    {
+      "Manufacturer": "EVH"
+    },
+    {
+      "Manufacturer": "Evident"
+    },
+    {
+      "Manufacturer": "EVO"
+    },
+    {
+      "Manufacturer": "Evoluent"
+    },
+    {
+      "Manufacturer": "Ewa-Marine"
+    },
+    {
+      "Manufacturer": "Exakta"
+    },
+    {
+      "Manufacturer": "Excelvan"
+    },
+    {
+      "Manufacturer": "ExoLens"
+    },
+    {
+      "Manufacturer": "Expert Shield"
+    },
+    {
+      "Manufacturer": "Explore Scientific"
+    },
+    {
+      "Manufacturer": "ExploreOne"
+    },
+    {
+      "Manufacturer": "Explorer"
+    },
+    {
+      "Manufacturer": "Explorer Cases"
+    },
+    {
+      "Manufacturer": "ExpoImaging"
+    },
+    {
+      "Manufacturer": "Express Digital"
+    },
+    {
+      "Manufacturer": "Extech"
+    },
+    {
+      "Manufacturer": "Extreme Fliers"
+    },
+    {
+      "Manufacturer": "Extron"
+    },
+    {
+      "Manufacturer": "EZ Acoustics"
+    },
+    {
+      "Manufacturer": "E-z Foldz"
+    },
+    {
+      "Manufacturer": "EZVIZ"
+    },
+    {
+      "Manufacturer": "F & V"
+    },
+    {
+      "Manufacturer": "FAB Defense"
+    },
+    {
+      "Manufacturer": "FabFilter"
+    },
+    {
+      "Manufacturer": "Facebook"
+    },
+    {
+      "Manufacturer": "FAIRWAY Electronic"
+    },
+    {
+      "Manufacturer": "Falcon"
+    },
+    {
+      "Manufacturer": "Falconeyes"
+    },
+    {
+      "Manufacturer": "Fancier"
+    },
+    {
+      "Manufacturer": "Fantasea"
+    },
+    {
+      "Manufacturer": "Fantom"
+    },
+    {
+      "Manufacturer": "Fantom Drives"
+    },
+    {
+      "Manufacturer": "Farpoint"
+    },
+    {
+      "Manufacturer": "FastCap"
+    },
+    {
+      "Manufacturer": "Fastech"
+    },
+    {
+      "Manufacturer": "Fat Shark"
+    },
+    {
+      "Manufacturer": "Feelworld"
+    },
+    {
+      "Manufacturer": "Feisol"
+    },
+    {
+      "Manufacturer": "Feiyu"
+    },
+    {
+      "Manufacturer": "Fellowes"
+    },
+    {
+      "Manufacturer": "Fender"
+    },
+    {
+      "Manufacturer": "Fender Custom Shop"
+    },
+    {
+      "Manufacturer": "Ferrofish"
+    },
+    {
+      "Manufacturer": "FIAT"
+    },
+    {
+      "Manufacturer": "Fiberbilt"
+    },
+    {
+      "Manufacturer": "Fidelity"
+    },
+    {
+      "Manufacturer": "Field Optics Research"
+    },
+    {
+      "Manufacturer": "FieldCast"
+    },
+    {
+      "Manufacturer": "Fiilex"
+    },
+    {
+      "Manufacturer": "FiiO"
+    },
+    {
+      "Manufacturer": "Film Gear"
+    },
+    {
+      "Manufacturer": "FILMCITY"
+    },
+    {
+      "Manufacturer": "Filmcraft"
+    },
+    {
+      "Manufacturer": "Finale French"
+    },
+    {
+      "Manufacturer": "Firefield"
+    },
+    {
+      "Manufacturer": "Firehouse Technology"
+    },
+    {
+      "Manufacturer": "FireKing"
+    },
+    {
+      "Manufacturer": "First Act"
+    },
+    {
+      "Manufacturer": "Fisher"
+    },
+    {
+      "Manufacturer": "Fisher Research Labs"
+    },
+    {
+      "Manufacturer": "Fitbit"
+    },
+    {
+      "Manufacturer": "Fitness Technologies"
+    },
+    {
+      "Manufacturer": "Flanders Scientific"
+    },
+    {
+      "Manufacturer": "Flashgels"
+    },
+    {
+      "Manufacturer": "Flashpoint"
+    },
+    {
+      "Manufacturer": "Flex Lens Shade"
+    },
+    {
+      "Manufacturer": "FlexFill"
+    },
+    {
+      "Manufacturer": "Flight"
+    },
+    {
+      "Manufacturer": "Flip"
+    },
+    {
+      "Manufacturer": "Flipbac"
+    },
+    {
+      "Manufacturer": "FLIR"
+    },
+    {
+      "Manufacturer": "FLM"
+    },
+    {
+      "Manufacturer": "FloLight"
+    },
+    {
+      "Manufacturer": "Flora"
+    },
+    {
+      "Manufacturer": "Flotone"
+    },
+    {
+      "Manufacturer": "Flowcine"
+    },
+    {
+      "Manufacturer": "Fluid Audio"
+    },
+    {
+      "Manufacturer": "Fluotec"
+    },
+    {
+      "Manufacturer": "FLYCAM"
+    },
+    {
+      "Manufacturer": "Flymount"
+    },
+    {
+      "Manufacturer": "Flysight"
+    },
+    {
+      "Manufacturer": "FoamWerks"
+    },
+    {
+      "Manufacturer": "Foba"
+    },
+    {
+      "Manufacturer": "Focal"
+    },
+    {
+      "Manufacturer": "Focusrite"
+    },
+    {
+      "Manufacturer": "FocusShifter"
+    },
+    {
+      "Manufacturer": "Foma"
+    },
+    {
+      "Manufacturer": "For.A"
+    },
+    {
+      "Manufacturer": "Force 1"
+    },
+    {
+      "Manufacturer": "Force10"
+    },
+    {
+      "Manufacturer": "Format"
+    },
+    {
+      "Manufacturer": "Formatt Hitech"
+    },
+    {
+      "Manufacturer": "Fortinge"
+    },
+    {
+      "Manufacturer": "Fostex"
+    },
+    {
+      "Manufacturer": "Fotga"
+    },
+    {
+      "Manufacturer": "Fotodiox"
+    },
+    {
+      "Manufacturer": "FotoPro"
+    },
+    {
+      "Manufacturer": "Fotostrap"
+    },
+    {
+      "Manufacturer": "FoxFury"
+    },
+    {
+      "Manufacturer": "FPP"
+    },
+    {
+      "Manufacturer": "Framatic"
+    },
+    {
+      "Manufacturer": "Fraser Optics"
+    },
+    {
+      "Manufacturer": "Freedom360"
+    },
+    {
+      "Manufacturer": "Freefly"
+    },
+    {
+      "Manufacturer": "Freehands"
+    },
+    {
+      "Manufacturer": "Freestream"
+    },
+    {
+      "Manufacturer": "Freevision"
+    },
+    {
+      "Manufacturer": "Freewell"
+    },
+    {
+      "Manufacturer": "Frezzi"
+    },
+    {
+      "Manufacturer": "Friday Home"
+    },
+    {
+      "Manufacturer": "Fringer"
+    },
+    {
+      "Manufacturer": "FrogEye"
+    },
+    {
+      "Manufacturer": "Froggi"
+    },
+    {
+      "Manufacturer": "Front Line"
+    },
+    {
+      "Manufacturer": "FS Labs"
+    },
+    {
+      "Manufacturer": "FSI"
+    },
+    {
+      "Manufacturer": "F-stop"
+    },
+    {
+      "Manufacturer": "Fstop Labs"
+    },
+    {
+      "Manufacturer": "Fuchs"
+    },
+    {
+      "Manufacturer": "Fujica"
+    },
+    {
+      "Manufacturer": "Fujifilm"
+    },
+    {
+      "Manufacturer": "Fujikura"
+    },
+    {
+      "Manufacturer": "Fujinon"
+    },
+    {
+      "Manufacturer": "Fujitsu"
+    },
+    {
+      "Manufacturer": "Funko"
+    },
+    {
+      "Manufacturer": "Funleader"
+    },
+    {
+      "Manufacturer": "Funlux"
+    },
+    {
+      "Manufacturer": "Furman Sound"
+    },
+    {
+      "Manufacturer": "Fusion"
+    },
+    {
+      "Manufacturer": "Fusion Photo Gear"
+    },
+    {
+      "Manufacturer": "Futaba"
+    },
+    {
+      "Manufacturer": "FX Lion"
+    },
+    {
+      "Manufacturer": "FXHOME Ltd"
+    },
+    {
+      "Manufacturer": "GaffGun"
+    },
+    {
+      "Manufacturer": "Galaxy Audio"
+    },
+    {
+      "Manufacturer": "GameQuest"
+    },
+    {
+      "Manufacturer": "Gariz"
+    },
+    {
+      "Manufacturer": "Garmin"
+    },
+    {
+      "Manufacturer": "Garrett"
+    },
+    {
+      "Manufacturer": "Garritan"
+    },
+    {
+      "Manufacturer": "Gary Fong"
+    },
+    {
+      "Manufacturer": "Gator Cases"
+    },
+    {
+      "Manufacturer": "GAUGE"
+    },
+    {
+      "Manufacturer": "GDT"
+    },
+    {
+      "Manufacturer": "Gearbox"
+    },
+    {
+      "Manufacturer": "Geekoto"
+    },
+    {
+      "Manufacturer": "Gefen"
+    },
+    {
+      "Manufacturer": "Gemini"
+    },
+    {
+      "Manufacturer": "Gemline"
+    },
+    {
+      "Manufacturer": "GEN Energy"
+    },
+    {
+      "Manufacturer": "General Brand"
+    },
+    {
+      "Manufacturer": "Generic"
+    },
+    {
+      "Manufacturer": "Genius Ingenious"
+    },
+    {
+      "Manufacturer": "Genus"
+    },
+    {
+      "Manufacturer": "Gepe"
+    },
+    {
+      "Manufacturer": "Ghostek"
+    },
+    {
+      "Manufacturer": "Gig Gear"
+    },
+    {
+      "Manufacturer": "Gigabyte"
+    },
+    {
+      "Manufacturer": "GigaPan"
+    },
+    {
+      "Manufacturer": "Giottos"
+    },
+    {
+      "Manufacturer": "Gitup"
+    },
+    {
+      "Manufacturer": "Gitzo"
+    },
+    {
+      "Manufacturer": "GKC"
+    },
+    {
+      "Manufacturer": "GLI Pro"
+    },
+    {
+      "Manufacturer": "Glide Gear"
+    },
+    {
+      "Manufacturer": "Glidecam"
+    },
+    {
+      "Manufacturer": "Glidetrack"
+    },
+    {
+      "Manufacturer": "Global Dynamics United"
+    },
+    {
+      "Manufacturer": "Global Truss"
+    },
+    {
+      "Manufacturer": "Globalmediapro"
+    },
+    {
+      "Manufacturer": "Glorious"
+    },
+    {
+      "Manufacturer": "Glow"
+    },
+    {
+      "Manufacturer": "GLP"
+    },
+    {
+      "Manufacturer": "Glyph Technologies"
+    },
+    {
+      "Manufacturer": "GNARBOX"
+    },
+    {
+      "Manufacturer": "Go Professional Cases"
+    },
+    {
+      "Manufacturer": "GO PUCK"
+    },
+    {
+      "Manufacturer": "Go Simply Connect"
+    },
+    {
+      "Manufacturer": "Goal Zero"
+    },
+    {
+      "Manufacturer": "Gobe"
+    },
+    {
+      "Manufacturer": "Godin"
+    },
+    {
+      "Manufacturer": "Godox"
+    },
+    {
+      "Manufacturer": "GoECOlife"
+    },
+    {
+      "Manufacturer": "Goerz"
+    },
+    {
+      "Manufacturer": "GoGo Tuners"
+    },
+    {
+      "Manufacturer": "GoGroove"
+    },
+    {
+      "Manufacturer": "Golden Age Project"
+    },
+    {
+      "Manufacturer": "Golden Eagle Electronics"
+    },
+    {
+      "Manufacturer": "Gon Bops"
+    },
+    {
+      "Manufacturer": "Gonine"
+    },
+    {
+      "Manufacturer": "Goodview"
+    },
+    {
+      "Manufacturer": "Google"
+    },
+    {
+      "Manufacturer": "Google Nest"
+    },
+    {
+      "Manufacturer": "GoPlug"
+    },
+    {
+      "Manufacturer": "GoPole"
+    },
+    {
+      "Manufacturer": "GoPro"
+    },
+    {
+      "Manufacturer": "Gore"
+    },
+    {
+      "Manufacturer": "Gossen"
+    },
+    {
+      "Manufacturer": "GoWing"
+    },
+    {
+      "Manufacturer": "Grace Digital"
+    },
+    {
+      "Manufacturer": "Graf"
+    },
+    {
+      "Manufacturer": "Gralab"
+    },
+    {
+      "Manufacturer": "Grandstream Networks"
+    },
+    {
+      "Manufacturer": "G-raphy"
+    },
+    {
+      "Manufacturer": "Grass Valley"
+    },
+    {
+      "Manufacturer": "Green Clean"
+    },
+    {
+      "Manufacturer": "Green Extreme"
+    },
+    {
+      "Manufacturer": "Green Go"
+    },
+    {
+      "Manufacturer": "Green.L"
+    },
+    {
+      "Manufacturer": "Gremsy"
+    },
+    {
+      "Manufacturer": "Gretsch"
+    },
+    {
+      "Manufacturer": "GRID"
+    },
+    {
+      "Manufacturer": "Griffin Technology"
+    },
+    {
+      "Manufacturer": "GRIP&SHOOT"
+    },
+    {
+      "Manufacturer": "Grip-It"
+    },
+    {
+      "Manufacturer": "GripnGaff"
+    },
+    {
+      "Manufacturer": "Groove Tubes"
+    },
+    {
+      "Manufacturer": "Gruv Gear"
+    },
+    {
+      "Manufacturer": "G-Technology"
+    },
+    {
+      "Manufacturer": "GTI"
+    },
+    {
+      "Manufacturer": "Guetti Labels"
+    },
+    {
+      "Manufacturer": "Guitar Pro"
+    },
+    {
+      "Manufacturer": "Gunnar Optiks"
+    },
+    {
+      "Manufacturer": "GunVault"
+    },
+    {
+      "Manufacturer": "GVB Gear"
+    },
+    {
+      "Manufacturer": "GVM"
+    },
+    {
+      "Manufacturer": "GyroVu"
+    },
+    {
+      "Manufacturer": "H&A"
+    },
+    {
+      "Manufacturer": "H&Y"
+    },
+    {
+      "Manufacturer": "Habbycam"
+    },
+    {
+      "Manufacturer": "Hagstrom"
+    },
+    {
+      "Manufacturer": "Hahnel"
+    },
+    {
+      "Manufacturer": "Hahnemuhle"
+    },
+    {
+      "Manufacturer": "Haida"
+    },
+    {
+      "Manufacturer": "Hakuba"
+    },
+    {
+      "Manufacturer": "Hall Research"
+    },
+    {
+      "Manufacturer": "Halse Systems"
+    },
+    {
+      "Manufacturer": "Hama"
+    },
+    {
+      "Manufacturer": "Hamilton Buhl"
+    },
+    {
+      "Manufacturer": "HandeVision"
+    },
+    {
+      "Manufacturer": "Hangman"
+    },
+    {
+      "Manufacturer": "Hardcase"
+    },
+    {
+      "Manufacturer": "Hardigg Industries"
+    },
+    {
+      "Manufacturer": "Harman"
+    },
+    {
+      "Manufacturer": "Harris"
+    },
+    {
+      "Manufacturer": "Harrison"
+    },
+    {
+      "Manufacturer": "Hartblei"
+    },
+    {
+      "Manufacturer": "Hartke"
+    },
+    {
+      "Manufacturer": "Hasselblad"
+    },
+    {
+      "Manufacturer": "Hauppauge"
+    },
+    {
+      "Manufacturer": "Hawk Woods"
+    },
+    {
+      "Manufacturer": "Hawke Sport Optics"
+    },
+    {
+      "Manufacturer": "Hazco"
+    },
+    {
+      "Manufacturer": "HCO Outdoor"
+    },
+    {
+      "Manufacturer": "HDfury"
+    },
+    {
+      "Manufacturer": "Headliner"
+    },
+    {
+      "Manufacturer": "Headrush"
+    },
+    {
+      "Manufacturer": "Hear Technologies"
+    },
+    {
+      "Manufacturer": "Heavy Leather NYC"
+    },
+    {
+      "Manufacturer": "Hedbox"
+    },
+    {
+      "Manufacturer": "HEDEN"
+    },
+    {
+      "Manufacturer": "Heico"
+    },
+    {
+      "Manufacturer": "Heil Sound"
+    },
+    {
+      "Manufacturer": "Heimplanet"
+    },
+    {
+      "Manufacturer": "Heliopan"
+    },
+    {
+      "Manufacturer": "Henry Engineering"
+    },
+    {
+      "Manufacturer": "Hensel"
+    },
+    {
+      "Manufacturer": "Hercules"
+    },
+    {
+      "Manufacturer": "Hercules Stands"
+    },
+    {
+      "Manufacturer": "Heritage Audio"
+    },
+    {
+      "Manufacturer": "Hewes"
+    },
+    {
+      "Manufacturer": "HGST"
+    },
+    {
+      "Manufacturer": "Hi Rise Camera"
+    },
+    {
+      "Manufacturer": "HID Fargo"
+    },
+    {
+      "Manufacturer": "Hi-Dow"
+    },
+    {
+      "Manufacturer": "HiFiMan"
+    },
+    {
+      "Manufacturer": "Hikvision"
+    },
+    {
+      "Manufacturer": "Hink"
+    },
+    {
+      "Manufacturer": "Hiro"
+    },
+    {
+      "Manufacturer": "Hisonic"
+    },
+    {
+      "Manufacturer": "Hitachi"
+    },
+    {
+      "Manufacturer": "Hitec"
+    },
+    {
+      "Manufacturer": "HiTi"
+    },
+    {
+      "Manufacturer": "Hive"
+    },
+    {
+      "Manufacturer": "HiViz"
+    },
+    {
+      "Manufacturer": "HK Audio"
+    },
+    {
+      "Manufacturer": "Hobot"
+    },
+    {
+      "Manufacturer": "Hohem"
+    },
+    {
+      "Manufacturer": "HoldFast Gear"
+    },
+    {
+      "Manufacturer": "Holga"
+    },
+    {
+      "Manufacturer": "Hollyland"
+    },
+    {
+      "Manufacturer": "Holy Stone"
+    },
+    {
+      "Manufacturer": "Hondo Garage"
+    },
+    {
+      "Manufacturer": "Honeycomb"
+    },
+    {
+      "Manufacturer": "HoneyGrids"
+    },
+    {
+      "Manufacturer": "Honeywell"
+    },
+    {
+      "Manufacturer": "Honlphoto"
+    },
+    {
+      "Manufacturer": "Hoodman"
+    },
+    {
+      "Manufacturer": "Hoppe's"
+    },
+    {
+      "Manufacturer": "Hori"
+    },
+    {
+      "Manufacturer": "Hosa Technology"
+    },
+    {
+      "Manufacturer": "Hotec"
+    },
+    {
+      "Manufacturer": "House of Power"
+    },
+    {
+      "Manufacturer": "HoverCam"
+    },
+    {
+      "Manufacturer": "Hoya"
+    },
+    {
+      "Manufacturer": "HP"
+    },
+    {
+      "Manufacturer": "Hp Combi"
+    },
+    {
+      "Manufacturer": "HPRC"
+    },
+    {
+      "Manufacturer": "HQRP"
+    },
+    {
+      "Manufacturer": "HSM"
+    },
+    {
+      "Manufacturer": "HTC"
+    },
+    {
+      "Manufacturer": "Huawei"
+    },
+    {
+      "Manufacturer": "Hubbell"
+    },
+    {
+      "Manufacturer": "Hubsan"
+    },
+    {
+      "Manufacturer": "HuddleCamHD"
+    },
+    {
+      "Manufacturer": "Huddly GO"
+    },
+    {
+      "Manufacturer": "Hudson Spider"
+    },
+    {
+      "Manufacturer": "Hufa"
+    },
+    {
+      "Manufacturer": "Hughes & Kettner"
+    },
+    {
+      "Manufacturer": "Huion"
+    },
+    {
+      "Manufacturer": "HumanCentric"
+    },
+    {
+      "Manufacturer": "Humvee Gear"
+    },
+    {
+      "Manufacturer": "Hybrid Fiber Systems"
+    },
+    {
+      "Manufacturer": "HyCell by Ansmann"
+    },
+    {
+      "Manufacturer": "Hynix"
+    },
+    {
+      "Manufacturer": "Hyper"
+    },
+    {
+      "Manufacturer": "HyperDrive"
+    },
+    {
+      "Manufacturer": "HyperX"
+    },
+    {
+      "Manufacturer": "Hyundai Technology"
+    },
+    {
+      "Manufacturer": "IAdea"
+    },
+    {
+      "Manufacturer": "IB/E Optics"
+    },
+    {
+      "Manufacturer": "iBaby"
+    },
+    {
+      "Manufacturer": "Ibanez"
+    },
+    {
+      "Manufacturer": "iBend"
+    },
+    {
+      "Manufacturer": "iBenzer"
+    },
+    {
+      "Manufacturer": "iBOLT"
+    },
+    {
+      "Manufacturer": "iBower"
+    },
+    {
+      "Manufacturer": "iBUYPOWER"
+    },
+    {
+      "Manufacturer": "Ice"
+    },
+    {
+      "Manufacturer": "iClever"
+    },
+    {
+      "Manufacturer": "ICON Digital"
+    },
+    {
+      "Manufacturer": "IDANCE"
+    },
+    {
+      "Manufacturer": "iDC PhotoVideo"
+    },
+    {
+      "Manufacturer": "Identiv"
+    },
+    {
+      "Manufacturer": "iDevices"
+    },
+    {
+      "Manufacturer": "Idolcam"
+    },
+    {
+      "Manufacturer": "IDX"
+    },
+    {
+      "Manufacturer": "iFi AUDIO"
+    },
+    {
+      "Manufacturer": "iFootage"
+    },
+    {
+      "Manufacturer": "Ignite Digital"
+    },
+    {
+      "Manufacturer": "iHip Digital"
+    },
+    {
+      "Manufacturer": "iHome"
+    },
+    {
+      "Manufacturer": "iiwey"
+    },
+    {
+      "Manufacturer": "Ijoy"
+    },
+    {
+      "Manufacturer": "IK Multimedia"
+    },
+    {
+      "Manufacturer": "Ikan"
+    },
+    {
+      "Manufacturer": "Ikegami"
+    },
+    {
+      "Manufacturer": "Ikelite"
+    },
+    {
+      "Manufacturer": "iKross"
+    },
+    {
+      "Manufacturer": "Ilex"
+    },
+    {
+      "Manufacturer": "Ilford"
+    },
+    {
+      "Manufacturer": "Illuminati Instrument"
+    },
+    {
+      "Manufacturer": "I'm Back"
+    },
+    {
+      "Manufacturer": "Imacon"
+    },
+    {
+      "Manufacturer": "Image Line"
+    },
+    {
+      "Manufacturer": "Imagineer Systems"
+    },
+    {
+      "Manufacturer": "IMC"
+    },
+    {
+      "Manufacturer": "iMicro"
+    },
+    {
+      "Manufacturer": "Impact"
+    },
+    {
+      "Manufacturer": "Impact Soundworks"
+    },
+    {
+      "Manufacturer": "Incase"
+    },
+    {
+      "Manufacturer": "Incipio"
+    },
+    {
+      "Manufacturer": "Indie Dolly Systems"
+    },
+    {
+      "Manufacturer": "Indigisounds"
+    },
+    {
+      "Manufacturer": "IndiPRO"
+    },
+    {
+      "Manufacturer": "indiSystem"
+    },
+    {
+      "Manufacturer": "Induction Dynamics"
+    },
+    {
+      "Manufacturer": "Induro"
+    },
+    {
+      "Manufacturer": "InFocus"
+    },
+    {
+      "Manufacturer": "Inkpress"
+    },
+    {
+      "Manufacturer": "InnerSpace"
+    },
+    {
+      "Manufacturer": "INNOREL"
+    },
+    {
+      "Manufacturer": "Innova Art"
+    },
+    {
+      "Manufacturer": "Innovatronix"
+    },
+    {
+      "Manufacturer": "INOGENI"
+    },
+    {
+      "Manufacturer": "Inovativ"
+    },
+    {
+      "Manufacturer": "Insignia"
+    },
+    {
+      "Manufacturer": "Insta360"
+    },
+    {
+      "Manufacturer": "Intel"
+    },
+    {
+      "Manufacturer": "IntelliARMOR"
+    },
+    {
+      "Manufacturer": "Intellytech"
+    },
+    {
+      "Manufacturer": "Interfit Photographic"
+    },
+    {
+      "Manufacturer": "International Ozone"
+    },
+    {
+      "Manufacturer": "Intova"
+    },
+    {
+      "Manufacturer": "IO Interactive"
+    },
+    {
+      "Manufacturer": "IOGEAR"
+    },
+    {
+      "Manufacturer": "iOgrapher"
+    },
+    {
+      "Manufacturer": "Iomega"
+    },
+    {
+      "Manufacturer": "iOptron"
+    },
+    {
+      "Manufacturer": "ioShutter"
+    },
+    {
+      "Manufacturer": "iOttie"
+    },
+    {
+      "Manufacturer": "IPM"
+    },
+    {
+      "Manufacturer": "iQpac"
+    },
+    {
+      "Manufacturer": "iRing"
+    },
+    {
+      "Manufacturer": "IRIX"
+    },
+    {
+      "Manufacturer": "IseeBell"
+    },
+    {
+      "Manufacturer": "IsoAcoustics"
+    },
+    {
+      "Manufacturer": "ISOVOX"
+    },
+    {
+      "Manufacturer": "itFits"
+    },
+    {
+      "Manufacturer": "I-Torch"
+    },
+    {
+      "Manufacturer": "Itoya"
+    },
+    {
+      "Manufacturer": "IvoryNite"
+    },
+    {
+      "Manufacturer": "iZotope"
+    },
+    {
+      "Manufacturer": "J Rockett"
+    },
+    {
+      "Manufacturer": "J5 Create"
+    },
+    {
+      "Manufacturer": "Jabra"
+    },
+    {
+      "Manufacturer": "Jackrabbit"
+    },
+    {
+      "Manufacturer": "Jackson"
+    },
+    {
+      "Manufacturer": "Jag35"
+    },
+    {
+      "Manufacturer": "Jamo"
+    },
+    {
+      "Manufacturer": "Jason Cases"
+    },
+    {
+      "Manufacturer": "JBL"
+    },
+    {
+      "Manufacturer": "JBL Bags"
+    },
+    {
+      "Manufacturer": "Jill-e"
+    },
+    {
+      "Manufacturer": "Jin Nuo Lang"
+    },
+    {
+      "Manufacturer": "Jinbei"
+    },
+    {
+      "Manufacturer": "JJC"
+    },
+    {
+      "Manufacturer": "JK Audio"
+    },
+    {
+      "Manufacturer": "JLCooper"
+    },
+    {
+      "Manufacturer": "JMR Electronics"
+    },
+    {
+      "Manufacturer": "Jo Totes"
+    },
+    {
+      "Manufacturer": "Jobu Design"
+    },
+    {
+      "Manufacturer": "Joby"
+    },
+    {
+      "Manufacturer": "Joe Meek"
+    },
+    {
+      "Manufacturer": "JoeCo"
+    },
+    {
+      "Manufacturer": "JonyJib"
+    },
+    {
+      "Manufacturer": "J-Rod"
+    },
+    {
+      "Manufacturer": "J-Tech"
+    },
+    {
+      "Manufacturer": "JTL"
+    },
+    {
+      "Manufacturer": "JTS"
+    },
+    {
+      "Manufacturer": "JTZ"
+    },
+    {
+      "Manufacturer": "Juice Goose"
+    },
+    {
+      "Manufacturer": "JuiceBox"
+    },
+    {
+      "Manufacturer": "Jupio"
+    },
+    {
+      "Manufacturer": "Just Mobile"
+    },
+    {
+      "Manufacturer": "JUST Normlicht"
+    },
+    {
+      "Manufacturer": "JVC"
+    },
+    {
+      "Manufacturer": "K 5600"
+    },
+    {
+      "Manufacturer": "K&F Concept"
+    },
+    {
+      "Manufacturer": "K&M"
+    },
+    {
+      "Manufacturer": "K2"
+    },
+    {
+      "Manufacturer": "KabukiGlasses"
+    },
+    {
+      "Manufacturer": "Kaces"
+    },
+    {
+      "Manufacturer": "Kacey Enterprises"
+    },
+    {
+      "Manufacturer": "Kahles"
+    },
+    {
+      "Manufacturer": "Kaidan"
+    },
+    {
+      "Manufacturer": "Kaiser"
+    },
+    {
+      "Manufacturer": "Kala"
+    },
+    {
+      "Manufacturer": "Kalt"
+    },
+    {
+      "Manufacturer": "Kamerar"
+    },
+    {
+      "Manufacturer": "KamLan"
+    },
+    {
+      "Manufacturer": "Kandao"
+    },
+    {
+      "Manufacturer": "Kanex"
+    },
+    {
+      "Manufacturer": "KanexPro"
+    },
+    {
+      "Manufacturer": "Kangaroo"
+    },
+    {
+      "Manufacturer": "Kanto"
+    },
+    {
+      "Manufacturer": "K-Array"
+    },
+    {
+      "Manufacturer": "Kase"
+    },
+    {
+      "Manufacturer": "Kaspersky"
+    },
+    {
+      "Manufacturer": "Kastar"
+    },
+    {
+      "Manufacturer": "Kata"
+    },
+    {
+      "Manufacturer": "Kawai"
+    },
+    {
+      "Manufacturer": "KB Covers"
+    },
+    {
+      "Manufacturer": "Keencut"
+    },
+    {
+      "Manufacturer": "Kelly Moore"
+    },
+    {
+      "Manufacturer": "Kendrick"
+    },
+    {
+      "Manufacturer": "Kenko"
+    },
+    {
+      "Manufacturer": "Ken-Lab"
+    },
+    {
+      "Manufacturer": "Kensington"
+    },
+    {
+      "Manufacturer": "Kentmere"
+    },
+    {
+      "Manufacturer": "Kenwood"
+    },
+    {
+      "Manufacturer": "Kessler"
+    },
+    {
+      "Manufacturer": "Kestrel"
+    },
+    {
+      "Manufacturer": "Key Digital"
+    },
+    {
+      "Manufacturer": "Keyhole"
+    },
+    {
+      "Manufacturer": "Kiev"
+    },
+    {
+      "Manufacturer": "Killer Concepts"
+    },
+    {
+      "Manufacturer": "Kiloview"
+    },
+    {
+      "Manufacturer": "Kimwipes"
+    },
+    {
+      "Manufacturer": "Kinetronics"
+    },
+    {
+      "Manufacturer": "Kingston Technology"
+    },
+    {
+      "Manufacturer": "Kino Flo"
+    },
+    {
+      "Manufacturer": "Kinokoo"
+    },
+    {
+      "Manufacturer": "KINOMATIK"
+    },
+    {
+      "Manufacturer": "Kinotehnik"
+    },
+    {
+      "Manufacturer": "Kipon"
+    },
+    {
+      "Manufacturer": "Kirk"
+    },
+    {
+      "Manufacturer": "Kish"
+    },
+    {
+      "Manufacturer": "KitDive"
+    },
+    {
+      "Manufacturer": "KJB Security Products"
+    },
+    {
+      "Manufacturer": "Klark Teknik"
+    },
+    {
+      "Manufacturer": "KleenBore"
+    },
+    {
+      "Manufacturer": "Kleer-Vu"
+    },
+    {
+      "Manufacturer": "KLH"
+    },
+    {
+      "Manufacturer": "Klipsch"
+    },
+    {
+      "Manufacturer": "Klover"
+    },
+    {
+      "Manufacturer": "KNA Pickups"
+    },
+    {
+      "Manufacturer": "Knekt"
+    },
+    {
+      "Manufacturer": "Knox"
+    },
+    {
+      "Manufacturer": "Koah"
+    },
+    {
+      "Manufacturer": "Kobra"
+    },
+    {
+      "Manufacturer": "KOCH"
+    },
+    {
+      "Manufacturer": "Kodak"
+    },
+    {
+      "Manufacturer": "Koei Tecmo"
+    },
+    {
+      "Manufacturer": "Koh Global"
+    },
+    {
+      "Manufacturer": "Kolari"
+    },
+    {
+      "Manufacturer": "Kolari Vision"
+    },
+    {
+      "Manufacturer": "Kolibri"
+    },
+    {
+      "Manufacturer": "Kondor Blue"
+    },
+    {
+      "Manufacturer": "Konftel"
+    },
+    {
+      "Manufacturer": "Kong Audio"
+    },
+    {
+      "Manufacturer": "Konica"
+    },
+    {
+      "Manufacturer": "KONO"
+    },
+    {
+      "Manufacturer": "Konova"
+    },
+    {
+      "Manufacturer": "Konus"
+    },
+    {
+      "Manufacturer": "Koolertron"
+    },
+    {
+      "Manufacturer": "Kopul"
+    },
+    {
+      "Manufacturer": "Korg"
+    },
+    {
+      "Manufacturer": "Koss"
+    },
+    {
+      "Manufacturer": "Kowa"
+    },
+    {
+      "Manufacturer": "Kraken Sports"
+    },
+    {
+      "Manufacturer": "Kramer Electronics"
+    },
+    {
+      "Manufacturer": "Krane"
+    },
+    {
+      "Manufacturer": "Krazy"
+    },
+    {
+      "Manufacturer": "Kremona"
+    },
+    {
+      "Manufacturer": "KResearch"
+    },
+    {
+      "Manufacturer": "KRK"
+    },
+    {
+      "Manufacturer": "Kroll"
+    },
+    {
+      "Manufacturer": "Kshioe"
+    },
+    {
+      "Manufacturer": "K-Tek"
+    },
+    {
+      "Manufacturer": "KTI Networks"
+    },
+    {
+      "Manufacturer": "Kumbacam"
+    },
+    {
+      "Manufacturer": "Kupo"
+    },
+    {
+      "Manufacturer": "Kurzweil"
+    },
+    {
+      "Manufacturer": "Kuvrd"
+    },
+    {
+      "Manufacturer": "KV331 Audio"
+    },
+    {
+      "Manufacturer": "kvitko"
+    },
+    {
+      "Manufacturer": "Kyocera"
+    },
+    {
+      "Manufacturer": "L.P.L."
+    },
+    {
+      "Manufacturer": "La Patrie"
+    },
+    {
+      "Manufacturer": "Lab Gruppen"
+    },
+    {
+      "Manufacturer": "Labpano"
+    },
+    {
+      "Manufacturer": "LaCie"
+    },
+    {
+      "Manufacturer": "Lacoste"
+    },
+    {
+      "Manufacturer": "Lag"
+    },
+    {
+      "Manufacturer": "Laird"
+    },
+    {
+      "Manufacturer": "Lamp"
+    },
+    {
+      "Manufacturer": "LANDOU"
+    },
+    {
+      "Manufacturer": "Lanparte"
+    },
+    {
+      "Manufacturer": "Laser Ammo"
+    },
+    {
+      "Manufacturer": "Laser Genetics"
+    },
+    {
+      "Manufacturer": "LaserMax"
+    },
+    {
+      "Manufacturer": "LaserSoft Imaging"
+    },
+    {
+      "Manufacturer": "Lastolite"
+    },
+    {
+      "Manufacturer": "Latch Lake"
+    },
+    {
+      "Manufacturer": "LaView"
+    },
+    {
+      "Manufacturer": "Lawmate"
+    },
+    {
+      "Manufacturer": "LC Technology"
+    },
+    {
+      "Manufacturer": "LCDVF"
+    },
+    {
+      "Manufacturer": "Leader"
+    },
+    {
+      "Manufacturer": "LeashTec"
+    },
+    {
+      "Manufacturer": "Leatherman"
+    },
+    {
+      "Manufacturer": "Lectrosonics"
+    },
+    {
+      "Manufacturer": "LED Lenser"
+    },
+    {
+      "Manufacturer": "LED Science"
+    },
+    {
+      "Manufacturer": "Ledgo"
+    },
+    {
+      "Manufacturer": "LEDZ"
+    },
+    {
+      "Manufacturer": "Lee Filters"
+    },
+    {
+      "Manufacturer": "Leica"
+    },
+    {
+      "Manufacturer": "Leitch"
+    },
+    {
+      "Manufacturer": "Lenkeng"
+    },
+    {
+      "Manufacturer": "Lenmar"
+    },
+    {
+      "Manufacturer": "Lenovo"
+    },
+    {
+      "Manufacturer": "Lens Band"
+    },
+    {
+      "Manufacturer": "LensAlign"
+    },
+    {
+      "Manufacturer": "Lensbaby"
+    },
+    {
+      "Manufacturer": "Lensball"
+    },
+    {
+      "Manufacturer": "LENSband"
+    },
+    {
+      "Manufacturer": "LensCoat"
+    },
+    {
+      "Manufacturer": "Lenskirt"
+    },
+    {
+      "Manufacturer": "Lensmate"
+    },
+    {
+      "Manufacturer": "LensPen"
+    },
+    {
+      "Manufacturer": "LenzBuddy"
+    },
+    {
+      "Manufacturer": "Lenzhound"
+    },
+    {
+      "Manufacturer": "Lester A Dine"
+    },
+    {
+      "Manufacturer": "Letscom"
+    },
+    {
+      "Manufacturer": "LetsFit"
+    },
+    {
+      "Manufacturer": "Letus"
+    },
+    {
+      "Manufacturer": "Leupold"
+    },
+    {
+      "Manufacturer": "Levenhuk"
+    },
+    {
+      "Manufacturer": "Levoit"
+    },
+    {
+      "Manufacturer": "Lewitt"
+    },
+    {
+      "Manufacturer": "Lex"
+    },
+    {
+      "Manufacturer": "Lexar"
+    },
+    {
+      "Manufacturer": "Lexicon"
+    },
+    {
+      "Manufacturer": "Lexmark"
+    },
+    {
+      "Manufacturer": "LG"
+    },
+    {
+      "Manufacturer": "LHIABNN"
+    },
+    {
+      "Manufacturer": "Lian-Li"
+    },
+    {
+      "Manufacturer": "Libec"
+    },
+    {
+      "Manufacturer": "Life+Gear"
+    },
+    {
+      "Manufacturer": "LifeProof"
+    },
+    {
+      "Manufacturer": "Lifesense"
+    },
+    {
+      "Manufacturer": "LifThor"
+    },
+    {
+      "Manufacturer": "Light & Motion"
+    },
+    {
+      "Manufacturer": "LightBridge"
+    },
+    {
+      "Manufacturer": "Lightrein"
+    },
+    {
+      "Manufacturer": "Lightware"
+    },
+    {
+      "Manufacturer": "Lightwave"
+    },
+    {
+      "Manufacturer": "Lilliput"
+    },
+    {
+      "Manufacturer": "Limelite"
+    },
+    {
+      "Manufacturer": "Linco"
+    },
+    {
+      "Manufacturer": "Lindahl"
+    },
+    {
+      "Manufacturer": "Lindell Audio"
+    },
+    {
+      "Manufacturer": "Lindsey Optics"
+    },
+    {
+      "Manufacturer": "Lindy"
+    },
+    {
+      "Manufacturer": "Line 6"
+    },
+    {
+      "Manufacturer": "Lineco"
+    },
+    {
+      "Manufacturer": "Linhof"
+    },
+    {
+      "Manufacturer": "Link Electronics"
+    },
+    {
+      "Manufacturer": "Lisco"
+    },
+    {
+      "Manufacturer": "Listec Teleprompters"
+    },
+    {
+      "Manufacturer": "Listen Technologies"
+    },
+    {
+      "Manufacturer": "Litegear"
+    },
+    {
+      "Manufacturer": "Litepanels"
+    },
+    {
+      "Manufacturer": "Litra"
+    },
+    {
+      "Manufacturer": "Littlite"
+    },
+    {
+      "Manufacturer": "Live Planet"
+    },
+    {
+      "Manufacturer": "Livestream"
+    },
+    {
+      "Manufacturer": "LiveU"
+    },
+    {
+      "Manufacturer": "Lixada"
+    },
+    {
+      "Manufacturer": "Lockcircle"
+    },
+    {
+      "Manufacturer": "LockNCharge"
+    },
+    {
+      "Manufacturer": "Logan Electric"
+    },
+    {
+      "Manufacturer": "Logan Graphics"
+    },
+    {
+      "Manufacturer": "LogicKeyboard"
+    },
+    {
+      "Manufacturer": "Logiix"
+    },
+    {
+      "Manufacturer": "Logitech"
+    },
+    {
+      "Manufacturer": "LokSak"
+    },
+    {
+      "Manufacturer": "Lomography"
+    },
+    {
+      "Manufacturer": "Loocam"
+    },
+    {
+      "Manufacturer": "Loop"
+    },
+    {
+      "Manufacturer": "Lorex"
+    },
+    {
+      "Manufacturer": "Loupedeck"
+    },
+    {
+      "Manufacturer": "Lowel"
+    },
+    {
+      "Manufacturer": "Lowell Manufacturing"
+    },
+    {
+      "Manufacturer": "Lowepro"
+    },
+    {
+      "Manufacturer": "LS Photo Pro Studio"
+    },
+    {
+      "Manufacturer": "Ltm"
+    },
+    {
+      "Manufacturer": "Lumahawk"
+    },
+    {
+      "Manufacturer": "Lumantek"
+    },
+    {
+      "Manufacturer": "Lume Cube"
+    },
+    {
+      "Manufacturer": "Lumedyne"
+    },
+    {
+      "Manufacturer": "Lumen Radio"
+    },
+    {
+      "Manufacturer": "Lumens"
+    },
+    {
+      "Manufacturer": "Lumijet"
+    },
+    {
+      "Manufacturer": "LumiQuest"
+    },
+    {
+      "Manufacturer": "Lumu"
+    },
+    {
+      "Manufacturer": "Luna"
+    },
+    {
+      "Manufacturer": "Luna Optics"
+    },
+    {
+      "Manufacturer": "Lunt Solar Systems"
+    },
+    {
+      "Manufacturer": "Lupo"
+    },
+    {
+      "Manufacturer": "Luxor"
+    },
+    {
+      "Manufacturer": "Lyman"
+    },
+    {
+      "Manufacturer": "Lynn Peavey"
+    },
+    {
+      "Manufacturer": "Lynx Studio"
+    },
+    {
+      "Manufacturer": "Lynx Technik AG"
+    },
+    {
+      "Manufacturer": "LyxPro"
+    },
+    {
+      "Manufacturer": "Macally"
+    },
+    {
+      "Manufacturer": "Mack Camera Repair"
+    },
+    {
+      "Manufacturer": "Mackie"
+    },
+    {
+      "Manufacturer": "Magenta Research"
+    },
+    {
+      "Manufacturer": "Magewell"
+    },
+    {
+      "Manufacturer": "Magic Gadgets"
+    },
+    {
+      "Manufacturer": "Magic Lantern"
+    },
+    {
+      "Manufacturer": "MagiCue"
+    },
+    {
+      "Manufacturer": "Magix"
+    },
+    {
+      "Manufacturer": "MagLite"
+    },
+    {
+      "Manufacturer": "Magma"
+    },
+    {
+      "Manufacturer": "MagMod"
+    },
+    {
+      "Manufacturer": "Magnaframe"
+    },
+    {
+      "Manufacturer": "Magnat"
+    },
+    {
+      "Manufacturer": "Magnus"
+    },
+    {
+      "Manufacturer": "Maha"
+    },
+    {
+      "Manufacturer": "Makaw"
+    },
+    {
+      "Manufacturer": "MakeMusic"
+    },
+    {
+      "Manufacturer": "Malden International"
+    },
+    {
+      "Manufacturer": "Mamiya"
+    },
+    {
+      "Manufacturer": "Mamiya/Leaf"
+    },
+    {
+      "Manufacturer": "Manfrotto"
+    },
+    {
+      "Manufacturer": "Manhattan"
+    },
+    {
+      "Manufacturer": "Manhattan Edit Workshop"
+    },
+    {
+      "Manufacturer": "Manhattan LCD"
+    },
+    {
+      "Manufacturer": "Manios Digital & Film"
+    },
+    {
+      "Manufacturer": "Manley Labs"
+    },
+    {
+      "Manufacturer": "MAONO"
+    },
+    {
+      "Manufacturer": "Marani"
+    },
+    {
+      "Manufacturer": "Marantz"
+    },
+    {
+      "Manufacturer": "Marathon"
+    },
+    {
+      "Manufacturer": "Margaritaville"
+    },
+    {
+      "Manufacturer": "Marseille"
+    },
+    {
+      "Manufacturer": "Marshall"
+    },
+    {
+      "Manufacturer": "Marshall Electronics"
+    },
+    {
+      "Manufacturer": "Marshall's Photo Coloring System"
+    },
+    {
+      "Manufacturer": "Martin Audio"
+    },
+    {
+      "Manufacturer": "Martin Lighting"
+    },
+    {
+      "Manufacturer": "Martin Universal Design"
+    },
+    {
+      "Manufacturer": "Marumi"
+    },
+    {
+      "Manufacturer": "Master Airscrew"
+    },
+    {
+      "Manufacturer": "Master Cases"
+    },
+    {
+      "Manufacturer": "Matein"
+    },
+    {
+      "Manufacturer": "Matrox"
+    },
+    {
+      "Manufacturer": "Matterport"
+    },
+    {
+      "Manufacturer": "Matthews"
+    },
+    {
+      "Manufacturer": "M-Audio"
+    },
+    {
+      "Manufacturer": "Maxell"
+    },
+    {
+      "Manufacturer": "MaxHub"
+    },
+    {
+      "Manufacturer": "Maximum Games"
+    },
+    {
+      "Manufacturer": "Maxoak"
+    },
+    {
+      "Manufacturer": "Maxpedition"
+    },
+    {
+      "Manufacturer": "Maxtor"
+    },
+    {
+      "Manufacturer": "MBI"
+    },
+    {
+      "Manufacturer": "MC Cases"
+    },
+    {
+      "Manufacturer": "MCS"
+    },
+    {
+      "Manufacturer": "Meade"
+    },
+    {
+      "Manufacturer": "MEAN WELL"
+    },
+    {
+      "Manufacturer": "Medalight"
+    },
+    {
+      "Manufacturer": "Medeli"
+    },
+    {
+      "Manufacturer": "MEDTECH Forensics"
+    },
+    {
+      "Manufacturer": "MEE audio"
+    },
+    {
+      "Manufacturer": "MeFOTO"
+    },
+    {
+      "Manufacturer": "Mega Tiny"
+    },
+    {
+      "Manufacturer": "Megadap"
+    },
+    {
+      "Manufacturer": "MegaGear"
+    },
+    {
+      "Manufacturer": "Meike"
+    },
+    {
+      "Manufacturer": "Meking"
+    },
+    {
+      "Manufacturer": "MeldaProduction"
+    },
+    {
+      "Manufacturer": "Mellanox"
+    },
+    {
+      "Manufacturer": "Memorex"
+    },
+    {
+      "Manufacturer": "Mentter"
+    },
+    {
+      "Manufacturer": "Meopta"
+    },
+    {
+      "Manufacturer": "Merge"
+    },
+    {
+      "Manufacturer": "Merging Technologies"
+    },
+    {
+      "Manufacturer": "Metabones"
+    },
+    {
+      "Manufacturer": "metaSETZ"
+    },
+    {
+      "Manufacturer": "Metro"
+    },
+    {
+      "Manufacturer": "Metrologic"
+    },
+    {
+      "Manufacturer": "Metz"
+    },
+    {
+      "Manufacturer": "Meural"
+    },
+    {
+      "Manufacturer": "MeVIDEO"
+    },
+    {
+      "Manufacturer": "Mevo"
+    },
+    {
+      "Manufacturer": "Meyer-Optik Gorlitz"
+    },
+    {
+      "Manufacturer": "MicaSense"
+    },
+    {
+      "Manufacturer": "Microboards Technology"
+    },
+    {
+      "Manufacturer": "Microdear"
+    },
+    {
+      "Manufacturer": "Microduino"
+    },
+    {
+      "Manufacturer": "Microflex"
+    },
+    {
+      "Manufacturer": "Micron"
+    },
+    {
+      "Manufacturer": "Microsoft"
+    },
+    {
+      "Manufacturer": "MicW"
+    },
+    {
+      "Manufacturer": "Midas"
+    },
+    {
+      "Manufacturer": "Middle Atlantic"
+    },
+    {
+      "Manufacturer": "Middle Things"
+    },
+    {
+      "Manufacturer": "Midland"
+    },
+    {
+      "Manufacturer": "miggo"
+    },
+    {
+      "Manufacturer": "Mighty Purse"
+    },
+    {
+      "Manufacturer": "Miktek"
+    },
+    {
+      "Manufacturer": "Millennia"
+    },
+    {
+      "Manufacturer": "Miller"
+    },
+    {
+      "Manufacturer": "Milspec"
+    },
+    {
+      "Manufacturer": "MindShift"
+    },
+    {
+      "Manufacturer": "Minelab"
+    },
+    {
+      "Manufacturer": "Mini Gadgets"
+    },
+    {
+      "Manufacturer": "Minolta"
+    },
+    {
+      "Manufacturer": "Minox"
+    },
+    {
+      "Manufacturer": "MiNT"
+    },
+    {
+      "Manufacturer": "Minuteman"
+    },
+    {
+      "Manufacturer": "Miranda"
+    },
+    {
+      "Manufacturer": "Mirfak"
+    },
+    {
+      "Manufacturer": "Mirror Image"
+    },
+    {
+      "Manufacturer": "Miscellaneous"
+    },
+    {
+      "Manufacturer": "Mitakon Zhongyi"
+    },
+    {
+      "Manufacturer": "Mitomo"
+    },
+    {
+      "Manufacturer": "Mitra"
+    },
+    {
+      "Manufacturer": "Mitsubishi"
+    },
+    {
+      "Manufacturer": "Mixcraft"
+    },
+    {
+      "Manufacturer": "MK Controls"
+    },
+    {
+      "Manufacturer": "MK Digital Direct"
+    },
+    {
+      "Manufacturer": "mLogic"
+    },
+    {
+      "Manufacturer": "MMT"
+    },
+    {
+      "Manufacturer": "Moab"
+    },
+    {
+      "Manufacturer": "Mobile Edge"
+    },
+    {
+      "Manufacturer": "Mobile Studios"
+    },
+    {
+      "Manufacturer": "Mobvoi"
+    },
+    {
+      "Manufacturer": "Mod"
+    },
+    {
+      "Manufacturer": "Mod-Tap"
+    },
+    {
+      "Manufacturer": "Mogami"
+    },
+    {
+      "Manufacturer": "MOHAWK"
+    },
+    {
+      "Manufacturer": "MOHOC"
+    },
+    {
+      "Manufacturer": "Mola"
+    },
+    {
+      "Manufacturer": "Mole-Richardson"
+    },
+    {
+      "Manufacturer": "Molex"
+    },
+    {
+      "Manufacturer": "Moment"
+    },
+    {
+      "Manufacturer": "Momentum"
+    },
+    {
+      "Manufacturer": "Monoprice"
+    },
+    {
+      "Manufacturer": "Monster Cable"
+    },
+    {
+      "Manufacturer": "Monument Labs"
+    },
+    {
+      "Manufacturer": "Moog"
+    },
+    {
+      "Manufacturer": "Moore"
+    },
+    {
+      "Manufacturer": "Moose"
+    },
+    {
+      "Manufacturer": "Mophie"
+    },
+    {
+      "Manufacturer": "Morris"
+    },
+    {
+      "Manufacturer": "Moshi"
+    },
+    {
+      "Manufacturer": "Mota"
+    },
+    {
+      "Manufacturer": "Motionnine"
+    },
+    {
+      "Manufacturer": "Motiv"
+    },
+    {
+      "Manufacturer": "Motorola"
+    },
+    {
+      "Manufacturer": "MOTU"
+    },
+    {
+      "Manufacturer": "Mountainsmith"
+    },
+    {
+      "Manufacturer": "Mounting Dream"
+    },
+    {
+      "Manufacturer": "Mount-It!"
+    },
+    {
+      "Manufacturer": "Movcam"
+    },
+    {
+      "Manufacturer": "Movo"
+    },
+    {
+      "Manufacturer": "Movo Photo"
+    },
+    {
+      "Manufacturer": "Moza"
+    },
+    {
+      "Manufacturer": "M-Pro 7"
+    },
+    {
+      "Manufacturer": "Mr.Zhou"
+    },
+    {
+      "Manufacturer": "MSI"
+    },
+    {
+      "Manufacturer": "MTF Services Ltd"
+    },
+    {
+      "Manufacturer": "Mueller Optics"
+    },
+    {
+      "Manufacturer": "Multi-Link"
+    },
+    {
+      "Manufacturer": "Music Fidelity"
+    },
+    {
+      "Manufacturer": "Music Trends"
+    },
+    {
+      "Manufacturer": "Musical Fidelity"
+    },
+    {
+      "Manufacturer": "MusicLab"
+    },
+    {
+      "Manufacturer": "Mustek"
+    },
+    {
+      "Manufacturer": "MustHD"
+    },
+    {
+      "Manufacturer": "Muxlab"
+    },
+    {
+      "Manufacturer": "MWM"
+    },
+    {
+      "Manufacturer": "MXL"
+    },
+    {
+      "Manufacturer": "myGEKOgear"
+    },
+    {
+      "Manufacturer": "MYRMICA"
+    },
+    {
+      "Manufacturer": "Mystaire"
+    },
+    {
+      "Manufacturer": "MyStudio"
+    },
+    {
+      "Manufacturer": "MYT Works"
+    },
+    {
+      "Manufacturer": "Nady"
+    },
+    {
+      "Manufacturer": "Naim"
+    },
+    {
+      "Manufacturer": "Nalpak"
+    },
+    {
+      "Manufacturer": "NanLite"
+    },
+    {
+      "Manufacturer": "Nanlux"
+    },
+    {
+      "Manufacturer": "Nanoleaf"
+    },
+    {
+      "Manufacturer": "Nanuk"
+    },
+    {
+      "Manufacturer": "Nartec"
+    },
+    {
+      "Manufacturer": "National Public Seating"
+    },
+    {
+      "Manufacturer": "Native Instruments"
+    },
+    {
+      "Manufacturer": "NatureScapes"
+    },
+    {
+      "Manufacturer": "Naughty Dogs Inc."
+    },
+    {
+      "Manufacturer": "NcSTAR"
+    },
+    {
+      "Manufacturer": "NcSTAR Vism"
+    },
+    {
+      "Manufacturer": "Neat Microphones"
+    },
+    {
+      "Manufacturer": "Nebtek"
+    },
+    {
+      "Manufacturer": "Nebula"
+    },
+    {
+      "Manufacturer": "NEC"
+    },
+    {
+      "Manufacturer": "Neewer"
+    },
+    {
+      "Manufacturer": "Neil Enterprises"
+    },
+    {
+      "Manufacturer": "Neopost"
+    },
+    {
+      "Manufacturer": "Netgear"
+    },
+    {
+      "Manufacturer": "Netmedia"
+    },
+    {
+      "Manufacturer": "Netvue"
+    },
+    {
+      "Manufacturer": "Neumann"
+    },
+    {
+      "Manufacturer": "Neutrik"
+    },
+    {
+      "Manufacturer": "New Leaf"
+    },
+    {
+      "Manufacturer": "NewBlueFX"
+    },
+    {
+      "Manufacturer": "Newcon Optik"
+    },
+    {
+      "Manufacturer": "NewerTech"
+    },
+    {
+      "Manufacturer": "Newswear"
+    },
+    {
+      "Manufacturer": "NewTek"
+    },
+    {
+      "Manufacturer": "Nextbase"
+    },
+    {
+      "Manufacturer": "Nexto DI"
+    },
+    {
+      "Manufacturer": "Nexx"
+    },
+    {
+      "Manufacturer": "NI Kontakt"
+    },
+    {
+      "Manufacturer": "NiceFoto"
+    },
+    {
+      "Manufacturer": "Niceyrig"
+    },
+    {
+      "Manufacturer": "Night Optics"
+    },
+    {
+      "Manufacturer": "Night Owl"
+    },
+    {
+      "Manufacturer": "Night Owl Optics"
+    },
+    {
+      "Manufacturer": "Nightforce Optics"
+    },
+    {
+      "Manufacturer": "Nightstick"
+    },
+    {
+      "Manufacturer": "NIK Public Safety"
+    },
+    {
+      "Manufacturer": "Nikon"
+    },
+    {
+      "Manufacturer": "Nila"
+    },
+    {
+      "Manufacturer": "Nimbus"
+    },
+    {
+      "Manufacturer": "Nintendo"
+    },
+    {
+      "Manufacturer": "NiSi"
+    },
+    {
+      "Manufacturer": "Nissin"
+    },
+    {
+      "Manufacturer": "Nitecore"
+    },
+    {
+      "Manufacturer": "Nixvue"
+    },
+    {
+      "Manufacturer": "Nodal Ninja"
+    },
+    {
+      "Manufacturer": "Noga"
+    },
+    {
+      "Manufacturer": "Nokia"
+    },
+    {
+      "Manufacturer": "Nokta"
+    },
+    {
+      "Manufacturer": "Nooie"
+    },
+    {
+      "Manufacturer": "NORD"
+    },
+    {
+      "Manufacturer": "Nordost"
+    },
+    {
+      "Manufacturer": "Noritsu"
+    },
+    {
+      "Manufacturer": "Norman"
+    },
+    {
+      "Manufacturer": "Novagrade"
+    },
+    {
+      "Manufacturer": "Novation"
+    },
+    {
+      "Manufacturer": "Novatron"
+    },
+    {
+      "Manufacturer": "Novoflex"
+    },
+    {
+      "Manufacturer": "Novopro"
+    },
+    {
+      "Manufacturer": "Novus"
+    },
+    {
+      "Manufacturer": "NPC"
+    },
+    {
+      "Manufacturer": "NRG"
+    },
+    {
+      "Manufacturer": "NTI"
+    },
+    {
+      "Manufacturer": "n-Track"
+    },
+    {
+      "Manufacturer": "Nuance"
+    },
+    {
+      "Manufacturer": "NuForce"
+    },
+    {
+      "Manufacturer": "NUGEN Audio"
+    },
+    {
+      "Manufacturer": "Numark"
+    },
+    {
+      "Manufacturer": "Nuraphone"
+    },
+    {
+      "Manufacturer": "Nvidia"
+    },
+    {
+      "Manufacturer": "N-Vision Optics"
+    },
+    {
+      "Manufacturer": "Nyrius"
+    },
+    {
+      "Manufacturer": "NZXT"
+    },
+    {
+      "Manufacturer": "Oben"
+    },
+    {
+      "Manufacturer": "OBSBOT"
+    },
+    {
+      "Manufacturer": "Obsen"
+    },
+    {
+      "Manufacturer": "Ocean Matrix"
+    },
+    {
+      "Manufacturer": "OConnor"
+    },
+    {
+      "Manufacturer": "Octopus.Camera"
+    },
+    {
+      "Manufacturer": "Oculus"
+    },
+    {
+      "Manufacturer": "ODV"
+    },
+    {
+      "Manufacturer": "Odyssey Innovative Designs"
+    },
+    {
+      "Manufacturer": "OGIO"
+    },
+    {
+      "Manufacturer": "Ohaus"
+    },
+    {
+      "Manufacturer": "Ohm Force"
+    },
+    {
+      "Manufacturer": "OKI Data"
+    },
+    {
+      "Manufacturer": "Oklahoma Sound"
+    },
+    {
+      "Manufacturer": "Olight"
+    },
+    {
+      "Manufacturer": "Olloclip"
+    },
+    {
+      "Manufacturer": "Olympus"
+    },
+    {
+      "Manufacturer": "Omega"
+    },
+    {
+      "Manufacturer": "Omega Case"
+    },
+    {
+      "Manufacturer": "Omega/LPL"
+    },
+    {
+      "Manufacturer": "OmniEYE X"
+    },
+    {
+      "Manufacturer": "ONA"
+    },
+    {
+      "Manufacturer": "Onanoff"
+    },
+    {
+      "Manufacturer": "One Control"
+    },
+    {
+      "Manufacturer": "OneTakeOnly"
+    },
+    {
+      "Manufacturer": "Onkyo"
+    },
+    {
+      "Manufacturer": "On-Stage"
+    },
+    {
+      "Manufacturer": "Ooma"
+    },
+    {
+      "Manufacturer": "Oomi"
+    },
+    {
+      "Manufacturer": "Op/Tech"
+    },
+    {
+      "Manufacturer": "Oppenheimer Camera Products"
+    },
+    {
+      "Manufacturer": "Opteka"
+    },
+    {
+      "Manufacturer": "Optical Cables by Corning"
+    },
+    {
+      "Manufacturer": "Opticron"
+    },
+    {
+      "Manufacturer": "Optitek"
+    },
+    {
+      "Manufacturer": "Optoma"
+    },
+    {
+      "Manufacturer": "Orange"
+    },
+    {
+      "Manufacturer": "OrangeMonkie"
+    },
+    {
+      "Manufacturer": "Orbit"
+    },
+    {
+      "Manufacturer": "Orca"
+    },
+    {
+      "Manufacturer": "ORDRO"
+    },
+    {
+      "Manufacturer": "OREI"
+    },
+    {
+      "Manufacturer": "Orion Images"
+    },
+    {
+      "Manufacturer": "ORLIT"
+    },
+    {
+      "Manufacturer": "Ortega Guitars"
+    },
+    {
+      "Manufacturer": "Ortery"
+    },
+    {
+      "Manufacturer": "Ortofon"
+    },
+    {
+      "Manufacturer": "OSD Audio"
+    },
+    {
+      "Manufacturer": "Osmo"
+    },
+    {
+      "Manufacturer": "Osprey International"
+    },
+    {
+      "Manufacturer": "Osprey Video"
+    },
+    {
+      "Manufacturer": "Osram"
+    },
+    {
+      "Manufacturer": "Otis Technology"
+    },
+    {
+      "Manufacturer": "OtterBox"
+    },
+    {
+      "Manufacturer": "Outers"
+    },
+    {
+      "Manufacturer": "Outlaw"
+    },
+    {
+      "Manufacturer": "Outsight"
+    },
+    {
+      "Manufacturer": "Overland Storage"
+    },
+    {
+      "Manufacturer": "OWC / Other World Computing"
+    },
+    {
+      "Manufacturer": "OZEN"
+    },
+    {
+      "Manufacturer": "P&C"
+    },
+    {
+      "Manufacturer": "Pachmayr"
+    },
+    {
+      "Manufacturer": "Pacific Image"
+    },
+    {
+      "Manufacturer": "Pacsafe"
+    },
+    {
+      "Manufacturer": "Pad Go Round"
+    },
+    {
+      "Manufacturer": "Padcaster"
+    },
+    {
+      "Manufacturer": "Pag"
+    },
+    {
+      "Manufacturer": "Pana Vue"
+    },
+    {
+      "Manufacturer": "PanaCast"
+    },
+    {
+      "Manufacturer": "Panasonic"
+    },
+    {
+      "Manufacturer": "PanaVise"
+    },
+    {
+      "Manufacturer": "Pancro"
+    },
+    {
+      "Manufacturer": "Panther"
+    },
+    {
+      "Manufacturer": "Panther Guard"
+    },
+    {
+      "Manufacturer": "Pantone"
+    },
+    {
+      "Manufacturer": "Paolo Cardelli"
+    },
+    {
+      "Manufacturer": "Papago"
+    },
+    {
+      "Manufacturer": "Paraben"
+    },
+    {
+      "Manufacturer": "Paralenz"
+    },
+    {
+      "Manufacturer": "Paralinx"
+    },
+    {
+      "Manufacturer": "Paramount"
+    },
+    {
+      "Manufacturer": "Parrot"
+    },
+    {
+      "Manufacturer": "Paterson Photographic"
+    },
+    {
+      "Manufacturer": "Pathway"
+    },
+    {
+      "Manufacturer": "Patriot Memory"
+    },
+    {
+      "Manufacturer": "Patrol Eyes"
+    },
+    {
+      "Manufacturer": "Paul C. Buff"
+    },
+    {
+      "Manufacturer": "Paxis"
+    },
+    {
+      "Manufacturer": "PBL"
+    },
+    {
+      "Manufacturer": "PD Movie"
+    },
+    {
+      "Manufacturer": "PDP"
+    },
+    {
+      "Manufacturer": "Peak Design"
+    },
+    {
+      "Manufacturer": "Peak Optics"
+    },
+    {
+      "Manufacturer": "Pearl Microphone Lab"
+    },
+    {
+      "Manufacturer": "Pearstone"
+    },
+    {
+      "Manufacturer": "Peavey"
+    },
+    {
+      "Manufacturer": "Peca"
+    },
+    {
+      "Manufacturer": "Pedco"
+    },
+    {
+      "Manufacturer": "Peerless"
+    },
+    {
+      "Manufacturer": "Pelco"
+    },
+    {
+      "Manufacturer": "Pelican"
+    },
+    {
+      "Manufacturer": "Pelican Gear"
+    },
+    {
+      "Manufacturer": "Pengo"
+    },
+    {
+      "Manufacturer": "Pentax"
+    },
+    {
+      "Manufacturer": "Permacell"
+    },
+    {
+      "Manufacturer": "PermaJetUSA"
+    },
+    {
+      "Manufacturer": "Perri's Leathers"
+    },
+    {
+      "Manufacturer": "Peter Engh"
+    },
+    {
+      "Manufacturer": "Petrol"
+    },
+    {
+      "Manufacturer": "PGYTECH"
+    },
+    {
+      "Manufacturer": "PHABRIX"
+    },
+    {
+      "Manufacturer": "Phantom Knowledge"
+    },
+    {
+      "Manufacturer": "Phase One"
+    },
+    {
+      "Manufacturer": "PHASE TECH"
+    },
+    {
+      "Manufacturer": "Phil Jones Bass"
+    },
+    {
+      "Manufacturer": "Philips"
+    },
+    {
+      "Manufacturer": "Phoenix"
+    },
+    {
+      "Manufacturer": "Phoenix Audio"
+    },
+    {
+      "Manufacturer": "Phoneographer"
+    },
+    {
+      "Manufacturer": "Phonic"
+    },
+    {
+      "Manufacturer": "Photek"
+    },
+    {
+      "Manufacturer": "Photo Clam"
+    },
+    {
+      "Manufacturer": "Photo Gear Designs"
+    },
+    {
+      "Manufacturer": "PhotoBert"
+    },
+    {
+      "Manufacturer": "PhotoBooth Startup"
+    },
+    {
+      "Manufacturer": "Photoflex"
+    },
+    {
+      "Manufacturer": "Photogenic"
+    },
+    {
+      "Manufacturer": "Photographers' Formulary"
+    },
+    {
+      "Manufacturer": "Photographic Solutions"
+    },
+    {
+      "Manufacturer": "Photography & Cinema"
+    },
+    {
+      "Manufacturer": "Photopantz"
+    },
+    {
+      "Manufacturer": "PhotoshopCafe"
+    },
+    {
+      "Manufacturer": "PhotoVision"
+    },
+    {
+      "Manufacturer": "Phottix"
+    },
+    {
+      "Manufacturer": "Pianoteq"
+    },
+    {
+      "Manufacturer": "Pico"
+    },
+    {
+      "Manufacturer": "Pictar"
+    },
+    {
+      "Manufacturer": "Pictools"
+    },
+    {
+      "Manufacturer": "Pictorico"
+    },
+    {
+      "Manufacturer": "Pictronic"
+    },
+    {
+      "Manufacturer": "Pig Hog"
+    },
+    {
+      "Manufacturer": "Pilotfly"
+    },
+    {
+      "Manufacturer": "Pimax"
+    },
+    {
+      "Manufacturer": "Pina Zangaro"
+    },
+    {
+      "Manufacturer": "Pioneer Electronics"
+    },
+    {
+      "Manufacturer": "Pioneer Home Audio"
+    },
+    {
+      "Manufacturer": "Pioneer Photo Album"
+    },
+    {
+      "Manufacturer": "Pivo"
+    },
+    {
+      "Manufacturer": "Pix4D"
+    },
+    {
+      "Manufacturer": "Pixel"
+    },
+    {
+      "Manufacturer": "Pixelflash"
+    },
+    {
+      "Manufacturer": "Planar"
+    },
+    {
+      "Manufacturer": "Plano"
+    },
+    {
+      "Manufacturer": "Plantronics"
+    },
+    {
+      "Manufacturer": "Platinum Tools"
+    },
+    {
+      "Manufacturer": "Platypod"
+    },
+    {
+      "Manufacturer": "PlayStation"
+    },
+    {
+      "Manufacturer": "Pliant Technologies"
+    },
+    {
+      "Manufacturer": "Plott Inc"
+    },
+    {
+      "Manufacturer": "Plume"
+    },
+    {
+      "Manufacturer": "Plush FX Pedals"
+    },
+    {
+      "Manufacturer": "Plustek"
+    },
+    {
+      "Manufacturer": "Pluto Trigger"
+    },
+    {
+      "Manufacturer": "PNY Technologies"
+    },
+    {
+      "Manufacturer": "PocketWizard"
+    },
+    {
+      "Manufacturer": "Point 2 Point"
+    },
+    {
+      "Manufacturer": "Polar"
+    },
+    {
+      "Manufacturer": "Polar Pro"
+    },
+    {
+      "Manufacturer": "Polaris Optics"
+    },
+    {
+      "Manufacturer": "Polaroid"
+    },
+    {
+      "Manufacturer": "Polaroid Originals"
+    },
+    {
+      "Manufacturer": "Polder"
+    },
+    {
+      "Manufacturer": "Poler"
+    },
+    {
+      "Manufacturer": "Polk Audio"
+    },
+    {
+      "Manufacturer": "Polsen"
+    },
+    {
+      "Manufacturer": "Polycom"
+    },
+    {
+      "Manufacturer": "Polyverse"
+    },
+    {
+      "Manufacturer": "Port"
+    },
+    {
+      "Manufacturer": "Porta Brace"
+    },
+    {
+      "Manufacturer": "Porta Trace"
+    },
+    {
+      "Manufacturer": "Portable Battery Systems"
+    },
+    {
+      "Manufacturer": "Portacom"
+    },
+    {
+      "Manufacturer": "Porta-Jib"
+    },
+    {
+      "Manufacturer": "Portkeys"
+    },
+    {
+      "Manufacturer": "Positive Grid"
+    },
+    {
+      "Manufacturer": "POSTIUM"
+    },
+    {
+      "Manufacturer": "Power2000"
+    },
+    {
+      "Manufacturer": "PowerA"
+    },
+    {
+      "Manufacturer": "Powerextra"
+    },
+    {
+      "Manufacturer": "PowerGistics"
+    },
+    {
+      "Manufacturer": "PowerPax"
+    },
+    {
+      "Manufacturer": "Powersoft"
+    },
+    {
+      "Manufacturer": "PowerVision"
+    },
+    {
+      "Manufacturer": "PPA International"
+    },
+    {
+      "Manufacturer": "PQI"
+    },
+    {
+      "Manufacturer": "Practilite"
+    },
+    {
+      "Manufacturer": "Prat Paris"
+    },
+    {
+      "Manufacturer": "Precision Design"
+    },
+    {
+      "Manufacturer": "Premier"
+    },
+    {
+      "Manufacturer": "Premier Imaging"
+    },
+    {
+      "Manufacturer": "Premium"
+    },
+    {
+      "Manufacturer": "PreSonus"
+    },
+    {
+      "Manufacturer": "Preston"
+    },
+    {
+      "Manufacturer": "Pre-View"
+    },
+    {
+      "Manufacturer": "Primacoustic"
+    },
+    {
+      "Manufacturer": "Primera Technology"
+    },
+    {
+      "Manufacturer": "Primos"
+    },
+    {
+      "Manufacturer": "Print File"
+    },
+    {
+      "Manufacturer": "Printique"
+    },
+    {
+      "Manufacturer": "Prinz"
+    },
+    {
+      "Manufacturer": "Pro Co Sound"
+    },
+    {
+      "Manufacturer": "Pro Photo"
+    },
+    {
+      "Manufacturer": "Pro Tapes"
+    },
+    {
+      "Manufacturer": "Pro Video Accessories"
+    },
+    {
+      "Manufacturer": "Pro8mm"
+    },
+    {
+      "Manufacturer": "Proactive"
+    },
+    {
+      "Manufacturer": "Proaim"
+    },
+    {
+      "Manufacturer": "ProAm"
+    },
+    {
+      "Manufacturer": "ProCam Motion"
+    },
+    {
+      "Manufacturer": "proDAD"
+    },
+    {
+      "Manufacturer": "Profoto"
+    },
+    {
+      "Manufacturer": "Prograde Digital"
+    },
+    {
+      "Manufacturer": "Projet"
+    },
+    {
+      "Manufacturer": "ProLights"
+    },
+    {
+      "Manufacturer": "Pro-Line"
+    },
+    {
+      "Manufacturer": "Prolite"
+    },
+    {
+      "Manufacturer": "Promaster"
+    },
+    {
+      "Manufacturer": "ProMax"
+    },
+    {
+      "Manufacturer": "ProMediaGear"
+    },
+    {
+      "Manufacturer": "Promise Technology"
+    },
+    {
+      "Manufacturer": "Promote Systems"
+    },
+    {
+      "Manufacturer": "Prompter People"
+    },
+    {
+      "Manufacturer": "ProOptic"
+    },
+    {
+      "Manufacturer": "ProPrompter"
+    },
+    {
+      "Manufacturer": "ProSoCoustic"
+    },
+    {
+      "Manufacturer": "ProStorage"
+    },
+    {
+      "Manufacturer": "ProX"
+    },
+    {
+      "Manufacturer": "PSC"
+    },
+    {
+      "Manufacturer": "PTZOptics"
+    },
+    {
+      "Manufacturer": "Pulsar"
+    },
+    {
+      "Manufacturer": "Pure Digital Technologies"
+    },
+    {
+      "Manufacturer": "PureLink"
+    },
+    {
+      "Manufacturer": "Purosol"
+    },
+    {
+      "Manufacturer": "Pyle"
+    },
+    {
+      "Manufacturer": "Pyramid"
+    },
+    {
+      "Manufacturer": "Qardio"
+    },
+    {
+      "Manufacturer": "QHYCCD"
+    },
+    {
+      "Manufacturer": "Qmadix"
+    },
+    {
+      "Manufacturer": "Qnap"
+    },
+    {
+      "Manufacturer": "QPcard"
+    },
+    {
+      "Manufacturer": "QSC"
+    },
+    {
+      "Manufacturer": "Q-See"
+    },
+    {
+      "Manufacturer": "Quad Lock"
+    },
+    {
+      "Manufacturer": "Quantaray"
+    },
+    {
+      "Manufacturer": "Quantum"
+    },
+    {
+      "Manufacturer": "Quasar Science"
+    },
+    {
+      "Manufacturer": "Que Audio"
+    },
+    {
+      "Manufacturer": "Quickpower"
+    },
+    {
+      "Manufacturer": "Quik Lok"
+    },
+    {
+      "Manufacturer": "Quik Pod"
+    },
+    {
+      "Manufacturer": "Quilter Labs"
+    },
+    {
+      "Manufacturer": "QVS"
+    },
+    {
+      "Manufacturer": "Qysea"
+    },
+    {
+      "Manufacturer": "Radial"
+    },
+    {
+      "Manufacturer": "Radial Engineering"
+    },
+    {
+      "Manufacturer": "Radio Shack"
+    },
+    {
+      "Manufacturer": "RadioPopper"
+    },
+    {
+      "Manufacturer": "Raider i-cuff"
+    },
+    {
+      "Manufacturer": "Rain Design"
+    },
+    {
+      "Manufacturer": "Rand Brands"
+    },
+    {
+      "Manufacturer": "Rane"
+    },
+    {
+      "Manufacturer": "Rane DJ"
+    },
+    {
+      "Manufacturer": "Rat Rig"
+    },
+    {
+      "Manufacturer": "Ravelli"
+    },
+    {
+      "Manufacturer": "Raxxess"
+    },
+    {
+      "Manufacturer": "Raynox"
+    },
+    {
+      "Manufacturer": "Rayovac"
+    },
+    {
+      "Manufacturer": "Rayzr 7"
+    },
+    {
+      "Manufacturer": "Razer"
+    },
+    {
+      "Manufacturer": "Razor"
+    },
+    {
+      "Manufacturer": "RBA Photo Booths"
+    },
+    {
+      "Manufacturer": "RCA"
+    },
+    {
+      "Manufacturer": "RCBS"
+    },
+    {
+      "Manufacturer": "RCF"
+    },
+    {
+      "Manufacturer": "RDL"
+    },
+    {
+      "Manufacturer": "Ready Rig"
+    },
+    {
+      "Manufacturer": "RealFlight"
+    },
+    {
+      "Manufacturer": "Really Right Stuff"
+    },
+    {
+      "Manufacturer": "Rebuff Reality"
+    },
+    {
+      "Manufacturer": "Reckeen"
+    },
+    {
+      "Manufacturer": "Re-Compose"
+    },
+    {
+      "Manufacturer": "RECONYX"
+    },
+    {
+      "Manufacturer": "RED Digital Cinema"
+    },
+    {
+      "Manufacturer": "Red Giant"
+    },
+    {
+      "Manufacturer": "Redrock Micro"
+    },
+    {
+      "Manufacturer": "Reel EFX"
+    },
+    {
+      "Manufacturer": "Reflecmedia"
+    },
+    {
+      "Manufacturer": "Reflecta"
+    },
+    {
+      "Manufacturer": "Re-Fuel"
+    },
+    {
+      "Manufacturer": "Rel Acoustics"
+    },
+    {
+      "Manufacturer": "Relab Development"
+    },
+    {
+      "Manufacturer": "Relacart"
+    },
+    {
+      "Manufacturer": "Reloop"
+    },
+    {
+      "Manufacturer": "Remin"
+    },
+    {
+      "Manufacturer": "Remo+"
+    },
+    {
+      "Manufacturer": "Remote Audio"
+    },
+    {
+      "Manufacturer": "REMOVU"
+    },
+    {
+      "Manufacturer": "Reolink"
+    },
+    {
+      "Manufacturer": "Retevis"
+    },
+    {
+      "Manufacturer": "Reunion Blues"
+    },
+    {
+      "Manufacturer": "Revo"
+    },
+    {
+      "Manufacturer": "Revolabs"
+    },
+    {
+      "Manufacturer": "Revolog"
+    },
+    {
+      "Manufacturer": "RF Venue"
+    },
+    {
+      "Manufacturer": "RF-Link"
+    },
+    {
+      "Manufacturer": "RGBlink"
+    },
+    {
+      "Manufacturer": "Rhino"
+    },
+    {
+      "Manufacturer": "RhinoShield"
+    },
+    {
+      "Manufacturer": "Ricoh"
+    },
+    {
+      "Manufacturer": "Rigel Systems"
+    },
+    {
+      "Manufacturer": "Rigidesigns"
+    },
+    {
+      "Manufacturer": "RigLand"
+    },
+    {
+      "Manufacturer": "RigWheels"
+    },
+    {
+      "Manufacturer": "RIM BlackBerry"
+    },
+    {
+      "Manufacturer": "Rime Lite"
+    },
+    {
+      "Manufacturer": "Ring"
+    },
+    {
+      "Manufacturer": "RIPP Restraints"
+    },
+    {
+      "Manufacturer": "Rip-Tie"
+    },
+    {
+      "Manufacturer": "Riteway"
+    },
+    {
+      "Manufacturer": "Ritron"
+    },
+    {
+      "Manufacturer": "RLSOCO"
+    },
+    {
+      "Manufacturer": "RME"
+    },
+    {
+      "Manufacturer": "RoadWired"
+    },
+    {
+      "Manufacturer": "Rob Papen"
+    },
+    {
+      "Manufacturer": "RoboSHOOT"
+    },
+    {
+      "Manufacturer": "Rochester Optical"
+    },
+    {
+      "Manufacturer": "Rock N Roller Multi-Cart"
+    },
+    {
+      "Manufacturer": "Rockland Colloid"
+    },
+    {
+      "Manufacturer": "Rockstar Games"
+    },
+    {
+      "Manufacturer": "Rockustics"
+    },
+    {
+      "Manufacturer": "Rocky Nook"
+    },
+    {
+      "Manufacturer": "Rode Microphones"
+    },
+    {
+      "Manufacturer": "Rodenstock"
+    },
+    {
+      "Manufacturer": "Rogue"
+    },
+    {
+      "Manufacturer": "Rokinon"
+    },
+    {
+      "Manufacturer": "Rokunar"
+    },
+    {
+      "Manufacturer": "Roland"
+    },
+    {
+      "Manufacturer": "Rollei"
+    },
+    {
+      "Manufacturer": "Rollocam"
+    },
+    {
+      "Manufacturer": "Rolls"
+    },
+    {
+      "Manufacturer": "Rolux"
+    },
+    {
+      "Manufacturer": "Ronford Baker"
+    },
+    {
+      "Manufacturer": "rooCASE"
+    },
+    {
+      "Manufacturer": "ROR"
+    },
+    {
+      "Manufacturer": "Rosco"
+    },
+    {
+      "Manufacturer": "Ross Video"
+    },
+    {
+      "Manufacturer": "RotaTrim"
+    },
+    {
+      "Manufacturer": "Rotolight"
+    },
+    {
+      "Manufacturer": "Royal Sovereign"
+    },
+    {
+      "Manufacturer": "ROYBI"
+    },
+    {
+      "Manufacturer": "Royole Moon"
+    },
+    {
+      "Manufacturer": "RPS Studio"
+    },
+    {
+      "Manufacturer": "Rsa"
+    },
+    {
+      "Manufacturer": "RTS"
+    },
+    {
+      "Manufacturer": "RTW"
+    },
+    {
+      "Manufacturer": "Ruckus"
+    },
+    {
+      "Manufacturer": "RucPac"
+    },
+    {
+      "Manufacturer": "Ruggard"
+    },
+    {
+      "Manufacturer": "RushCharge"
+    },
+    {
+      "Manufacturer": "Rustic Town"
+    },
+    {
+      "Manufacturer": "Rycote"
+    },
+    {
+      "Manufacturer": "Rylo"
+    },
+    {
+      "Manufacturer": "RYZE"
+    },
+    {
+      "Manufacturer": "Sabian"
+    },
+    {
+      "Manufacturer": "Sabinetek"
+    },
+    {
+      "Manufacturer": "Sabrent"
+    },
+    {
+      "Manufacturer": "Sachtler"
+    },
+    {
+      "Manufacturer": "Safariland"
+    },
+    {
+      "Manufacturer": "Safco"
+    },
+    {
+      "Manufacturer": "Safety Zone"
+    },
+    {
+      "Manufacturer": "Saitek"
+    },
+    {
+      "Manufacturer": "Salrayworks"
+    },
+    {
+      "Manufacturer": "Samigon"
+    },
+    {
+      "Manufacturer": "Sample Packs"
+    },
+    {
+      "Manufacturer": "Samson"
+    },
+    {
+      "Manufacturer": "Samsonite"
+    },
+    {
+      "Manufacturer": "Samsung"
+    },
+    {
+      "Manufacturer": "Samsung Printers"
+    },
+    {
+      "Manufacturer": "Samurai"
+    },
+    {
+      "Manufacturer": "Samyang"
+    },
+    {
+      "Manufacturer": "SanDisk"
+    },
+    {
+      "Manufacturer": "SanDisk Professional"
+    },
+    {
+      "Manufacturer": "SANDMARC"
+    },
+    {
+      "Manufacturer": "Sanho"
+    },
+    {
+      "Manufacturer": "Sanken"
+    },
+    {
+      "Manufacturer": "Sanus Systems"
+    },
+    {
+      "Manufacturer": "Saramonic"
+    },
+    {
+      "Manufacturer": "Satechi"
+    },
+    {
+      "Manufacturer": "Savage"
+    },
+    {
+      "Manufacturer": "Sawtooth"
+    },
+    {
+      "Manufacturer": "SBIG"
+    },
+    {
+      "Manufacturer": "Sceptre"
+    },
+    {
+      "Manufacturer": "Schecter"
+    },
+    {
+      "Manufacturer": "Schneider"
+    },
+    {
+      "Manufacturer": "Schoeps"
+    },
+    {
+      "Manufacturer": "Schok"
+    },
+    {
+      "Manufacturer": "Schulz Camerasupport"
+    },
+    {
+      "Manufacturer": "SE Electronics"
+    },
+    {
+      "Manufacturer": "Sea & Sea"
+    },
+    {
+      "Manufacturer": "Sea Frogs"
+    },
+    {
+      "Manufacturer": "Seagate"
+    },
+    {
+      "Manufacturer": "Seagull"
+    },
+    {
+      "Manufacturer": "Seahorse"
+    },
+    {
+      "Manufacturer": "Seal"
+    },
+    {
+      "Manufacturer": "SeaLife"
+    },
+    {
+      "Manufacturer": "Seaport Digital"
+    },
+    {
+      "Manufacturer": "S-Echoing"
+    },
+    {
+      "Manufacturer": "Secraft"
+    },
+    {
+      "Manufacturer": "Secure Data"
+    },
+    {
+      "Manufacturer": "Securitytronix"
+    },
+    {
+      "Manufacturer": "Seercam"
+    },
+    {
+      "Manufacturer": "Sega"
+    },
+    {
+      "Manufacturer": "Segue"
+    },
+    {
+      "Manufacturer": "Segway"
+    },
+    {
+      "Manufacturer": "Seiko Instruments"
+    },
+    {
+      "Manufacturer": "Sekonic"
+    },
+    {
+      "Manufacturer": "Sena"
+    },
+    {
+      "Manufacturer": "Senal Sound"
+    },
+    {
+      "Manufacturer": "Sengled"
+    },
+    {
+      "Manufacturer": "Sennheiser"
+    },
+    {
+      "Manufacturer": "Sensei"
+    },
+    {
+      "Manufacturer": "Sensta Tech"
+    },
+    {
+      "Manufacturer": "Sentry Safe"
+    },
+    {
+      "Manufacturer": "Serato"
+    },
+    {
+      "Manufacturer": "Series 7"
+    },
+    {
+      "Manufacturer": "Sescom"
+    },
+    {
+      "Manufacturer": "SetWear"
+    },
+    {
+      "Manufacturer": "Sevenoak"
+    },
+    {
+      "Manufacturer": "Shape"
+    },
+    {
+      "Manufacturer": "Sharp"
+    },
+    {
+      "Manufacturer": "Shell-Case"
+    },
+    {
+      "Manufacturer": "Shen Drones"
+    },
+    {
+      "Manufacturer": "Shepherd"
+    },
+    {
+      "Manufacturer": "Shill"
+    },
+    {
+      "Manufacturer": "Shimoda"
+    },
+    {
+      "Manufacturer": "Shining Technology"
+    },
+    {
+      "Manufacturer": "Shinybow"
+    },
+    {
+      "Manufacturer": "ShooterSlicker"
+    },
+    {
+      "Manufacturer": "Shootsac"
+    },
+    {
+      "Manufacturer": "Shoulderpod"
+    },
+    {
+      "Manufacturer": "Shure"
+    },
+    {
+      "Manufacturer": "ShutterBands"
+    },
+    {
+      "Manufacturer": "Shutterbug Designs"
+    },
+    {
+      "Manufacturer": "Sibelius"
+    },
+    {
+      "Manufacturer": "Siemens"
+    },
+    {
+      "Manufacturer": "Siena"
+    },
+    {
+      "Manufacturer": "Sightmark"
+    },
+    {
+      "Manufacturer": "Sightron"
+    },
+    {
+      "Manufacturer": "Sigma"
+    },
+    {
+      "Manufacturer": "Sihl"
+    },
+    {
+      "Manufacturer": "SIIG"
+    },
+    {
+      "Manufacturer": "Silicon Power"
+    },
+    {
+      "Manufacturer": "Simmons"
+    },
+    {
+      "Manufacturer": "Simorr"
+    },
+    {
+      "Manufacturer": "Simply Gimbal"
+    },
+    {
+      "Manufacturer": "SimplySmartHome"
+    },
+    {
+      "Manufacturer": "Simtoo"
+    },
+    {
+      "Manufacturer": "Sinar"
+    },
+    {
+      "Manufacturer": "Singh-Ray"
+    },
+    {
+      "Manufacturer": "Singing Machine"
+    },
+    {
+      "Manufacturer": "SiOnyx"
+    },
+    {
+      "Manufacturer": "Sirchie"
+    },
+    {
+      "Manufacturer": "Sirui"
+    },
+    {
+      "Manufacturer": "SiteBloc"
+    },
+    {
+      "Manufacturer": "SJCAM"
+    },
+    {
+      "Manufacturer": "Skaarhoj"
+    },
+    {
+      "Manufacturer": "SKB"
+    },
+    {
+      "Manufacturer": "Skooba"
+    },
+    {
+      "Manufacturer": "Skutr"
+    },
+    {
+      "Manufacturer": "SkyeBrowse"
+    },
+    {
+      "Manufacturer": "Skyreat"
+    },
+    {
+      "Manufacturer": "Skywatch"
+    },
+    {
+      "Manufacturer": "Sky-Watcher"
+    },
+    {
+      "Manufacturer": "Skyzimir"
+    },
+    {
+      "Manufacturer": "Slate Media Technology"
+    },
+    {
+      "Manufacturer": "Slickforce Studio"
+    },
+    {
+      "Manufacturer": "SlickWraps"
+    },
+    {
+      "Manufacturer": "Slidgo"
+    },
+    {
+      "Manufacturer": "Slik"
+    },
+    {
+      "Manufacturer": "Slimlens"
+    },
+    {
+      "Manufacturer": "Slinger"
+    },
+    {
+      "Manufacturer": "SlingStudio"
+    },
+    {
+      "Manufacturer": "SLR Lounge"
+    },
+    {
+      "Manufacturer": "SLR Magic"
+    },
+    {
+      "Manufacturer": "SmallHD"
+    },
+    {
+      "Manufacturer": "SmallRig"
+    },
+    {
+      "Manufacturer": "Smart"
+    },
+    {
+      "Manufacturer": "Smart Strip"
+    },
+    {
+      "Manufacturer": "Smart-AVI"
+    },
+    {
+      "Manufacturer": "SmartSystem"
+    },
+    {
+      "Manufacturer": "Smatree"
+    },
+    {
+      "Manufacturer": "Smith & Wesson"
+    },
+    {
+      "Manufacturer": "Smith Optics"
+    },
+    {
+      "Manufacturer": "Smith-Victor"
+    },
+    {
+      "Manufacturer": "SMPRO"
+    },
+    {
+      "Manufacturer": "SMS Audio"
+    },
+    {
+      "Manufacturer": "Snake River Prototyping"
+    },
+    {
+      "Manufacturer": "Snaptain"
+    },
+    {
+      "Manufacturer": "Socanland"
+    },
+    {
+      "Manufacturer": "Sofradir-EC"
+    },
+    {
+      "Manufacturer": "SoftPanels"
+    },
+    {
+      "Manufacturer": "Softron"
+    },
+    {
+      "Manufacturer": "Softube"
+    },
+    {
+      "Manufacturer": "Solar Technology International"
+    },
+    {
+      "Manufacturer": "Solid Camera"
+    },
+    {
+      "Manufacturer": "SolidDrive"
+    },
+    {
+      "Manufacturer": "Solio"
+    },
+    {
+      "Manufacturer": "Solo Bags"
+    },
+    {
+      "Manufacturer": "SOLOSHOT3"
+    },
+    {
+      "Manufacturer": "Sonarworks"
+    },
+    {
+      "Manufacturer": "Sonic Alert"
+    },
+    {
+      "Manufacturer": "Sonifex"
+    },
+    {
+      "Manufacturer": "Sonnet"
+    },
+    {
+      "Manufacturer": "Sonos"
+    },
+    {
+      "Manufacturer": "Sontronics"
+    },
+    {
+      "Manufacturer": "Sonuus"
+    },
+    {
+      "Manufacturer": "Sony"
+    },
+    {
+      "Manufacturer": "Souldier"
+    },
+    {
+      "Manufacturer": "Sound Devices"
+    },
+    {
+      "Manufacturer": "Sound Ideas"
+    },
+    {
+      "Manufacturer": "Soundcraft"
+    },
+    {
+      "Manufacturer": "SoundMAGIC"
+    },
+    {
+      "Manufacturer": "Soundsphere"
+    },
+    {
+      "Manufacturer": "SoundTube"
+    },
+    {
+      "Manufacturer": "Southern Crossbow"
+    },
+    {
+      "Manufacturer": "SP Studio Systems"
+    },
+    {
+      "Manufacturer": "SPC International"
+    },
+    {
+      "Manufacturer": "Speck"
+    },
+    {
+      "Manufacturer": "Speco Technologies"
+    },
+    {
+      "Manufacturer": "Spector Bass"
+    },
+    {
+      "Manufacturer": "Spectra Cine"
+    },
+    {
+      "Manufacturer": "Spectroline"
+    },
+    {
+      "Manufacturer": "Speed IR"
+    },
+    {
+      "Manufacturer": "Speedotron"
+    },
+    {
+      "Manufacturer": "Spektrum"
+    },
+    {
+      "Manufacturer": "SP-Gadgets"
+    },
+    {
+      "Manufacturer": "Spheron"
+    },
+    {
+      "Manufacturer": "SPIbelt"
+    },
+    {
+      "Manufacturer": "Spider Support Systems"
+    },
+    {
+      "Manufacturer": "SpiderHolster"
+    },
+    {
+      "Manufacturer": "Spiffy Gear"
+    },
+    {
+      "Manufacturer": "Spigen"
+    },
+    {
+      "Manufacturer": "SpinLight 360"
+    },
+    {
+      "Manufacturer": "Spiratone"
+    },
+    {
+      "Manufacturer": "SPL"
+    },
+    {
+      "Manufacturer": "SPLACH"
+    },
+    {
+      "Manufacturer": "Sprint"
+    },
+    {
+      "Manufacturer": "Square"
+    },
+    {
+      "Manufacturer": "Square Enix Inc."
+    },
+    {
+      "Manufacturer": "Squier"
+    },
+    {
+      "Manufacturer": "SRN"
+    },
+    {
+      "Manufacturer": "StabiLens"
+    },
+    {
+      "Manufacturer": "Stablis"
+    },
+    {
+      "Manufacturer": "Stack-On"
+    },
+    {
+      "Manufacturer": "Stanley Global"
+    },
+    {
+      "Manufacturer": "Stanton"
+    },
+    {
+      "Manufacturer": "Starbound"
+    },
+    {
+      "Manufacturer": "Starlight Xpress"
+    },
+    {
+      "Manufacturer": "StarLink"
+    },
+    {
+      "Manufacturer": "Start Micronics"
+    },
+    {
+      "Manufacturer": "StarTech"
+    },
+    {
+      "Manufacturer": "StatGear"
+    },
+    {
+      "Manufacturer": "Static Master"
+    },
+    {
+      "Manufacturer": "SteadiCam"
+    },
+    {
+      "Manufacturer": "Steadygum"
+    },
+    {
+      "Manufacturer": "Stealth Cam"
+    },
+    {
+      "Manufacturer": "SteelSeries"
+    },
+    {
+      "Manufacturer": "Steiner"
+    },
+    {
+      "Manufacturer": "Stellar Lighting"
+    },
+    {
+      "Manufacturer": "Stem Audio"
+    },
+    {
+      "Manufacturer": "Sterling Audio"
+    },
+    {
+      "Manufacturer": "Stewart Filmscreen"
+    },
+    {
+      "Manufacturer": "STM"
+    },
+    {
+      "Manufacturer": "Sto-Fen"
+    },
+    {
+      "Manufacturer": "Stony Edge"
+    },
+    {
+      "Manufacturer": "Strand"
+    },
+    {
+      "Manufacturer": "Streambox"
+    },
+    {
+      "Manufacturer": "Streamlight"
+    },
+    {
+      "Manufacturer": "Street Candy"
+    },
+    {
+      "Manufacturer": "Stroboframe"
+    },
+    {
+      "Manufacturer": "Strukture"
+    },
+    {
+      "Manufacturer": "Studio 1 Productions"
+    },
+    {
+      "Manufacturer": "Studio Assets"
+    },
+    {
+      "Manufacturer": "Studio Carts"
+    },
+    {
+      "Manufacturer": "Studio Depot"
+    },
+    {
+      "Manufacturer": "Studio Dynamics"
+    },
+    {
+      "Manufacturer": "Studio Essentials"
+    },
+    {
+      "Manufacturer": "Studio Projects"
+    },
+    {
+      "Manufacturer": "Studiomaster"
+    },
+    {
+      "Manufacturer": "STX"
+    },
+    {
+      "Manufacturer": "Styrka"
+    },
+    {
+      "Manufacturer": "Sublue"
+    },
+    {
+      "Manufacturer": "Sugar Bytes"
+    },
+    {
+      "Manufacturer": "Summer Infant"
+    },
+    {
+      "Manufacturer": "Sun Optics"
+    },
+    {
+      "Manufacturer": "Sunbounce"
+    },
+    {
+      "Manufacturer": "Sunnylife"
+    },
+    {
+      "Manufacturer": "Sunpak"
+    },
+    {
+      "Manufacturer": "SunRise"
+    },
+    {
+      "Manufacturer": "SunwayFoto"
+    },
+    {
+      "Manufacturer": "Sunwin"
+    },
+    {
+      "Manufacturer": "Supersonic"
+    },
+    {
+      "Manufacturer": "SureFire"
+    },
+    {
+      "Manufacturer": "Surgex"
+    },
+    {
+      "Manufacturer": "SuteFoto"
+    },
+    {
+      "Manufacturer": "Swab-Its"
+    },
+    {
+      "Manufacturer": "Swagtron"
+    },
+    {
+      "Manufacturer": "Swann"
+    },
+    {
+      "Manufacturer": "Swarovski Optik"
+    },
+    {
+      "Manufacturer": "Swellpro"
+    },
+    {
+      "Manufacturer": "Swift Stream RC"
+    },
+    {
+      "Manufacturer": "Swing"
+    },
+    {
+      "Manufacturer": "SWIT Electronics"
+    },
+    {
+      "Manufacturer": "Switchcraft"
+    },
+    {
+      "Manufacturer": "Switchpod"
+    },
+    {
+      "Manufacturer": "Sylvania"
+    },
+    {
+      "Manufacturer": "Syma"
+    },
+    {
+      "Manufacturer": "Synco Audio"
+    },
+    {
+      "Manufacturer": "Synology"
+    },
+    {
+      "Manufacturer": "Syrp"
+    },
+    {
+      "Manufacturer": "Sysco"
+    },
+    {
+      "Manufacturer": "TacStar"
+    },
+    {
+      "Manufacturer": "Tactical Fiber Systems"
+    },
+    {
+      "Manufacturer": "Tadashi"
+    },
+    {
+      "Manufacturer": "Takahashi"
+    },
+    {
+      "Manufacturer": "Takama"
+    },
+    {
+      "Manufacturer": "Take-Two"
+    },
+    {
+      "Manufacturer": "Takeway"
+    },
+    {
+      "Manufacturer": "Tama"
+    },
+    {
+      "Manufacturer": "Tamrac"
+    },
+    {
+      "Manufacturer": "Tamron"
+    },
+    {
+      "Manufacturer": "Tangent"
+    },
+    {
+      "Manufacturer": "Tanglewood"
+    },
+    {
+      "Manufacturer": "Tannoy"
+    },
+    {
+      "Manufacturer": "TAP"
+    },
+    {
+      "Manufacturer": "TargDots"
+    },
+    {
+      "Manufacturer": "Targus"
+    },
+    {
+      "Manufacturer": "Tascam"
+    },
+    {
+      "Manufacturer": "Tasco"
+    },
+    {
+      "Manufacturer": "Tattu"
+    },
+    {
+      "Manufacturer": "Taytrix"
+    },
+    {
+      "Manufacturer": "TC Electronic"
+    },
+    {
+      "Manufacturer": "TC Helicon"
+    },
+    {
+      "Manufacturer": "TeachLogic"
+    },
+    {
+      "Manufacturer": "Team Blacksheep"
+    },
+    {
+      "Manufacturer": "Techart PRO"
+    },
+    {
+      "Manufacturer": "Techko"
+    },
+    {
+      "Manufacturer": "TechLogix"
+    },
+    {
+      "Manufacturer": "Technical Pro"
+    },
+    {
+      "Manufacturer": "TecNec"
+    },
+    {
+      "Manufacturer": "Tectra"
+    },
+    {
+      "Manufacturer": "Tek'it Audio"
+    },
+    {
+      "Manufacturer": "Tekkeon"
+    },
+    {
+      "Manufacturer": "Teknetics"
+    },
+    {
+      "Manufacturer": "Tektronix"
+    },
+    {
+      "Manufacturer": "Tele Vue"
+    },
+    {
+      "Manufacturer": "Telecast"
+    },
+    {
+      "Manufacturer": "Teledex"
+    },
+    {
+      "Manufacturer": "Telefunken"
+    },
+    {
+      "Manufacturer": "Telemetrics"
+    },
+    {
+      "Manufacturer": "Telescript"
+    },
+    {
+      "Manufacturer": "Telestream"
+    },
+    {
+      "Manufacturer": "Telex"
+    },
+    {
+      "Manufacturer": "Telmax"
+    },
+    {
+      "Manufacturer": "Telrad"
+    },
+    {
+      "Manufacturer": "Tempracam"
+    },
+    {
+      "Manufacturer": "Tenba"
+    },
+    {
+      "Manufacturer": "Tenergy"
+    },
+    {
+      "Manufacturer": "Tentacle Sync"
+    },
+    {
+      "Manufacturer": "Tera Grand"
+    },
+    {
+      "Manufacturer": "Teradek"
+    },
+    {
+      "Manufacturer": "Teranex"
+    },
+    {
+      "Manufacturer": "Tether Tools"
+    },
+    {
+      "Manufacturer": "TetherBLOCK"
+    },
+    {
+      "Manufacturer": "Texas Instruments"
+    },
+    {
+      "Manufacturer": "The Joy Factory"
+    },
+    {
+      "Manufacturer": "The Mako Group"
+    },
+    {
+      "Manufacturer": "The North Face"
+    },
+    {
+      "Manufacturer": "The Off Camera Flashback"
+    },
+    {
+      "Manufacturer": "The POD"
+    },
+    {
+      "Manufacturer": "The Vest Guy"
+    },
+    {
+      "Manufacturer": "Thermaltake"
+    },
+    {
+      "Manufacturer": "Thermionic Culture Ltd"
+    },
+    {
+      "Manufacturer": "Thermodyne"
+    },
+    {
+      "Manufacturer": "Thingyfy"
+    },
+    {
+      "Manufacturer": "Think Tank"
+    },
+    {
+      "Manufacturer": "Thinkware"
+    },
+    {
+      "Manufacturer": "Thor"
+    },
+    {
+      "Manufacturer": "THQ/Nordic"
+    },
+    {
+      "Manufacturer": "Threeking"
+    },
+    {
+      "Manufacturer": "Thronmax"
+    },
+    {
+      "Manufacturer": "Thrustmaster"
+    },
+    {
+      "Manufacturer": "Thule"
+    },
+    {
+      "Manufacturer": "Tieline"
+    },
+    {
+      "Manufacturer": "Tiffen"
+    },
+    {
+      "Manufacturer": "Tile Inc"
+    },
+    {
+      "Manufacturer": "Tilta"
+    },
+    {
+      "Manufacturer": "Tiltall"
+    },
+    {
+      "Manufacturer": "TimeCode Systems"
+    },
+    {
+      "Manufacturer": "TiVo"
+    },
+    {
+      "Manufacturer": "Tizo Design"
+    },
+    {
+      "Manufacturer": "TK Audio"
+    },
+    {
+      "Manufacturer": "TOA Electronics"
+    },
+    {
+      "Manufacturer": "Toft Audio Designs"
+    },
+    {
+      "Manufacturer": "Togo Power"
+    },
+    {
+      "Manufacturer": "Tokina"
+    },
+    {
+      "Manufacturer": "TOKK"
+    },
+    {
+      "Manufacturer": "Tonelux"
+    },
+    {
+      "Manufacturer": "Tonino Lamborghini"
+    },
+    {
+      "Manufacturer": "Topcon"
+    },
+    {
+      "Manufacturer": "Topgreener"
+    },
+    {
+      "Manufacturer": "Toshiba"
+    },
+    {
+      "Manufacturer": "Toughgaff"
+    },
+    {
+      "Manufacturer": "Toyo"
+    },
+    {
+      "Manufacturer": "TP-Link"
+    },
+    {
+      "Manufacturer": "Trace Elliot"
+    },
+    {
+      "Manufacturer": "Trackimo"
+    },
+    {
+      "Manufacturer": "Tracktion"
+    },
+    {
+      "Manufacturer": "Trakbelt360"
+    },
+    {
+      "Manufacturer": "TRAKK Tech"
+    },
+    {
+      "Manufacturer": "Tram"
+    },
+    {
+      "Manufacturer": "Transcend"
+    },
+    {
+      "Manufacturer": "Transvideo"
+    },
+    {
+      "Manufacturer": "Tranzporter"
+    },
+    {
+      "Manufacturer": "Travel9to5"
+    },
+    {
+      "Manufacturer": "Traveler Guitar"
+    },
+    {
+      "Manufacturer": "Traynor"
+    },
+    {
+      "Manufacturer": "TrekPak"
+    },
+    {
+      "Manufacturer": "Trek-Tech"
+    },
+    {
+      "Manufacturer": "TRENDnet"
+    },
+    {
+      "Manufacturer": "T-Rex Engineering"
+    },
+    {
+      "Manufacturer": "Trexo"
+    },
+    {
+      "Manufacturer": "TRIAD"
+    },
+    {
+      "Manufacturer": "Triad-Orbit"
+    },
+    {
+      "Manufacturer": "Triangle"
+    },
+    {
+      "Manufacturer": "Trident"
+    },
+    {
+      "Manufacturer": "Trident Audio"
+    },
+    {
+      "Manufacturer": "TriggerSmart"
+    },
+    {
+      "Manufacturer": "Triggertrap"
+    },
+    {
+      "Manufacturer": "TRIGYN"
+    },
+    {
+      "Manufacturer": "Tripp Lite"
+    },
+    {
+      "Manufacturer": "Tri-Tech Forensics"
+    },
+    {
+      "Manufacturer": "Triumph"
+    },
+    {
+      "Manufacturer": "Trius"
+    },
+    {
+      "Manufacturer": "TRP Worldwide"
+    },
+    {
+      "Manufacturer": "Tru Protection"
+    },
+    {
+      "Manufacturer": "TruGlo"
+    },
+    {
+      "Manufacturer": "TTArtisan"
+    },
+    {
+      "Manufacturer": "Tucano"
+    },
+    {
+      "Manufacturer": "Tumi"
+    },
+    {
+      "Manufacturer": "Turbo Ace"
+    },
+    {
+      "Manufacturer": "Turbosound"
+    },
+    {
+      "Manufacturer": "Turf Stand"
+    },
+    {
+      "Manufacturer": "TV Logic"
+    },
+    {
+      "Manufacturer": "TV One"
+    },
+    {
+      "Manufacturer": "TW"
+    },
+    {
+      "Manufacturer": "Twelve South"
+    },
+    {
+      "Manufacturer": "Tyvek"
+    },
+    {
+      "Manufacturer": "U&I"
+    },
+    {
+      "Manufacturer": "Ubertronix"
+    },
+    {
+      "Manufacturer": "Ubiquiti Networks"
+    },
+    {
+      "Manufacturer": "Ubisoft"
+    },
+    {
+      "Manufacturer": "UDI RC"
+    },
+    {
+      "Manufacturer": "u-He Software"
+    },
+    {
+      "Manufacturer": "UKPro"
+    },
+    {
+      "Manufacturer": "Ulanzi"
+    },
+    {
+      "Manufacturer": "Uline"
+    },
+    {
+      "Manufacturer": "Ultimate Acoustics"
+    },
+    {
+      "Manufacturer": "Ultimate Support"
+    },
+    {
+      "Manufacturer": "Ultimaxx"
+    },
+    {
+      "Manufacturer": "Ultramax"
+    },
+    {
+      "Manufacturer": "Ultrasone"
+    },
+    {
+      "Manufacturer": "Umbra"
+    },
+    {
+      "Manufacturer": "Unagi"
+    },
+    {
+      "Manufacturer": "Uncle Mike's"
+    },
+    {
+      "Manufacturer": "Underwater Kinetics"
+    },
+    {
+      "Manufacturer": "Union"
+    },
+    {
+      "Manufacturer": "UniqBall"
+    },
+    {
+      "Manufacturer": "Universal Audio"
+    },
+    {
+      "Manufacturer": "Urbano Design"
+    },
+    {
+      "Manufacturer": "Urth"
+    },
+    {
+      "Manufacturer": "US Army"
+    },
+    {
+      "Manufacturer": "Used"
+    },
+    {
+      "Manufacturer": "Ushio"
+    },
+    {
+      "Manufacturer": "UST"
+    },
+    {
+      "Manufacturer": "UTG"
+    },
+    {
+      "Manufacturer": "UV Shield"
+    },
+    {
+      "Manufacturer": "UVify"
+    },
+    {
+      "Manufacturer": "UZI"
+    },
+    {
+      "Manufacturer": "V.I.O."
+    },
+    {
+      "Manufacturer": "Vaddio"
+    },
+    {
+      "Manufacturer": "VAIO"
+    },
+    {
+      "Manufacturer": "Valcam"
+    },
+    {
+      "Manufacturer": "Vanguard"
+    },
+    {
+      "Manufacturer": "Vankyo"
+    },
+    {
+      "Manufacturer": "Vaonis"
+    },
+    {
+      "Manufacturer": "Varavon"
+    },
+    {
+      "Manufacturer": "VariZoom"
+    },
+    {
+      "Manufacturer": "Vaxis"
+    },
+    {
+      "Manufacturer": "Vazen"
+    },
+    {
+      "Manufacturer": "VDO360"
+    },
+    {
+      "Manufacturer": "Veho"
+    },
+    {
+      "Manufacturer": "Velbon"
+    },
+    {
+      "Manufacturer": "VELCRO Brand"
+    },
+    {
+      "Manufacturer": "Vello"
+    },
+    {
+      "Manufacturer": "Velvet"
+    },
+    {
+      "Manufacturer": "Venom"
+    },
+    {
+      "Manufacturer": "Venus"
+    },
+    {
+      "Manufacturer": "Verbatim"
+    },
+    {
+      "Manufacturer": "Veridian Health Care"
+    },
+    {
+      "Manufacturer": "Vest Tech"
+    },
+    {
+      "Manufacturer": "Veydra"
+    },
+    {
+      "Manufacturer": "V-FLAT WORLD"
+    },
+    {
+      "Manufacturer": "VGear"
+    },
+    {
+      "Manufacturer": "Vic Firth"
+    },
+    {
+      "Manufacturer": "Victorinox"
+    },
+    {
+      "Manufacturer": "Videon"
+    },
+    {
+      "Manufacturer": "Videotek"
+    },
+    {
+      "Manufacturer": "VidPro"
+    },
+    {
+      "Manufacturer": "Viewfactor"
+    },
+    {
+      "Manufacturer": "ViewSonic"
+    },
+    {
+      "Manufacturer": "ViewZ"
+    },
+    {
+      "Manufacturer": "Vijim"
+    },
+    {
+      "Manufacturer": "Viking"
+    },
+    {
+      "Manufacturer": "Viltrox"
+    },
+    {
+      "Manufacturer": "Vinten"
+    },
+    {
+      "Manufacturer": "VIOFO"
+    },
+    {
+      "Manufacturer": "Viotek"
+    },
+    {
+      "Manufacturer": "Viridian"
+    },
+    {
+      "Manufacturer": "Visible Dust"
+    },
+    {
+      "Manufacturer": "Vision Research"
+    },
+    {
+      "Manufacturer": "Visioneer"
+    },
+    {
+      "Manufacturer": "Visionsmith"
+    },
+    {
+      "Manufacturer": "Visual Departures"
+    },
+    {
+      "Manufacturer": "Visual Products"
+    },
+    {
+      "Manufacturer": "Vitec"
+    },
+    {
+      "Manufacturer": "Viviana"
+    },
+    {
+      "Manufacturer": "Vivitar"
+    },
+    {
+      "Manufacturer": "Vivotek"
+    },
+    {
+      "Manufacturer": "Vixen"
+    },
+    {
+      "Manufacturer": "Vizio"
+    },
+    {
+      "Manufacturer": "Vizta"
+    },
+    {
+      "Manufacturer": "vMix"
+    },
+    {
+      "Manufacturer": "V-MODA"
+    },
+    {
+      "Manufacturer": "Vocaloid"
+    },
+    {
+      "Manufacturer": "Vocas"
+    },
+    {
+      "Manufacturer": "VocoPro"
+    },
+    {
+      "Manufacturer": "Voice Technologies"
+    },
+    {
+      "Manufacturer": "Voigtlander"
+    },
+    {
+      "Manufacturer": "Voking"
+    },
+    {
+      "Manufacturer": "Volarious"
+    },
+    {
+      "Manufacturer": "Volkano X"
+    },
+    {
+      "Manufacturer": "Volta"
+    },
+    {
+      "Manufacturer": "Voltaic Systems"
+    },
+    {
+      "Manufacturer": "Vonnic"
+    },
+    {
+      "Manufacturer": "Vortex Media"
+    },
+    {
+      "Manufacturer": "Vortex Optics"
+    },
+    {
+      "Manufacturer": "Vosker"
+    },
+    {
+      "Manufacturer": "Vox"
+    },
+    {
+      "Manufacturer": "Voyager"
+    },
+    {
+      "Manufacturer": "VST AU Plugin"
+    },
+    {
+      "Manufacturer": "VTech"
+    },
+    {
+      "Manufacturer": "VU"
+    },
+    {
+      "Manufacturer": "Vufine"
+    },
+    {
+      "Manufacturer": "Vuze"
+    },
+    {
+      "Manufacturer": "Wacom"
+    },
+    {
+      "Manufacturer": "Wagan"
+    },
+    {
+      "Manufacturer": "Waldorf"
+    },
+    {
+      "Manufacturer": "Walimex"
+    },
+    {
+      "Manufacturer": "Walkera"
+    },
+    {
+      "Manufacturer": "Walkstool"
+    },
+    {
+      "Manufacturer": "WANDRD"
+    },
+    {
+      "Manufacturer": "Warm Audio"
+    },
+    {
+      "Manufacturer": "Warner"
+    },
+    {
+      "Manufacturer": "Warner Bros Games"
+    },
+    {
+      "Manufacturer": "Warwick Acoustics"
+    },
+    {
+      "Manufacturer": "Wasabi Power"
+    },
+    {
+      "Manufacturer": "Washburn"
+    },
+    {
+      "Manufacturer": "Wasp Barcode Technologies"
+    },
+    {
+      "Manufacturer": "Wasserstein"
+    },
+    {
+      "Manufacturer": "Watec"
+    },
+    {
+      "Manufacturer": "Waterbird"
+    },
+    {
+      "Manufacturer": "Watson"
+    },
+    {
+      "Manufacturer": "Wave Arts"
+    },
+    {
+      "Manufacturer": "Wave DNA"
+    },
+    {
+      "Manufacturer": "Waves"
+    },
+    {
+      "Manufacturer": "WD"
+    },
+    {
+      "Manufacturer": "Weaver"
+    },
+    {
+      "Manufacturer": "weBoost"
+    },
+    {
+      "Manufacturer": "Weego"
+    },
+    {
+      "Manufacturer": "Wein"
+    },
+    {
+      "Manufacturer": "Wellue"
+    },
+    {
+      "Manufacturer": "Wenger"
+    },
+    {
+      "Manufacturer": "WePresent Meeting"
+    },
+    {
+      "Manufacturer": "We-R-Memory Keepers"
+    },
+    {
+      "Manufacturer": "Wesco"
+    },
+    {
+      "Manufacturer": "West Penn"
+    },
+    {
+      "Manufacturer": "Westcott"
+    },
+    {
+      "Manufacturer": "Weston"
+    },
+    {
+      "Manufacturer": "Westone"
+    },
+    {
+      "Manufacturer": "Wharfedale"
+    },
+    {
+      "Manufacturer": "WhiBal"
+    },
+    {
+      "Manufacturer": "Whirlwind"
+    },
+    {
+      "Manufacturer": "White's"
+    },
+    {
+      "Manufacturer": "Wi Digital"
+    },
+    {
+      "Manufacturer": "WiebeTech"
+    },
+    {
+      "Manufacturer": "WiFiStand"
+    },
+    {
+      "Manufacturer": "Williams Sound"
+    },
+    {
+      "Manufacturer": "Wilson Electronics"
+    },
+    {
+      "Manufacturer": "Wimberley"
+    },
+    {
+      "Manufacturer": "WindFire"
+    },
+    {
+      "Manufacturer": "WindTech"
+    },
+    {
+      "Manufacturer": "Wine Country Camera"
+    },
+    {
+      "Manufacturer": "Winsted"
+    },
+    {
+      "Manufacturer": "Wiral"
+    },
+    {
+      "Manufacturer": "Wireless Mic Belts"
+    },
+    {
+      "Manufacturer": "WireWorld"
+    },
+    {
+      "Manufacturer": "Wise Advanced"
+    },
+    {
+      "Manufacturer": "WiseLift"
+    },
+    {
+      "Manufacturer": "Wista"
+    },
+    {
+      "Manufacturer": "Wohler"
+    },
+    {
+      "Manufacturer": "Wolfcom"
+    },
+    {
+      "Manufacturer": "Wolverine"
+    },
+    {
+      "Manufacturer": "Wooden Camera"
+    },
+    {
+      "Manufacturer": "Wowitoys"
+    },
+    {
+      "Manufacturer": "Wrapsol"
+    },
+    {
+      "Manufacturer": "X-Acto"
+    },
+    {
+      "Manufacturer": "Xantech"
+    },
+    {
+      "Manufacturer": "XBlue"
+    },
+    {
+      "Manufacturer": "Xbox"
+    },
+    {
+      "Manufacturer": "XDrone"
+    },
+    {
+      "Manufacturer": "Xerox"
+    },
+    {
+      "Manufacturer": "xFold"
+    },
+    {
+      "Manufacturer": "XGIMI"
+    },
+    {
+      "Manufacturer": "Xhun Audio"
+    },
+    {
+      "Manufacturer": "XILS Labs"
+    },
+    {
+      "Manufacturer": "Xiro"
+    },
+    {
+      "Manufacturer": "XIT"
+    },
+    {
+      "Manufacturer": "X-Keys"
+    },
+    {
+      "Manufacturer": "XP Metal Detectors"
+    },
+    {
+      "Manufacturer": "XP PhotoGear"
+    },
+    {
+      "Manufacturer": "XPG"
+    },
+    {
+      "Manufacturer": "Xpix"
+    },
+    {
+      "Manufacturer": "X-Rite"
+    },
+    {
+      "Manufacturer": "XS Sights"
+    },
+    {
+      "Manufacturer": "XSEED"
+    },
+    {
+      "Manufacturer": "XSories"
+    },
+    {
+      "Manufacturer": "Xtender"
+    },
+    {
+      "Manufacturer": "Xtreme Cables"
+    },
+    {
+      "Manufacturer": "Xume"
+    },
+    {
+      "Manufacturer": "XVIVE"
+    },
+    {
+      "Manufacturer": "Yaesu"
+    },
+    {
+      "Manufacturer": "Yamaha"
+    },
+    {
+      "Manufacturer": "Yankee"
+    },
+    {
+      "Manufacturer": "Yashica"
+    },
+    {
+      "Manufacturer": "Yasuhara"
+    },
+    {
+      "Manufacturer": "Yeelight"
+    },
+    {
+      "Manufacturer": "Yekbee"
+    },
+    {
+      "Manufacturer": "YELANGU"
+    },
+    {
+      "Manufacturer": "YI"
+    },
+    {
+      "Manufacturer": "Yodica"
+    },
+    {
+      "Manufacturer": "YoloLiv"
+    },
+    {
+      "Manufacturer": "Yongnuo"
+    },
+    {
+      "Manufacturer": "Yuan"
+    },
+    {
+      "Manufacturer": "Yuneec"
+    },
+    {
+      "Manufacturer": "Z CAM"
+    },
+    {
+      "Manufacturer": "Zacuto"
+    },
+    {
+      "Manufacturer": "Zagg"
+    },
+    {
+      "Manufacturer": "Zebra"
+    },
+    {
+      "Manufacturer": "Zecti"
+    },
+    {
+      "Manufacturer": "Zeikos"
+    },
+    {
+      "Manufacturer": "Zeiss"
+    },
+    {
+      "Manufacturer": "Zencam"
+    },
+    {
+      "Manufacturer": "Zendure"
+    },
+    {
+      "Manufacturer": "Zenfox"
+    },
+    {
+      "Manufacturer": "Zepp"
+    },
+    {
+      "Manufacturer": "Zero Halliburton"
+    },
+    {
+      "Manufacturer": "ZFUTURE"
+    },
+    {
+      "Manufacturer": "Zhiyun"
+    },
+    {
+      "Manufacturer": "Zhiyun-Tech"
+    },
+    {
+      "Manufacturer": "Zigen"
+    },
+    {
+      "Manufacturer": "Zildjian"
+    },
+    {
+      "Manufacturer": "ZILR"
+    },
+    {
+      "Manufacturer": "Zing"
+    },
+    {
+      "Manufacturer": "ZipKord Solutions"
+    },
+    {
+      "Manufacturer": "Zmodo"
+    },
+    {
+      "Manufacturer": "Zoom"
+    },
+    {
+      "Manufacturer": "Zotac"
+    },
+    {
+      "Manufacturer": "ZTS Inc."
+    },
+    {
+      "Manufacturer": "ZUCA"
+    },
+    {
+      "Manufacturer": "Zunow"
+    },
+    {
+      "Manufacturer": "Zykkor"
+    },
+    {
+      "Manufacturer": "Zylight"
+    }
+  ],
+  "battery_materials": [
+    {
+      "Battery Material": "-"
+    },
+    {
+      "Battery Material": "alkaline"
+    },
+    {
+      "Battery Material": "lead acid"
+    },
+    {
+      "Battery Material": "lithium"
+    },
+    {
+      "Battery Material": "lithium ion"
+    },
+    {
+      "Battery Material": "magnesium"
+    },
+    {
+      "Battery Material": "mercury"
+    },
+    {
+      "Battery Material": "nickel cadmium"
+    },
+    {
+      "Battery Material": "nickel metal hydride"
+    },
+    {
+      "Battery Material": "silver oxide"
+    },
+    {
+      "Battery Material": "zinc air"
+    },
+    {
+      "Battery Material": "zinc carbon"
+    },
+    {
+      "Battery Material": "zinc chloride"
+    }
+  ],
+  "battery_types": [
+    {
+      "Battery Type": "-"
+    },
+    {
+      "Battery Type": "1/3 N"
+    },
+    {
+      "Battery Type": "18350"
+    },
+    {
+      "Battery Type": "18650"
+    },
+    {
+      "Battery Type": "9-volt"
+    },
+    {
+      "Battery Type": "A"
+    },
+    {
+      "Battery Type": "A10"
+    },
+    {
+      "Battery Type": "A13"
+    },
+    {
+      "Battery Type": "A23"
+    },
+    {
+      "Battery Type": "A312"
+    },
+    {
+      "Battery Type": "A675"
+    },
+    {
+      "Battery Type": "AA"
+    },
+    {
+      "Battery Type": "AAA"
+    },
+    {
+      "Battery Type": "AAAA"
+    },
+    {
+      "Battery Type": "AG3"
+    },
+    {
+      "Battery Type": "AG3/LR41"
+    },
+    {
+      "Battery Type": "AG5"
+    },
+    {
+      "Battery Type": "C"
+    },
+    {
+      "Battery Type": "CR1216"
+    },
+    {
+      "Battery Type": "CR1220"
+    },
+    {
+      "Battery Type": "CR123"
+    },
+    {
+      "Battery Type": "CR123A"
+    },
+    {
+      "Battery Type": "CR1616"
+    },
+    {
+      "Battery Type": "CR1620"
+    },
+    {
+      "Battery Type": "CR1623"
+    },
+    {
+      "Battery Type": "CR1632"
+    },
+    {
+      "Battery Type": "CR2"
+    },
+    {
+      "Battery Type": "CR2016"
+    },
+    {
+      "Battery Type": "CR2023"
+    },
+    {
+      "Battery Type": "CR2025"
+    },
+    {
+      "Battery Type": "CR2026"
+    },
+    {
+      "Battery Type": "CR2032"
+    },
+    {
+      "Battery Type": "CR2412"
+    },
+    {
+      "Battery Type": "CR2430"
+    },
+    {
+      "Battery Type": "CR2450"
+    },
+    {
+      "Battery Type": "CR927"
+    },
+    {
+      "Battery Type": "D"
+    },
+    {
+      "Battery Type": "DD"
+    },
+    {
+      "Battery Type": "LR1130"
+    },
+    {
+      "Battery Type": "LR41"
+    },
+    {
+      "Battery Type": "LR43"
+    },
+    {
+      "Battery Type": "LR44"
+    },
+    {
+      "Battery Type": "LR45"
+    },
+    {
+      "Battery Type": "LR48"
+    },
+    {
+      "Battery Type": "LR54"
+    },
+    {
+      "Battery Type": "LR60"
+    },
+    {
+      "Battery Type": "LR63"
+    },
+    {
+      "Battery Type": "LR66"
+    },
+    {
+      "Battery Type": "N"
+    },
+    {
+      "Battery Type": "non-universal"
+    },
+    {
+      "Battery Type": "SR44W"
+    },
+    {
+      "Battery Type": "SR521SW"
+    },
+    {
+      "Battery Type": "SR616SW"
+    },
+    {
+      "Battery Type": "SR621SW"
+    },
+    {
+      "Battery Type": "SR626SW"
+    },
+    {
+      "Battery Type": "SR721SW"
+    },
+    {
+      "Battery Type": "SR916SW"
+    },
+    {
+      "Battery Type": "SR920SW"
+    },
+    {
+      "Battery Type": "SR927SW"
+    }
+  ],
+  "special_rules": [
+    {
+      "Symbol": "©",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Copyright symbol "
+    },
+    {
+      "Symbol": "®",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Registered trademark"
+    },
+    {
+      "Symbol": "™",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Trademark"
+    },
+    {
+      "Symbol": "°",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol "
+    },
+    {
+      "Symbol": "º",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol "
+    },
+    {
+      "Symbol": "±",
+      "Action required": "Replace",
+      "Replace Value": " +/-",
+      "Symbol Meaning": "Plus-or-minus sign "
+    },
+    {
+      "Symbol": "¶",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Paragraph mark "
+    },
+    {
+      "Symbol": "¼",
+      "Action required": "Replace",
+      "Replace Value": " 1/4",
+      "Symbol Meaning": "Fraction, one-fourth "
+    },
+    {
+      "Symbol": "½",
+      "Action required": "Replace",
+      "Replace Value": " 1/2",
+      "Symbol Meaning": "Fraction, one-half "
+    },
+    {
+      "Symbol": "¾",
+      "Action required": "Replace",
+      "Replace Value": " 3/4",
+      "Symbol Meaning": "Fraction, three-fourths "
+    },
+    {
+      "Symbol": "×",
+      "Action required": "Replace",
+      "Replace Value": " x",
+      "Symbol Meaning": "Multiplication sign"
+    },
+    {
+      "Symbol": "Ω",
+      "Action required": "Replace",
+      "Replace Value": " Ohm",
+      "Symbol Meaning": "Ohm"
+    },
+    {
+      "Symbol": "²",
+      "Action required": "Replace",
+      "Replace Value": " 2",
+      "Symbol Meaning": "Superscript 2"
+    },
+    {
+      "Symbol": "µ",
+      "Action required": "Replace",
+      "Replace Value": "micro",
+      "Symbol Meaning": "Mu or Micro"
+    },
+    {
+      "Symbol": "μA",
+      "Action required": "Replace",
+      "Replace Value": "micro A",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "μV",
+      "Action required": "Replace",
+      "Replace Value": "micro V",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "–",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
+    },
+    {
+      "Symbol": "—",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
+    },
+    {
+      "Symbol": "~",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "Tilde to -"
+    },
+    {
+      "Symbol": "’",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": "Single invert"
+    },
+    {
+      "Symbol": "“",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": "Invert. Open"
+    },
+    {
+      "Symbol": "”",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": "Invert. Close"
+    },
+    {
+      "Symbol": "α",
+      "Action required": "Replace",
+      "Replace Value": "a",
+      "Symbol Meaning": "Alpha"
+    },
+    {
+      "Symbol": "‘",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "’",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ø",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Â",
+      "Action required": "Replace",
+      "Replace Value": "A",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Phi"
+    },
+    {
+      "Symbol": "Φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Phi"
+    },
+    {
+      "Symbol": "º",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol "
+    },
+    {
+      "Symbol": "˚",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol "
+    },
+    {
+      "Symbol": "×",
+      "Action required": "Replace",
+      "Replace Value": "x",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "≤",
+      "Action required": "Replace",
+      "Replace Value": "<=",
+      "Symbol Meaning": "Less than or equals to"
+    },
+    {
+      "Symbol": "～",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "Tilde to -"
+    },
+    {
+      "Symbol": "℃",
+      "Action required": "Replace",
+      "Replace Value": " Degree C",
+      "Symbol Meaning": "Degree symbol "
+    },
+    {
+      "Symbol": "≥",
+      "Action required": "Replace",
+      "Replace Value": ">=",
+      "Symbol Meaning": "Greater than or equals to"
+    },
+    {
+      "Symbol": "∞",
+      "Action required": "Replace",
+      "Replace Value": "Infinite",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "″",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ω",
+      "Action required": "Replace",
+      "Replace Value": "Ohm",
+      "Symbol Meaning": "Ohm"
+    },
+    {
+      "Symbol": "˚",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "μ",
+      "Action required": "Replace",
+      "Replace Value": "micro",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "‑",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "′",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "„",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ø",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ƫ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ʃ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "−",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
+    },
+    {
+      "Symbol": "ﬁ",
+      "Action required": "Replace",
+      "Replace Value": "fi",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "：",
+      "Action required": "Replace",
+      "Replace Value": ":",
+      "Symbol Meaning": "colon"
+    },
+    {
+      "Symbol": "é",
+      "Action required": "Replace",
+      "Replace Value": "e",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Grey",
+      "Action required": "Replace",
+      "Replace Value": "Gray",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "grey",
+      "Action required": "Replace",
+      "Replace Value": "gray",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Colour",
+      "Action required": "Replace",
+      "Replace Value": "Color",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "colour",
+      "Action required": "Replace",
+      "Replace Value": "color",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Adaptor",
+      "Action required": "Replace",
+      "Replace Value": "Adapter",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "adaptor",
+      "Action required": "Replace",
+      "Replace Value": "adapter",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Velcro",
+      "Action required": "Replace",
+      "Replace Value": "Self-Securing Closure",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "velcro",
+      "Action required": "Replace",
+      "Replace Value": "self-securing closure",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "…",
+      "Action required": "Replace",
+      "Replace Value": "...",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Aluminium",
+      "Action required": "Replace",
+      "Replace Value": "Aluminum",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "⅜",
+      "Action required": "Replace",
+      "Replace Value": "3/8",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ü",
+      "Action required": "Replace",
+      "Replace Value": "U",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "△",
+      "Action required": "Replace",
+      "Replace Value": "Delta ",
+      "Symbol Meaning": "Delta"
+    },
+    {
+      "Symbol": "≦",
+      "Action required": "Replace",
+      "Replace Value": "<=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "≧",
+      "Action required": "Replace",
+      "Replace Value": ">=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "†",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "≈",
+      "Action required": "Replace",
+      "Replace Value": "=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "⎓",
+      "Action required": "Replace",
+      "Replace Value": "=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "å",
+      "Action required": "Replace",
+      "Replace Value": "Angstrom",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ﬂ",
+      "Action required": "Replace",
+      "Replace Value": "fl",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "【",
+      "Action required": "Replace",
+      "Replace Value": "(",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "】",
+      "Action required": "Replace",
+      "Replace Value": ")",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "aluminium",
+      "Action required": "Replace",
+      "Replace Value": "aluminum",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "TÜV",
+      "Action required": "Replace",
+      "Replace Value": "TUV",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Xᵉ",
+      "Action required": "Replace",
+      "Replace Value": "Xe",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "·",
+      "Action required": "Replace",
+      "Replace Value": ".",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ō",
+      "Action required": "Replace",
+      "Replace Value": "o",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "（",
+      "Action required": "Replace",
+      "Replace Value": "(",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "）",
+      "Action required": "Replace",
+      "Replace Value": ")",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ⅱ",
+      "Action required": "Replace",
+      "Replace Value": "II",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ⅰ",
+      "Action required": "Replace",
+      "Replace Value": "I",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "，",
+      "Action required": "Replace",
+      "Replace Value": ", ",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Phi"
+    },
+    {
+      "Symbol": "＜",
+      "Action required": "Replace",
+      "Replace Value": "<",
+      "Symbol Meaning": "Less than"
+    }
+  ],
+  "html_template": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Product Sample Page</title>\n    <style>\n      body {font-family:Calibri;font-size: 15px;}\n      table, th, td {\n        border: 1px solid #ccc;\n        border-collapse: collapse;\n      }\n      td {\n        padding-left: 7px;\n        padding-right: 7px;\n        padding-top: 5px;\n        padding-bottom: 5px;\n      }\n\n      /* Style the tab */\n      div.tab {\n        overflow: hidden;\n        border: 1px solid #ccc;\n        background-color: #f1f1f1;\n      }\n\n      /* Style the buttons inside the tab */\n      div.tab button {\n        background-color: inherit;\n        float: left;\n        border: none;\n        outline: none;\n        cursor: pointer;\n        padding: 5px 15px;\n        transition: 0.3s;\n        height:30px;\n      }\n\n      /* Change background color of buttons on hover */\n      div.tab button:hover {\n        background-color: #ddd;\n      }\n\n      /* Create an active/current tablink class */\n      div.tab button.active {\n        background-color: #ccc;\n      }\n\n      /* Style the tab content */\n      .tabcontent {\n        display: none;\n        padding: 6px 12px;\n        border: 1px solid #ccc;\n        height:450px;\n        border-top: none;\n      }\n      .tabcontent {\n        -webkit-animation: fadeEffect 1s;\n        animation: fadeEffect 1s; /* Fading effect takes 1 second */\n      }\n\n      @-webkit-keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n\n      @keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n    </style>\n  </head>\n\n  <body>\n    <table style=\"height: 500px;\" border=\"0\" width=100% cellspacing=\"0\" align=\"center\">\n      <tbody>\n        <tr>\n          <td rowspan=\"3\" width=125 align=\"center\"><img src=\"https://virtualops.net/wp-content/uploads/2022/12/logo-dark.png\" alt=\"\"/></td>\n          <td colspan=\"4\" width=\"675\" height=\"50\" style=\"font-size:19px;\">\n            <strong>--Title--</strong>\n            <br><font size=\"3\">--ShortTitle--</font>\n          </td>\n        </tr>\n        <tr>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Item No</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Item</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Model</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Warranty Months</strong></td>\n        </tr>\n        <tr>\n          <td height=\"30\">--ItemNo--</td>\n          <td height=\"30\">--MfgItem--</td>\n          <td height=\"30\">--MfgModel--</td>\n          <td height=\"30\">--Warranty Months--</td>\n        </tr>\n        <tr>\n          <td colspan=\"5\" rowspan=\"4\" valign=\"top\">\n            <div class=\"tab\">\n              <button class=\"tablinks\" accesskey=\"d\" onclick=\"openCity(event, 'Description')\" id=\"defaultOpen\"><strong><u>D</u>escription</strong></button>\n              <button class=\"tablinks\" accesskey=\"f\" onclick=\"openCity(event, 'Features')\"><strong><u>F</u>eatures</strong></button>\n              <button class=\"tablinks\" accesskey=\"s\" onclick=\"openCity(event, 'Specifications')\"><strong><u>S</u>pecifications</strong></button>\n              <button class=\"tablinks\" accesskey=\"h\" onclick=\"openCity(event, 'Highlights')\"><strong><u>H</u>ighlights</strong></button>\n              <button class=\"tablinks\" accesskey=\"l\" onclick=\"openCity(event, 'Includes')\"><strong>Inc<u>l</u>udes</strong></button>\n              <button class=\"tablinks\" accesskey=\"r\" onclick=\"openCity(event, 'Battery Info')\"><strong>Batte<u>r</u>y Info</strong></button>\n            </div>\n\n            <div id=\"Description\" class=\"tabcontent\" style=\"overflow:auto;\">\n              --Description--\n            </div>\n\n            <div id=\"Features\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Features--\n              </table>\n            </div>\n\n            <div id=\"Specifications\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Specifications--\n              </table>\n            </div>\n\n            <div id=\"Highlights\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Highlights--\n              </table>\n            </div>\n\n            <div id=\"Includes\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Includes--\n              </table>\n            </div>\n\n            <div id=\"Battery Info\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Battery Info--\n              </table>\n            </div>\n            <script>\n              function openCity(evt, cityName) {\n                // Declare all variables\n                var i, tabcontent, tablinks;\n\n                // Get all elements with class=\"tabcontent\" and hide them\n                tabcontent = document.getElementsByClassName(\"tabcontent\");\n                for (i = 0; i < tabcontent.length; i++) {\n                  tabcontent[i].style.display = \"none\";\n                }\n\n                // Get all elements with class=\"tablinks\" and remove the class \"active\"\n                tablinks = document.getElementsByClassName(\"tablinks\");\n                for (i = 0; i < tablinks.length; i++) {\n                  tablinks[i].className = tablinks[i].className.replace(\" active\", \"\");\n                }\n\n                // Show the current tab, and add an \"active\" class to the button that opened the tab\n                document.getElementById(cityName).style.display = \"block\";\n                evt.currentTarget.className += \" active\";\n              }\n              document.getElementById(\"defaultOpen\").click();\n            </script>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n\n  </body>\n</html>"
+}

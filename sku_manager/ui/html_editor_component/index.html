@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/htmlmixed/htmlmixed.min.js"></script>
+<style id="dynamic-css"></style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+var Streamlit = (function() {
+  var API_VERSION = 1;
+  var RENDER_EVENT = "streamlit:render";
+  var lastHeight = null;
+  var renderHandlers = [];
+
+  function sendBackMsg(type, data) {
+    var payload = Object.assign({ isStreamlitMessage: true, type: type }, data || {});
+    window.parent.postMessage(payload, "*");
+  }
+
+  function onMessageEvent(event) {
+    if (!event.data || event.data.type !== RENDER_EVENT) return;
+    var args = event.data.args || {};
+    renderHandlers.forEach(function(handler) {
+      handler({ args: args, disabled: Boolean(event.data.disabled), theme: event.data.theme });
+    });
+  }
+
+  return {
+    RENDER_EVENT: RENDER_EVENT,
+    events: {
+      addEventListener: function(type, handler) {
+        if (type === RENDER_EVENT) renderHandlers.push(function(event) {
+          handler({ detail: event });
+        });
+      }
+    },
+    setComponentReady: function() {
+      window.addEventListener("message", onMessageEvent);
+      sendBackMsg("streamlit:componentReady", { apiVersion: API_VERSION });
+    },
+    setFrameHeight: function(height) {
+      height = height || document.body.scrollHeight;
+      if (height !== lastHeight) {
+        lastHeight = height;
+        sendBackMsg("streamlit:setFrameHeight", { height: height });
+      }
+    },
+    setComponentValue: function(value) {
+      sendBackMsg("streamlit:setComponentValue", { value: value, dataType: "json" });
+    }
+  };
+})();
+
+var LIMIT = 10000;
+var RULES = [];
+var cm = null;
+var counter = null;
+var previewContent = null;
+var currentArgs = {};
+var lastSentPayload = "";
+var parentClickHandler = null;
+var parentMouseDownHandler = null;
+var suppressChange = false;
+var eventCounter = 0;
+var commitTimer = null;
+var lastSentValue = null;
+var dirty = false;
+
+function renderComponent(event) {
+  var args = event.detail.args || {};
+  currentArgs = args;
+  RULES = Array.isArray(args.rules) ? args.rules : [];
+
+  document.getElementById("dynamic-css").textContent = args.css || "";
+
+  if (!cm) {
+    mountEditor(args);
+  } else {
+    applyIncomingValue(args);
+  }
+
+  installParentNavigationSync();
+  renderRulesBar();
+  updateCounter();
+  updatePreview();
+  scheduleRepaint();
+}
+
+function renderRulesBar() {
+  var bar = document.getElementById("rules-bar");
+  if (!bar) return;
+  if (!RULES.length) {
+    bar.innerHTML = '<span class="rules-empty">No custom rules. Add some on the Editor Rules page.</span>';
+    return;
+  }
+  var html = '<span class="rules-label">Rules:</span>';
+  for (var i = 0; i < RULES.length; i++) {
+    var r = RULES[i];
+    var name = String(r.name || "Rule " + (i + 1));
+    var sc = String(r.shortcut || "");
+    var tip = sc ? (name + " (" + sc + ")") : name;
+    html += '<button class="btn rule-btn" data-rule="' + i + '" title="' + tip.replace(/"/g, "&quot;") + '">' +
+            name +
+            (sc ? ' <span class="rule-kbd">' + sc + '</span>' : '') +
+            '</button>';
+  }
+  bar.innerHTML = html;
+  var btns = bar.querySelectorAll(".rule-btn");
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].addEventListener("click", function() {
+      var idx = Number(this.getAttribute("data-rule"));
+      if (RULES[idx]) applyRuleInEditor(RULES[idx]);
+    });
+  }
+}
+
+function scheduleRepaint() {
+  requestAnimationFrame(function() {
+    if (cm) cm.refresh();
+    Streamlit.setFrameHeight(document.body.scrollHeight);
+    requestAnimationFrame(function() {
+      if (cm) cm.refresh();
+      setTimeout(function() { if (cm) cm.refresh(); }, 50);
+      setTimeout(function() { if (cm) cm.refresh(); }, 200);
+    });
+  });
+}
+
+function initialValue(args) {
+  return args.value == null ? "" : String(args.value);
+}
+
+function mountEditor(args) {
+  var app = document.getElementById("app");
+  app.innerHTML = String(args.toolbar || "") + String(args.find_bar || "") + String(args.paste_menu || "") +
+    '<div id="rules-bar" class="bar rules-bar-flex"></div>' +
+    '<div id="main-panels">' +
+    '  <div id="editor-panel">' +
+    '    <div id="cm-wrap"></div>' +
+    '    <div id="counter" class="cnt-ok"></div>' +
+    '  </div>' +
+    '  <div id="preview-panel">' +
+    '    <div id="preview-label">Live Preview</div>' +
+    '    <div id="preview-content"></div>' +
+    '  </div>' +
+    '</div>';
+
+  counter = document.getElementById("counter");
+  previewContent = document.getElementById("preview-content");
+
+  cm = CodeMirror(document.getElementById("cm-wrap"), {
+    value: initialValue(args),
+    mode: "htmlmixed",
+    lineNumbers: false,
+    lineWrapping: true,
+    autofocus: true,
+    indentWithTabs: false,
+    tabSize: 2,
+    electricChars: false,
+    extraKeys: {
+      "Ctrl-B": function() { wrapSel("<b>", "</b>"); },
+      "Ctrl-I": function() { wrapSel("<i>", "</i>"); },
+      "Ctrl-F": function() { toggleFind(); return false; },
+      "Ctrl-L": function() { doSingleLine(); }
+    }
+  });
+
+  cm.on("change", function() {
+    if (suppressChange) return;
+    dirty = true;
+    updateCounter();
+    updatePreview();
+    scheduleCommit();
+  });
+  cm.on("blur", function() { scheduleCommit(150); });
+  window.addEventListener("pagehide", function() { commitValue({ reason: "pagehide" }); });
+  window.addEventListener("beforeunload", function() { commitValue({ reason: "beforeunload" }); });
+
+  setupLinkBar();
+  setupFindBar();
+  setupShortcuts();
+  setupPasteMenu();
+  setupResizeObserver();
+}
+
+function setupResizeObserver() {
+  if (typeof ResizeObserver === "undefined") return;
+  var wrap = document.getElementById("cm-wrap");
+  if (!wrap) return;
+  var ro = new ResizeObserver(function() {
+    if (cm) cm.refresh();
+  });
+  ro.observe(wrap);
+  ro.observe(document.body);
+}
+
+function applyIncomingValue(args) {
+  var next = args.value == null ? "" : String(args.value);
+  var forced = Boolean(args.forced);
+  var currentText = cm.getValue();
+  if (next === currentText) return;
+  if (forced) {
+    suppressChange = true;
+    cm.setValue(next);
+    suppressChange = false;
+    dirty = false;
+    lastSentValue = next;
+    return;
+  }
+  if (dirty) return;
+  if (lastSentValue !== null && currentText === lastSentValue && next !== lastSentValue) return;
+  if (next === "" && currentText !== "") return;
+  if (next === lastSentValue) return;
+  suppressChange = true;
+  cm.setValue(next);
+  suppressChange = false;
+  lastSentValue = next;
+}
+
+
+function commitValue(extra) {
+  if (!cm) return;
+  if (commitTimer) {
+    clearTimeout(commitTimer);
+    commitTimer = null;
+  }
+  var currentValue = cm.getValue();
+  var force = extra && (extra.navigateTo || extra.switchItem);
+  if (!force && currentValue === lastSentValue) return;
+  lastSentValue = currentValue;
+  var payload = Object.assign({ value: currentValue, eventId: String(Date.now()) + ":" + String(++eventCounter) }, extra || {});
+  var serialized = JSON.stringify(payload);
+  if (serialized === lastSentPayload && !payload.navigateTo && !payload.switchItem) return;
+  lastSentPayload = serialized;
+  dirty = false;
+  Streamlit.setComponentValue(payload);
+}
+
+function scheduleCommit(delayMs) {
+  if (commitTimer) clearTimeout(commitTimer);
+  commitTimer = setTimeout(function() {
+    commitValue({ reason: "idle" });
+  }, delayMs == null ? 700 : delayMs);
+}
+
+function installParentNavigationSync() {
+  try {
+    var doc = window.parent.document;
+    if (parentClickHandler) doc.removeEventListener("click", parentClickHandler, true);
+    if (parentMouseDownHandler) doc.removeEventListener("mousedown", parentMouseDownHandler, true);
+
+    parentMouseDownHandler = null;
+
+    parentClickHandler = function(event) {
+      if (!cm) return;
+      var target = event.target;
+      if (!target || !target.closest) return;
+      var navTarget = target.closest(
+        "[data-testid='stSidebarNav'] a, " +
+        "[data-testid='stSidebar'] button, " +
+        "[role='tab'], " +
+        "[role='radio']"
+      );
+      if (!navTarget) return;
+      commitValue({ reason: "parent_click" });
+    };
+
+    doc.addEventListener("click", parentClickHandler, true);
+    window.addEventListener("pagehide", function() {
+      try {
+        doc.removeEventListener("click", parentClickHandler, true);
+      } catch (e) {}
+    });
+  } catch (e) {}
+}
+
+function updatePreview() {
+  if (!previewContent || !cm) return;
+  var html = cm.getValue();
+  previewContent.innerHTML = html.trim()
+    ? html
+    : '<div id="preview-placeholder">HTML preview appears here as you type.</div>';
+}
+
+function updateCounter() {
+  if (!counter || !cm) return;
+  var n = cm.getValue().length;
+  counter.textContent = n + " / " + LIMIT + " characters";
+  counter.className = n <= LIMIT ? "cnt-ok" : "cnt-bad";
+}
+
+function wrapSel(open, close) {
+  var sel = cm.getSelection() || "text";
+  cm.replaceSelection(open + sel + close, "around");
+  cm.focus();
+  scheduleRepaint();
+}
+function ins(text) { cm.replaceSelection(text); cm.focus(); scheduleRepaint(); }
+function getValue() { return cm.getValue(); }
+function setValue(v) { cm.setValue(v); cm.focus(); }
+function wrap(open, close) { wrapSel(open, close); }
+function doSingleLine() { setValue(getValue().split("\n").join(" ")); }
+
+function doCase(type) {
+  var sel = cm.getSelection();
+  var target = sel || getValue();
+  var result;
+  if (type === "upper") {
+    result = target.toUpperCase();
+  } else if (type === "lower") {
+    result = target.toLowerCase();
+  } else {
+    result = target
+      .replace(/([.!?]\s*)(\S)/g, function(m, a, b) { return a + b.toUpperCase(); })
+      .replace(/^(\s*)(\S)/, function(m, a, b) { return a + b.toUpperCase(); });
+  }
+  if (sel) { cm.replaceSelection(result); } else { setValue(result); }
+}
+
+var linkBar = null;
+var savedSel = null;
+function setupLinkBar() {
+  linkBar = document.getElementById("link-bar");
+  var linkUrl = document.getElementById("link-url");
+  if (!linkUrl) return;
+  linkUrl.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") { e.preventDefault(); confirmLink(); }
+    if (e.key === "Escape") { e.preventDefault(); cancelLink(); }
+  });
+}
+function insertLink() {
+  savedSel = { from: cm.getCursor("from"), to: cm.getCursor("to") };
+  linkBar.classList.remove("hidden");
+  document.getElementById("link-url").focus();
+  document.getElementById("link-url").select();
+}
+function confirmLink() {
+  var url = document.getElementById("link-url").value.trim();
+  if (!url) { cancelLink(); return; }
+  var txt = cm.getSelection() || "link text";
+  if (savedSel) { cm.setSelection(savedSel.from, savedSel.to); }
+  cm.replaceSelection('<a href="' + url + '">' + txt + "</a>");
+  cancelLink();
+}
+function cancelLink() {
+  linkBar.classList.add("hidden");
+  document.getElementById("link-url").value = "";
+  cm.focus();
+}
+
+var findBar = null;
+var findInput = null;
+var replInput = null;
+var findStatus = null;
+var lastFindPos = null;
+function setupFindBar() {
+  findBar = document.getElementById("find-bar");
+  findInput = document.getElementById("find-input");
+  replInput = document.getElementById("repl-input");
+  findStatus = document.getElementById("find-status");
+  if (!findInput) return;
+  findInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") { e.preventDefault(); doFind(true); }
+    if (e.key === "Escape") { e.preventDefault(); toggleFind(); }
+  });
+}
+function toggleFind() {
+  findBar.classList.toggle("hidden");
+  if (!findBar.classList.contains("hidden")) { findInput.focus(); findInput.select(); }
+  else { cm.focus(); }
+}
+function findNext() { doFind(true); }
+function findPrev() { doFind(false); }
+function doFind(forward) {
+  var txt = findInput.value; if (!txt) return;
+  var cs = document.getElementById("find-case").checked;
+  var src = cs ? cm.getValue() : cm.getValue().toLowerCase();
+  var ndl = cs ? txt : txt.toLowerCase();
+  var from = lastFindPos !== null ? (forward ? lastFindPos + 1 : lastFindPos - 1) : (forward ? 0 : src.length);
+  var idx = forward ? src.indexOf(ndl, from) : src.lastIndexOf(ndl, from);
+  if (idx === -1) { idx = forward ? src.indexOf(ndl) : src.lastIndexOf(ndl); }
+  if (idx === -1) { findStatus.textContent = "Not found"; return; }
+  lastFindPos = idx;
+  var f = cm.posFromIndex(idx), t = cm.posFromIndex(idx + ndl.length);
+  cm.setSelection(f, t);
+  cm.scrollIntoView({ from: f, to: t });
+  findStatus.textContent = "Found at " + (idx + 1);
+}
+function doReplace() {
+  if (!cm.getSelection()) { doFind(true); return; }
+  cm.replaceSelection(replInput.value);
+  lastFindPos = cm.indexFromPos(cm.getCursor()) - 1;
+}
+function doReplaceAll() {
+  var txt = findInput.value; if (!txt) return;
+  var flags = document.getElementById("find-case").checked ? "g" : "gi";
+  var escaped = txt.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  var rx = new RegExp(escaped, flags);
+  var old = cm.getValue();
+  var count = (old.match(rx) || []).length;
+  setValue(old.replace(rx, replInput.value));
+  findStatus.textContent = "Replaced " + count;
+}
+
+function setupShortcuts() {
+  document.addEventListener("keydown", function(e) {
+    if (e.ctrlKey && !e.shiftKey && !e.altKey && e.key === "f") {
+      e.preventDefault(); toggleFind();
+    }
+    for (var i = 0; i < RULES.length; i++) {
+      var sc = (RULES[i].shortcut || "").trim();
+      if (sc && chordMatches(e, sc)) {
+        e.preventDefault(); applyRuleInEditor(RULES[i]); return;
+      }
+    }
+  });
+}
+function chordMatches(e, sc) {
+  var parts = sc.split("+");
+  var key = parts[parts.length - 1].toLowerCase();
+  return e.ctrlKey === (parts.indexOf("Ctrl") !== -1)
+      && e.shiftKey === (parts.indexOf("Shift") !== -1)
+      && e.altKey === (parts.indexOf("Alt") !== -1)
+      && e.key.toLowerCase() === key;
+}
+function applyRuleInEditor(rule) {
+  var sel = cm.getSelection();
+  var out = applyRuleLogic(sel, rule);
+  if (sel) { cm.replaceSelection(out); } else { setValue(getValue() + out); }
+}
+function applyRuleLogic(text, rule) {
+  var lines = rule.apply_per_line ? text.split("\n") : [text];
+  return lines.map(function(l) { return applyMods(l, rule); }).join("\n");
+}
+function applyMods(text, rule) {
+  var r = text, st = rule.start_text || "", et = rule.end_text || "";
+  var tg = (rule.add_tags && rule.tag) ? rule.tag.trim() : "";
+  var op = tg ? "<" + tg + ">" : "", cl = tg ? "</" + tg + ">" : "";
+  if (tg) {
+    r = (rule.add_start && st) ? (rule.start_after_tag ? op + st + r : st + op + r) : op + r;
+    r = (rule.add_end && et) ? (rule.end_before_tag ? r + et + cl : r + cl + et) : r + cl;
+  } else {
+    if (rule.add_start && st) r = st + r;
+    if (rule.add_end && et) r = r + et;
+  }
+  return r;
+}
+
+var pasteMenu = null;
+var pendingClipboard = null;
+function setupPasteMenu() {
+  pasteMenu = document.getElementById("paste-menu");
+  var cmWrap = document.getElementById("cm-wrap");
+  cmWrap.addEventListener("paste", function(e) {
+    var html = e.clipboardData && e.clipboardData.getData("text/html");
+    var plain = e.clipboardData && e.clipboardData.getData("text/plain");
+    if (!html) return;
+    e.preventDefault(); e.stopPropagation();
+    pendingClipboard = { plain: plain, html: html };
+    pasteMenu.classList.remove("hidden");
+  }, true);
+}
+function hidePasteMenu() { pasteMenu.classList.add("hidden"); pendingClipboard = null; cm.focus(); }
+function doPaste(mode) {
+  if (!pendingClipboard) { hidePasteMenu(); return; }
+  var text = mode === "plain" ? pendingClipboard.plain
+           : mode === "raw" ? pendingClipboard.html
+           : cleanHtml(pendingClipboard.html);
+  for (var i = 0; i < RULES.length; i++) {
+    if (RULES[i].apply_on_paste) { text = applyRuleLogic(text, RULES[i]); }
+  }
+  cm.replaceSelection(text);
+  hidePasteMenu();
+  cm.focus();
+  commitValue({ reason: "paste" });
+  requestAnimationFrame(function() {
+    if (cm) cm.refresh();
+    requestAnimationFrame(function() { if (cm) cm.refresh(); });
+  });
+}
+function cleanHtml(html) {
+  try {
+    html = html.replace(/<html[^>]*>|<\/html>/gi, "");
+    html = html.replace(/<body[^>]*>|<\/body>/gi, "");
+    html = html.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "");
+    html = html.replace(/<!--[\s\S]*?-->/g, "");
+    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
+    html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
+    html = html.replace(/<noscript[^>]*>[\s\S]*?<\/noscript>/gi, "");
+    html = html.replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "");
+    html = html.replace(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi, "");
+
+    var ATTR_STRIP = "class|style|id|role|tabindex|onclick|onload|onerror|onmouseover|onmouseout|onfocus|onblur";
+    var reAttrDQ = new RegExp("\\s+(?:" + ATTR_STRIP + ")\\s*=\\s*\"[^\"]*\"", "gi");
+    var reAttrSQ = new RegExp("\\s+(?:" + ATTR_STRIP + ")\\s*=\\s*'[^']*'", "gi");
+    html = html.replace(reAttrDQ, "");
+    html = html.replace(reAttrSQ, "");
+    html = html.replace(/\s+data-[a-z0-9-]+\s*=\s*"[^"]*"/gi, "");
+    html = html.replace(/\s+data-[a-z0-9-]+\s*=\s*'[^']*'/gi, "");
+    html = html.replace(/\s+aria-[a-z-]+\s*=\s*"[^"]*"/gi, "");
+    html = html.replace(/\s+aria-[a-z-]+\s*=\s*'[^']*'/gi, "");
+
+    html = html.replace(/<\/([^>]+)>>+/g, "</$1>");
+    html = html.replace(/<([^\/][^>]*)>>+/g, "<$1>");
+
+    html = html.replace(/[ \t]+/g, " ");
+    html = html.replace(/[ \t]*\n[ \t]*/g, "\n");
+
+    html = html.replace(/<(ul|ol|table)([^>]*)>/gi, "<$1$2>\n");
+    html = html.replace(/<li([^>]*)>/gi, "\n<li$1>");
+    html = html.replace(/<\/li>/gi, "</li>\n");
+    html = html.replace(/<\/(ul|ol|table)>/gi, "\n</$1>\n");
+
+    var em = {
+      "&amp;":"&", "&lt;":"<", "&gt;":">", "&quot;":"\"", "&apos;":"'",
+      "&nbsp;":" ",
+      "&copy;":"©", "&reg;":"®", "&trade;":"™",
+      "&mdash;":"—", "&ndash;":"–",
+      "&ldquo;":"“", "&rdquo;":"”",
+      "&lsquo;":"‘", "&rsquo;":"’",
+      "&bull;":"•", "&middot;":"·", "&hellip;":"…",
+      "&euro;":"€", "&pound;":"£", "&cent;":"¢", "&deg;":"°"
+    };
+    for (var k in em) { html = html.split(k).join(em[k]); }
+
+    html = html.replace(/\n{3,}/g, "\n\n");
+    return html.trim();
+  } catch (e) {
+    return html;
+  }
+}
+
+Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, renderComponent);
+Streamlit.setComponentReady();
+</script>
+</body>
+</html>

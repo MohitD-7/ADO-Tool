@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; }
+  #wrap {
+    display: flex; align-items: center; gap: 8px;
+    border: 2px dashed #8fa3b8; border-radius: 8px;
+    background: #f8fafc; padding: 10px 14px; cursor: pointer;
+    transition: border-color .12s, background .12s;
+    outline: none;
+  }
+  #wrap.focused { border-style: solid; border-color: #2f6f73; background: #fff; box-shadow: 0 0 0 3px rgba(47,111,115,.18); }
+  #wrap.armed   { border-color: #f28c00; background: #fff8ee; }
+  .kbd {
+    display: inline-block; font-family: Consolas, monospace; font-size: 13px;
+    background: #fff; border: 1px solid #c5d0da; border-bottom-width: 2px;
+    border-radius: 5px; padding: 3px 8px; color: #1a2330;
+  }
+  #hint { color: #6f8090; font-size: 12px; flex: 1; }
+  #clr {
+    background: #eee; border: 1px solid #c5d0da; border-radius: 6px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer; color: #444;
+  }
+  #clr:hover { background: #ddd; }
+</style>
+</head>
+<body>
+<div id="wrap" tabindex="0">
+  <span id="value" class="kbd">Click to record</span>
+  <span id="hint">Press the key combo you want.</span>
+  <button id="clr" type="button">Clear</button>
+</div>
+<script>
+var Streamlit = (function() {
+  var API_VERSION = 1;
+  var RENDER_EVENT = "streamlit:render";
+  var lastHeight = null;
+  var renderHandlers = [];
+
+  function sendBackMsg(type, data) {
+    var payload = Object.assign({ isStreamlitMessage: true, type: type }, data || {});
+    window.parent.postMessage(payload, "*");
+  }
+
+  function onMessageEvent(event) {
+    if (!event.data || event.data.type !== RENDER_EVENT) return;
+    var args = event.data.args || {};
+    renderHandlers.forEach(function(handler) {
+      handler({ args: args, disabled: Boolean(event.data.disabled), theme: event.data.theme });
+    });
+  }
+
+  return {
+    RENDER_EVENT: RENDER_EVENT,
+    events: {
+      addEventListener: function(type, handler) {
+        if (type === RENDER_EVENT) renderHandlers.push(function(event) {
+          handler({ detail: event });
+        });
+      }
+    },
+    setComponentReady: function() {
+      window.addEventListener("message", onMessageEvent);
+      sendBackMsg("streamlit:componentReady", { apiVersion: API_VERSION });
+    },
+    setFrameHeight: function(height) {
+      height = height || document.body.scrollHeight;
+      if (height !== lastHeight) {
+        lastHeight = height;
+        sendBackMsg("streamlit:setFrameHeight", { height: height });
+      }
+    },
+    setComponentValue: function(value) {
+      sendBackMsg("streamlit:setComponentValue", { value: value, dataType: "json" });
+    }
+  };
+})();
+
+var wrap  = document.getElementById('wrap');
+var value = document.getElementById('value');
+var hint  = document.getElementById('hint');
+var clr   = document.getElementById('clr');
+var currentChord = "";
+var eventCounter = 0;
+
+function paint() {
+  value.textContent = currentChord || 'Click to record';
+  Streamlit.setFrameHeight();
+}
+
+function normaliseKey(e) {
+  var parts = [];
+  if (e.ctrlKey || e.metaKey) parts.push('Ctrl');
+  if (e.shiftKey) parts.push('Shift');
+  if (e.altKey)   parts.push('Alt');
+  var k = e.key;
+  if (k === ' ')      k = 'Space';
+  if (k === 'Escape') return null;
+  if (['Control','Shift','Alt','Meta','OS'].indexOf(k) !== -1) return null;
+  if (k.length === 1) k = k.toUpperCase();
+  parts.push(k);
+  return parts.join('+');
+}
+
+function commit(chord) {
+  currentChord = chord;
+  paint();
+  Streamlit.setComponentValue({
+    chord: chord,
+    eventId: String(Date.now()) + ":" + String(++eventCounter)
+  });
+}
+
+wrap.addEventListener('focus', function() {
+  wrap.classList.add('focused', 'armed');
+  hint.textContent = 'Listening… press keys.';
+});
+wrap.addEventListener('blur', function() {
+  wrap.classList.remove('focused', 'armed');
+  hint.textContent = 'Press the key combo you want.';
+});
+wrap.addEventListener('click', function() { wrap.focus(); });
+
+wrap.addEventListener('keydown', function(e) {
+  if (!wrap.classList.contains('armed')) return;
+  if (e.key === 'Tab') return;
+  e.preventDefault();
+  e.stopPropagation();
+  var chord = normaliseKey(e);
+  if (chord) commit(chord);
+});
+
+clr.addEventListener('click', function(e) {
+  e.stopPropagation();
+  commit('');
+});
+
+Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, function(event) {
+  var args = event.detail.args || {};
+  var initial = args.initial == null ? "" : String(args.initial);
+  if (currentChord === "" && initial) {
+    currentChord = initial;
+    paint();
+  } else {
+    Streamlit.setFrameHeight();
+  }
+});
+
+Streamlit.setComponentReady();
+</script>
+</body>
+</html>

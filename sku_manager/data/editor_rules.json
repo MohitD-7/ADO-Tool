@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Bullet",
+    "shortcut": "Alt+1",
+    "apply_on_paste": false,
+    "apply_per_line": true,
+    "add_start": true,
+    "start_text": "@@",
+    "add_end": true,
+    "end_text": "<br>",
+    "add_tags": true,
+    "tag": "",
+    "start_after_tag": false,
+    "end_before_tag": false
+  }
+]
