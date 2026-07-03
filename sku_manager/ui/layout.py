@@ -108,25 +108,21 @@ def workspace_topbar() -> str:
     st.session_state["workspace_tab"] = active_tab
 
     item = current_item()
-    if item:
+    if item and not st.session_state.get("_review_loaded"):
         details = item["details"]
         item_no = details.get("item_no", "")
         mfg_item = details.get("mfg_item", "")
         title = details.get("title", "")
-        mfg_str = f' <span class="vo-topbar-label" style="margin-left: 12px;">Mfg Item:</span> <span class="vo-topbar-ino">{mfg_item}</span>' if mfg_item else ''
-        st.markdown(
-            f"""
-            <div class="vo-topbar">
-              <div class="vo-topbar-sku">
-                <span class="vo-topbar-label">SKU:</span>
-                <span class="vo-topbar-ino">{item_no}</span>
-                {mfg_str}
-                <span class="vo-topbar-title" style="margin-left: 15px;">- {title}</span>
-              </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+        mfg_str = f'<span class="vo-topbar-label" style="margin-left:12px;">Mfg Item:</span><span class="vo-topbar-ino">{mfg_item}</span>' if mfg_item else ""
+        bar = (
+            f'<div class="vo-topbar"><div class="vo-topbar-sku">'
+            f'<span class="vo-topbar-label">SKU:</span>'
+            f'<span class="vo-topbar-ino">{item_no}</span>'
+            f'{mfg_str}'
+            f'<span class="vo-topbar-title" style="margin-left:15px;">- {title}</span>'
+            f'</div></div>'
         )
+        st.markdown(bar, unsafe_allow_html=True)
 
     tab_names = list(WORKSPACE_TABS.keys())
     btn_cols  = st.columns(len(tab_names))

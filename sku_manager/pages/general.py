@@ -50,13 +50,8 @@ def render(show_header: bool = True) -> None:
                 details["short_title"] = details["title"]
                 st.rerun()
 
-        c3, c4 = st.columns(2)
-        with c3:
-            st.text_input("Item No (read-only)", value=details.get("item_no", ""), disabled=True)
-            details["mfg_model"] = st.text_input("Mfg Model", value=details.get("mfg_model", ""), key=f"mfg_model_{details['item_no']}")
-            character_counter(details["mfg_model"], LIMITS["mfg_model"])
-        with c4:
-            st.text_input("Mfg Item (read-only)", value=details.get("mfg_item", ""), disabled=True)
+        details["mfg_model"] = st.text_input("Mfg Model", value=details.get("mfg_model", ""), key=f"mfg_model_{details['item_no']}")
+        character_counter(details["mfg_model"], LIMITS["mfg_model"])
         st.markdown("</div>", unsafe_allow_html=True)
 
         # ── Battery section ───────────────────────────────────────────
