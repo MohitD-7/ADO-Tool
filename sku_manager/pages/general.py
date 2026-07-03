@@ -48,6 +48,7 @@ def render(show_header: bool = True) -> None:
             st.markdown("<div class='vo-spacer-btn'></div>", unsafe_allow_html=True)
             if st.button("Copy Title", width="stretch"):
                 details["short_title"] = details["title"]
+                st.session_state.pop(f"short_title_{details['item_no']}", None)
                 st.rerun()
 
         details["mfg_model"] = st.text_input("Mfg Model", value=details.get("mfg_model", ""), key=f"mfg_model_{details['item_no']}")

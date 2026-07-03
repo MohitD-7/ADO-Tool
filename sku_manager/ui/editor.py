@@ -243,6 +243,15 @@ html, body { margin: 0; padding: 0; background: transparent;
   font-size: 14px; line-height: 1.65;
   font-family: "Consolas", "Menlo", "Monaco", monospace;
 }
+#cm-wrap .CodeMirror-gutters {
+  background: #f4f6f8;
+  border-right: 1px solid #c5d0da;
+}
+#cm-wrap .CodeMirror-linenumber {
+  color: #8fa3b8;
+  font-size: 11px;
+  padding-right: 6px;
+}
 #cm-wrap .CodeMirror-focused {
   border-color: #2f6f73; box-shadow: 0 0 0 3px rgba(47,111,115,.12);
 }

@@ -207,7 +207,7 @@ function mountEditor(args) {
   cm = CodeMirror(document.getElementById("cm-wrap"), {
     value: initialValue(args),
     mode: "htmlmixed",
-    lineNumbers: false,
+    lineNumbers: true,
     lineWrapping: true,
     autofocus: true,
     indentWithTabs: false,
