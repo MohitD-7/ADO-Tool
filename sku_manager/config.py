@@ -2,6 +2,8 @@ APP_TITLE = "VirtualOps SKU Manager"
 
 QUEUE_COLUMNS = ["Item No", "Title", "Mfg Item", "Status", "Done By"]
 
+INPUT_SHEET_COLUMNS = ["Item No", "Title", "Mfg Item"]
+
 OUTPUT_COLUMNS = [
     "",
     "Field Name",

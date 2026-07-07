@@ -4,7 +4,7 @@ from io import BytesIO
 
 import pandas as pd
 
-from sku_manager.config import OUTPUT_COLUMNS, QUEUE_COLUMNS
+from sku_manager.config import INPUT_SHEET_COLUMNS, OUTPUT_COLUMNS, QUEUE_COLUMNS
 from sku_manager.models import new_item_record
 
 
@@ -98,18 +98,56 @@ def build_output_df(queue_df: pd.DataFrame, items: dict) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=OUTPUT_COLUMNS)
 
 
-def excel_bytes(output_df: pd.DataFrame) -> bytes:
+def build_input_sheet_df(queue_df: pd.DataFrame, items: dict | None = None) -> pd.DataFrame:
+    """Frozen snapshot of the original three-column input (workspace) sheet.
+
+    Values come straight from the uploaded queue (Item No, Title, Mfg Item)
+    and never reflect later edits — only the output sheet carries changes.
+    """
+    rows = [
+        {
+            "Item No":  str(queue_row["Item No"]),
+            "Title":    str(queue_row.get("Title", "")),
+            "Mfg Item": str(queue_row.get("Mfg Item", "")),
+        }
+        for _, queue_row in queue_df.iterrows()
+    ]
+    return pd.DataFrame(rows, columns=INPUT_SHEET_COLUMNS)
+
+
+def _write_sheet(writer, df: pd.DataFrame, sheet_name: str) -> None:
+    df.to_excel(writer, index=False, sheet_name=sheet_name)
+    workbook = writer.book
+    worksheet = writer.sheets[sheet_name]
+    header_fmt = workbook.add_format({"bold": True, "bg_color": "#56667f", "font_color": "#FFFFFF", "border": 1})
+    for col_num, column in enumerate(df.columns):
+        worksheet.write(0, col_num, column, header_fmt)
+        width = min(max(12, int(df[column].astype(str).str.len().max() if not df.empty else 12) + 2), 55)
+        worksheet.set_column(col_num, col_num, width)
+
+
+def excel_bytes(output_df: pd.DataFrame, input_df: pd.DataFrame | None = None) -> bytes:
     buffer = BytesIO()
     with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
-        output_df.to_excel(writer, index=False, sheet_name="-Item Processed Details-")
-        workbook = writer.book
-        worksheet = writer.sheets["-Item Processed Details-"]
-        header_fmt = workbook.add_format({"bold": True, "bg_color": "#56667f", "font_color": "#FFFFFF", "border": 1})
-        for col_num, column in enumerate(output_df.columns):
-            worksheet.write(0, col_num, column, header_fmt)
-            width = min(max(12, int(output_df[column].astype(str).str.len().max() if not output_df.empty else 12) + 2), 55)
-            worksheet.set_column(col_num, col_num, width)
+        if input_df is not None:
+            _write_sheet(writer, input_df, "Input")
+        _write_sheet(writer, output_df, "-Item Processed Details-")
     return buffer.getvalue()
+
+
+# Text export keeps only the field/value columns (through Value5); the trailing
+# Comments, Source, and Video Link columns are dropped.
+TEXT_COLUMNS = ["", "Field Name", "Item Number", "Value1", "Value2", "Value3", "Value4", "Value5"]
+
+
+def text_bytes(output_df: pd.DataFrame) -> bytes:
+    """Tab-separated Notepad-friendly export of the filled output sheet.
+
+    Includes the empty leading column but stops at Value5 — Comments, Source,
+    and Video Link are omitted.
+    """
+    columns = [col for col in TEXT_COLUMNS if col in output_df.columns]
+    return output_df[columns].to_csv(index=False, sep="\t").encode("utf-8-sig")
 
 
 def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:

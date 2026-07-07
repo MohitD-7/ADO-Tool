@@ -257,8 +257,9 @@ def shortcut_capture(current: str, key: str) -> str:
 def right_feedback_panel(item: dict, warnings: list[str], key_prefix: str = "feedback") -> None:
     st.markdown('<div class="vo-panel-title">Validation</div>', unsafe_allow_html=True)
     if warnings:
-        for warning in warnings:
-            st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
+        with st.expander(f"⚠ Warnings — not filled ({len(warnings)})", expanded=False):
+            for warning in warnings:
+                st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
     else:
         st.markdown(
             '<div class="vo-success-box">All fields look good.</div>',

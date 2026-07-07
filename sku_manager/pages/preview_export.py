@@ -3,7 +3,13 @@ from __future__ import annotations
 import streamlit as st
 import streamlit.components.v1 as components
 
-from sku_manager.services.export import build_output_df, excel_bytes, render_html
+from sku_manager.services.export import (
+    build_input_sheet_df,
+    build_output_df,
+    excel_bytes,
+    render_html,
+    text_bytes,
+)
 from sku_manager.services.validation import item_warnings, submit_blockers
 from sku_manager.state import current_item, mark_status, sync_description_state
 from sku_manager.ui.components import page_header
@@ -27,25 +33,34 @@ def render(show_header: bool = True) -> None:
         return
 
     output_df = build_output_df(st.session_state["queue_df"], st.session_state["items"])
+    input_df = build_input_sheet_df(st.session_state["queue_df"], st.session_state["items"])
     blockers = submit_blockers(item)
     item_warning_list = item_warnings(details, item["features"], item["specs"], item["highlights"])
 
     if blockers:
-        st.error("This SKU cannot be submitted yet. Complete the required fields:")
-        for reason in blockers:
-            st.markdown(f"- {reason}")
+        with st.expander(f"⚠ Not filled / required ({len(blockers)})", expanded=False):
+            st.caption("This SKU cannot be submitted yet. Complete the required fields:")
+            for reason in blockers:
+                st.markdown(f"- {reason}")
     elif item_warning_list:
-        st.warning("Current item has non-blocking validation warnings.")
-        for warning in item_warning_list:
-            st.markdown(f"- {warning}", unsafe_allow_html=True)
+        with st.expander(f"⚠ Warnings — not filled ({len(item_warning_list)})", expanded=False):
+            st.caption("Non-blocking validation warnings:")
+            for warning in item_warning_list:
+                st.markdown(f"- {warning}", unsafe_allow_html=True)
     else:
         st.success("Current item is ready for submit/export.")
-    fname_col, _ = st.columns([2, 1])
-    export_filename = fname_col.text_input(
-        "File name",
-        value=st.session_state.get("_export_filename", "Items Processed"),
-        placeholder="Enter file name (no extension needed)",
-        key="_export_filename",
+    xlsx_col, txt_col = st.columns(2)
+    excel_filename = xlsx_col.text_input(
+        "Excel file name",
+        value=st.session_state.get("_export_excel_filename", "Items Processed"),
+        placeholder="Enter Excel file name (no extension needed)",
+        key="_export_excel_filename",
+    ).strip() or "Items Processed"
+    text_filename = txt_col.text_input(
+        "Text file name",
+        value=st.session_state.get("_export_text_filename", "Items Processed"),
+        placeholder="Enter text file name (no extension needed)",
+        key="_export_text_filename",
     ).strip() or "Items Processed"
 
     a, b, c = st.columns([1, 1, 1])
@@ -63,21 +78,23 @@ def render(show_header: bool = True) -> None:
             st.rerun()
     b.download_button(
         "Download Excel",
-        data=excel_bytes(output_df),
-        file_name=f"{export_filename}.xlsx",
+        data=excel_bytes(output_df, input_df),
+        file_name=f"{excel_filename}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
     )
     c.download_button(
-        "Download CSV",
-        data=output_df.to_csv(index=False).encode("utf-8-sig"),
-        file_name=f"{export_filename}.csv",
-        mime="text/csv",
+        "Download Text",
+        data=text_bytes(output_df),
+        file_name=f"{text_filename}.txt",
+        mime="text/plain",
         use_container_width=True,
     )
     tab_preview, tab_rows, tab_html = st.tabs(["Product Preview", "Output Rows", "HTML Template"])
     with tab_preview:
         html = render_html(item, st.session_state["html_template"])
+        if st.button("⛶ Full screen", key="_preview_fullscreen_btn", use_container_width=False):
+            _fullscreen_preview_dialog(html)
         components.html(html, height=650, scrolling=True)
     with tab_rows:
         st.dataframe(output_df, width="stretch", hide_index=True)
@@ -85,6 +102,11 @@ def render(show_header: bool = True) -> None:
         st.session_state["html_template"] = st.text_area(
             "HTML Template", value=st.session_state["html_template"], height=420
         )
+
+
+@st.dialog("Product Preview", width="large")
+def _fullscreen_preview_dialog(html: str) -> None:
+    components.html(html, height=760, scrolling=True)
 
 
 @st.dialog("Cannot submit — required fields missing")
