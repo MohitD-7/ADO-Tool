@@ -10,7 +10,13 @@ from __future__ import annotations
 import streamlit as st
 
 from sku_manager.pages import workspace
-from sku_manager.services.export import build_output_df, excel_bytes, parse_output_excel
+from sku_manager.services.export import (
+    build_input_sheet_df,
+    build_output_df,
+    excel_bytes,
+    parse_output_excel,
+    text_bytes,
+)
 from sku_manager.state import set_batch, set_description_state, sync_description_state
 from sku_manager.ui.components import page_header
 from sku_manager.ui.layout import review_sku_bar
@@ -73,32 +79,39 @@ def _render_review_workspace() -> None:
         if st.button("Exit Review", use_container_width=True):
             _clear_review_state()
             st.rerun()
-    dl_col, xl_col, csv_col = st.columns([2, 1, 1])
     default_name = _default_export_name(source)
-    export_name = dl_col.text_input(
-        "Download file name",
-        value=st.session_state.get("_review_export_name", default_name),
-        placeholder="Enter file name (no extension)",
-        key="_review_export_name",
-        label_visibility="collapsed",
+    xl_name_col, txt_name_col = st.columns(2)
+    excel_name = xl_name_col.text_input(
+        "Excel file name",
+        value=st.session_state.get("_review_excel_name", default_name),
+        placeholder="Enter Excel file name (no extension)",
+        key="_review_excel_name",
+    ).strip() or default_name
+    text_name = txt_name_col.text_input(
+        "Text file name",
+        value=st.session_state.get("_review_text_name", default_name),
+        placeholder="Enter text file name (no extension)",
+        key="_review_text_name",
     ).strip() or default_name
 
     sync_description_state()
     output_df = build_output_df(st.session_state["queue_df"], st.session_state["items"])
+    input_df = build_input_sheet_df(st.session_state["queue_df"], st.session_state["items"])
 
+    xl_col, txt_col = st.columns(2)
     xl_col.download_button(
         "Download Excel",
-        data=excel_bytes(output_df),
-        file_name=f"{export_name}.xlsx",
+        data=excel_bytes(output_df, input_df),
+        file_name=f"{excel_name}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
         type="primary",
     )
-    csv_col.download_button(
-        "Download CSV",
-        data=output_df.to_csv(index=False).encode("utf-8-sig"),
-        file_name=f"{export_name}.csv",
-        mime="text/csv",
+    txt_col.download_button(
+        "Download Text",
+        data=text_bytes(output_df),
+        file_name=f"{text_name}.txt",
+        mime="text/plain",
         use_container_width=True,
     )
     workspace.render()
@@ -110,7 +123,7 @@ def _default_export_name(source: str) -> str:
 
 
 def _clear_review_state() -> None:
-    for key in ["_review_loaded", "_review_source_name", "_review_export_name"]:
+    for key in ["_review_loaded", "_review_source_name", "_review_excel_name", "_review_text_name"]:
         st.session_state.pop(key, None)
     for key in list(st.session_state.keys()):
         if key.startswith("_desc_"):
