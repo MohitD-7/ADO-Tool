@@ -32,11 +32,6 @@ def build_item_rows(item: dict) -> list[dict]:
         _row("Title", item_no, details.get("title", ""), comments=comments),
         _row("Short Title", item_no, details.get("short_title", "")),
         _row("Description", item_no, details.get("description", "")),
-        _row("Mfg Model", item_no, details.get("mfg_model", "")),
-        _row("Battery Info", item_no, details.get("battery_info", "")),
-        _row("Battery Material", item_no, details.get("battery_material", "")),
-        _row("Battery Type", item_no, details.get("battery_type", "")),
-        _row("Battery Quantity", item_no, details.get("battery_quantity", "")),
     ]
 
     for index, include in enumerate(item.get("includes", []), start=1):
@@ -51,6 +46,14 @@ def build_item_rows(item: dict) -> list[dict]:
             value2=text,
             value3=sku,
         ))
+
+    rows.extend([
+        _row("Mfg Model", item_no, details.get("mfg_model", "")),
+        _row("Battery Info", item_no, details.get("battery_info", "")),
+        _row("Battery Material", item_no, details.get("battery_material", "")),
+        _row("Battery Type", item_no, details.get("battery_type", "")),
+        _row("Battery Quantity", item_no, details.get("battery_quantity", "")),
+    ])
 
     for index, feature in enumerate(item.get("features", []), start=1):
         rows.append(_row("Feature", item_no, str(index * 10), str(feature)))
@@ -163,12 +166,24 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
       Specification (Value2=order, Value4=key, Value5=value),
       Highlight (Value1=order, Value2=text)
     """
+    required = {"Field Name", "Item Number"}
     try:
-        df = pd.read_excel(file, sheet_name=0, dtype=str).fillna("")
+        sheets = pd.read_excel(file, sheet_name=None, dtype=str)
     except Exception as exc:
         raise ValueError(f"Could not read file: {exc}") from exc
 
-    required = {"Field Name", "Item Number"}
+    # Prefer the named field/output sheet; fall back to the first sheet that
+    # carries the required columns (Input sheet is now first in the workbook).
+    df = sheets.get("-Item Processed Details-")
+    if df is None or not required.issubset(set(df.columns)):
+        df = next(
+            (s for s in sheets.values() if required.issubset(set(s.columns))),
+            None,
+        )
+    if df is None:
+        df = next(iter(sheets.values()), pd.DataFrame())
+    df = df.fillna("")
+
     if not required.issubset(set(df.columns)):
         raise ValueError(f"Missing columns: {required - set(df.columns)}")
 
