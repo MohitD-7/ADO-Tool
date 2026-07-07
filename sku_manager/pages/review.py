@@ -27,11 +27,6 @@ def render() -> None:
 
 
 def _render_upload() -> None:
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;'
-        'border-radius:8px;padding:0.5rem 0.8rem;max-width:640px;">',
-        unsafe_allow_html=True,
-    )
     st.markdown("### Upload a Batch for Review")
     st.caption(
         "Upload an Excel file exported from this app (Download Excel). "
@@ -44,8 +39,6 @@ def _render_upload() -> None:
         accept_multiple_files=False,
         key="_review_upload",
     )
-    st.markdown("</div>", unsafe_allow_html=True)
-
     if uploaded is None:
         return
 
@@ -80,12 +73,6 @@ def _render_review_workspace() -> None:
         if st.button("Exit Review", use_container_width=True):
             _clear_review_state()
             st.rerun()
-
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #f28c00;'
-        'border-radius:8px;padding:0.4rem 0.8rem;margin-bottom:0.4rem;">',
-        unsafe_allow_html=True,
-    )
     dl_col, xl_col, csv_col = st.columns([2, 1, 1])
     default_name = _default_export_name(source)
     export_name = dl_col.text_input(
@@ -114,8 +101,6 @@ def _render_review_workspace() -> None:
         mime="text/csv",
         use_container_width=True,
     )
-    st.markdown("</div>", unsafe_allow_html=True)
-
     workspace.render()
 
 

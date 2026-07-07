@@ -1,22 +1,25 @@
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from sku_manager.services.validation import char_count_status
 
 
 def page_header(kicker: str, title: str, status: str | None = None) -> None:
-    badge = f'<span class="vo-badge">{status}</span>' if status else ""
+    safe_kicker = html.escape(str(kicker))
+    safe_title = html.escape(str(title))
+    badge = f'<span class="vo-badge">{html.escape(str(status))}</span>' if status else ""
     st.markdown(
         f"""
         <div class="vo-header">
-          <div class="vo-kicker">{kicker}{badge}</div>
-          <div class="vo-title">{title}</div>
+          <div class="vo-kicker"><span>{safe_kicker}</span>{badge}</div>
+          <div class="vo-title">{safe_title}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-
 
 def character_counter(value: str, limit: int) -> None:
     count, ok = char_count_status(value, limit)
@@ -65,12 +68,12 @@ def drag_reorder(labels: list[str]) -> list[int] | None:
   ol { list-style: none; margin: 0; padding: 0; }
   li {
     display: flex; align-items: center; gap: 8px;
-    background: #f8fafc; border: 1px solid #dde3ea; border-radius: 6px;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
     padding: 6px 10px; margin-bottom: 4px; cursor: grab;
     transition: background .1s, box-shadow .1s;
   }
   li.dragging { opacity: 0.45; }
-  li.drag-over { border-color: #2f6f73; box-shadow: 0 0 0 2px rgba(47,111,115,.18); }
+  li.drag-over { border-color: #ef8e0d; box-shadow: 0 0 0 2px rgba(239,142,13,.24); }
   .handle { color: #98a5b3; font-size: 14px; line-height: 1; user-select: none; }
   .order  { font-weight: 700; color: #6f8090; min-width: 28px; text-align: right; }
   .label  { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1a2330; }
@@ -175,10 +178,6 @@ def links_panel(item: dict, key_suffix: str = "shared") -> None:
     the cell.
     """
     ino = item["details"]["item_no"]
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #8a4d00;border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin:0.4rem 0;">',
-        unsafe_allow_html=True,
-    )
     st.markdown("### Links")
     st.caption("One link per line. Exports as a single cell with all links stacked.")
     existing = item.setdefault("links", {}).setdefault("general", [])
@@ -189,13 +188,11 @@ def links_panel(item: dict, key_suffix: str = "shared") -> None:
         "Links",
         value=text_value,
         key=f"links_{key_suffix}_{ino}",
-        height=140,
+        height=120,
         label_visibility="collapsed",
         placeholder="https://example.com/source-1\nhttps://example.com/source-2",
     )
     item["links"]["general"] = [line.strip() for line in updated.splitlines() if line.strip()]
-    st.markdown("</div>", unsafe_allow_html=True)
-
 
 _RESERVED_CHORDS = {
     # Chrome / OS-level shortcuts that would either intercept our keydown or
@@ -258,24 +255,17 @@ def shortcut_capture(current: str, key: str) -> str:
 
 
 def right_feedback_panel(item: dict, warnings: list[str], key_prefix: str = "feedback") -> None:
-    st.markdown(
-        '<div style="background:#f8fafc;border:1px solid #dde3ea;border-radius:8px;padding:0.65rem 0.8rem 0.6rem 0.8rem;font-size:0.85rem;">',
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        '<div style="font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:.04em;color:#6f8090;margin-bottom:6px;">Validation</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown('<div class="vo-panel-title">Validation</div>', unsafe_allow_html=True)
     if warnings:
         for warning in warnings:
             st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
     else:
         st.markdown(
-            '<div style="background:#f0faf3;border:1px solid #7cba8c;border-left:3px solid #2e8b57;border-radius:6px;padding:.45rem .7rem;color:#1b5e30;font-size:.83rem;font-weight:600;">All fields look good.</div>',
+            '<div class="vo-success-box">All fields look good.</div>',
             unsafe_allow_html=True,
         )
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
+    st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
     with st.expander("Item notes", expanded=False):
         item["details"]["comments"] = st.text_area(
             "Item-level comment",

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css">
@@ -70,6 +70,31 @@ var eventCounter = 0;
 var commitTimer = null;
 var lastSentValue = null;
 var dirty = false;
+var fullscreenActive = false;
+var preFullscreenHeight = null;
+var frameStyleBackup = null;
+var auditMarkers = [];
+var auditTimer = null;
+var spellDictionary = null;
+var spellDictionaryLoading = false;
+var spellDictionaryFailed = false;
+var MAX_AUDIT_MARKS = 450;
+var TYPO_SCRIPT_URLS = [
+  "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/typo.js",
+  "https://cdn.jsdelivr.net/gh/cfinke/Typo.js/typo/typo.js"
+];
+var SPELL_AFF_URLS = [
+  "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/dictionaries/en_US/en_US.aff",
+  "https://cdn.jsdelivr.net/gh/cfinke/Typo.js/typo/dictionaries/en_US/en_US.aff"
+];
+var SPELL_DIC_URLS = [
+  "https://cdn.jsdelivr.net/npm/typo-js@1.3.2/dictionaries/en_US/en_US.dic",
+  "https://cdn.jsdelivr.net/gh/cfinke/Typo.js/typo/dictionaries/en_US/en_US.dic"
+];
+var SPELL_IGNORE_WORDS = Object.create(null);
+"sku,skus,mpn,pdp,html,dropbox,hp,zbook,wquxga,intel,core,ultra,vpro,ssd,hdd,gb,tb,mb,usb,hdmi,wifi,wi,fi,bluetooth,smartbuy,workstation,touchscreen,notepad,dropdown,checkbox,checkboxes,textarea,href,nbsp,br".split(",").forEach(function(word) {
+  SPELL_IGNORE_WORDS[word] = true;
+});
 
 function renderComponent(event) {
   var args = event.detail.args || {};
@@ -88,6 +113,8 @@ function renderComponent(event) {
   renderRulesBar();
   updateCounter();
   updatePreview();
+  ensureSpellDictionary();
+  scheduleTextAudit(120);
   scheduleRepaint();
 }
 
@@ -168,6 +195,130 @@ function applyEditorHeight() {
   Streamlit.setFrameHeight(document.body.scrollHeight);
 }
 
+function backupFrameStyle(frame) {
+  if (!frame || frameStyleBackup) return;
+  frameStyleBackup = {
+    position: frame.style.position,
+    top: frame.style.top,
+    left: frame.style.left,
+    width: frame.style.width,
+    height: frame.style.height,
+    zIndex: frame.style.zIndex,
+    border: frame.style.border,
+    background: frame.style.background,
+    maxWidth: frame.style.maxWidth
+  };
+}
+
+function restoreFrameStyle(frame) {
+  if (!frame || !frameStyleBackup) return;
+  frame.style.position = frameStyleBackup.position;
+  frame.style.top = frameStyleBackup.top;
+  frame.style.left = frameStyleBackup.left;
+  frame.style.width = frameStyleBackup.width;
+  frame.style.height = frameStyleBackup.height;
+  frame.style.zIndex = frameStyleBackup.zIndex;
+  frame.style.border = frameStyleBackup.border;
+  frame.style.background = frameStyleBackup.background;
+  frame.style.maxWidth = frameStyleBackup.maxWidth;
+  frameStyleBackup = null;
+}
+
+function setFrameOverlay(on) {
+  try {
+    var frame = window.frameElement;
+    if (!frame) return;
+    if (on) {
+      backupFrameStyle(frame);
+      frame.style.position = "fixed";
+      frame.style.top = "0";
+      frame.style.left = "0";
+      frame.style.width = "100vw";
+      frame.style.height = "100vh";
+      frame.style.maxWidth = "none";
+      frame.style.zIndex = "2147483647";
+      frame.style.border = "0";
+      frame.style.background = "#f7f9fb";
+    } else {
+      restoreFrameStyle(frame);
+    }
+  } catch (e) {}
+}
+
+function updateFullscreenButton() {
+  var btn = document.getElementById("fullscreen-btn");
+  if (!btn) return;
+  btn.textContent = fullscreenActive ? "Exit full screen" : "Full screen";
+  btn.title = fullscreenActive ? "Exit full screen editor" : "Open editor full screen";
+}
+
+function adjustFullscreenHeight() {
+  if (!fullscreenActive) return;
+  var chrome = 0;
+  ["toolbar", "find-bar", "rules-bar", "counter"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el || el.classList.contains("hidden")) return;
+    chrome += el.getBoundingClientRect().height;
+  });
+  editorHeight = Math.max(260, window.innerHeight - chrome - 34);
+  applyEditorHeight();
+  Streamlit.setFrameHeight(window.innerHeight);
+}
+
+function setFullscreenMode(on) {
+  if (on === fullscreenActive) return;
+  fullscreenActive = on;
+  document.body.classList.toggle("fullscreen-mode", on);
+  setFrameOverlay(on);
+  if (on) {
+    preFullscreenHeight = editorHeight;
+    adjustFullscreenHeight();
+  } else {
+    if (preFullscreenHeight) editorHeight = preFullscreenHeight;
+    preFullscreenHeight = null;
+    applyEditorHeight();
+    Streamlit.setFrameHeight(document.body.scrollHeight);
+  }
+  updateFullscreenButton();
+  setTimeout(function() { if (cm) cm.refresh(); }, 50);
+}
+
+function toggleFullscreen() {
+  commitValue({ reason: "fullscreen" });
+  if (fullscreenActive) {
+    if (document.fullscreenElement && document.exitFullscreen) {
+      document.exitFullscreen().catch(function() { setFullscreenMode(false); });
+    } else {
+      setFullscreenMode(false);
+    }
+    return;
+  }
+  var shell = document.getElementById("editor-shell") || document.documentElement;
+  if (shell.requestFullscreen) {
+    shell.requestFullscreen().then(function() {
+      setFullscreenMode(true);
+    }).catch(function() {
+      setFullscreenMode(true);
+    });
+  } else {
+    setFullscreenMode(true);
+  }
+}
+
+function setupFullscreen() {
+  updateFullscreenButton();
+  document.addEventListener("fullscreenchange", function() {
+    setFullscreenMode(Boolean(document.fullscreenElement));
+  });
+  window.addEventListener("resize", function() {
+    if (fullscreenActive) adjustFullscreenHeight();
+  });
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape" && fullscreenActive && !document.fullscreenElement) {
+      setFullscreenMode(false);
+    }
+  });
+}
 function scheduleRepaint() {
   requestAnimationFrame(function() {
     if (cm) cm.refresh();
@@ -186,7 +337,7 @@ function initialValue(args) {
 
 function mountEditor(args) {
   var app = document.getElementById("app");
-  app.innerHTML = String(args.toolbar || "") + String(args.find_bar || "") + String(args.paste_menu || "") +
+  app.innerHTML = '<div id="editor-shell">' + String(args.toolbar || "") + String(args.find_bar || "") + String(args.paste_menu || "") +
     '<div id="rules-bar" class="bar rules-bar-flex"></div>' +
     '<div id="main-panels">' +
     '  <div id="editor-panel">' +
@@ -198,7 +349,8 @@ function mountEditor(args) {
     '    <div id="preview-content"></div>' +
     '  </div>' +
     '</div>' +
-    '<div id="resize-handle" title="Drag to resize editor height"></div>';
+    '<div id="resize-handle" title="Drag to resize editor height"></div>' +
+    '</div>';
   setupResize(Number(args.height) || 320);
 
   counter = document.getElementById("counter");
@@ -226,6 +378,7 @@ function mountEditor(args) {
     dirty = true;
     updateCounter();
     updatePreview();
+    scheduleTextAudit();
     scheduleCommit();
   });
   cm.on("blur", function() { scheduleCommit(150); });
@@ -237,6 +390,10 @@ function mountEditor(args) {
   setupShortcuts();
   setupPasteMenu();
   setupResizeObserver();
+  setupFullscreen();
+  setupEditorLanguage();
+  ensureSpellDictionary();
+  scheduleTextAudit(80);
 }
 
 function setupResizeObserver() {
@@ -271,6 +428,7 @@ function applyIncomingValue(args) {
   cm.setValue(next);
   suppressChange = false;
   lastSentValue = next;
+  scheduleTextAudit(80);
 }
 
 
@@ -345,6 +503,224 @@ function updateCounter() {
   counter.className = n <= LIMIT ? "cnt-ok" : "cnt-bad";
 }
 
+function setupEditorLanguage() {
+  document.documentElement.setAttribute("lang", "en-US");
+  document.body.setAttribute("lang", "en-US");
+  if (!cm) return;
+  var wrapper = cm.getWrapperElement();
+  if (wrapper) {
+    wrapper.setAttribute("lang", "en-US");
+    wrapper.setAttribute("spellcheck", "false");
+  }
+}
+
+function scheduleTextAudit(delayMs) {
+  if (!cm) return;
+  if (auditTimer) clearTimeout(auditTimer);
+  auditTimer = setTimeout(runTextAudit, delayMs == null ? 350 : delayMs);
+}
+
+function clearAuditMarkers() {
+  for (var i = 0; i < auditMarkers.length; i++) {
+    auditMarkers[i].clear();
+  }
+  auditMarkers = [];
+}
+
+function loadScriptCandidates(urls) {
+  var index = 0;
+  function next() {
+    if (index >= urls.length) return Promise.reject(new Error("Typo.js unavailable"));
+    var url = urls[index++];
+    return new Promise(function(resolve, reject) {
+      var existing = document.querySelector('script[data-spell-src="' + url + '"]');
+      if (existing) { resolve(); return; }
+      var script = document.createElement("script");
+      script.src = url;
+      script.async = true;
+      script.setAttribute("data-spell-src", url);
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    }).catch(next);
+  }
+  return next();
+}
+
+function fetchTextCandidates(urls) {
+  var index = 0;
+  function next() {
+    if (index >= urls.length) return Promise.reject(new Error("Dictionary unavailable"));
+    var url = urls[index++];
+    return fetch(url, { cache: "force-cache" }).then(function(response) {
+      if (!response.ok) throw new Error("Dictionary request failed");
+      return response.text();
+    }).catch(next);
+  }
+  return next();
+}
+
+function ensureSpellDictionary() {
+  if (spellDictionary || spellDictionaryLoading || spellDictionaryFailed) return;
+  spellDictionaryLoading = true;
+  loadScriptCandidates(TYPO_SCRIPT_URLS)
+    .then(function() {
+      if (typeof Typo === "undefined") throw new Error("Typo.js did not register");
+      return Promise.all([fetchTextCandidates(SPELL_AFF_URLS), fetchTextCandidates(SPELL_DIC_URLS)]);
+    })
+    .then(function(parts) {
+      spellDictionary = new Typo("en_US", parts[0], parts[1], { platform: "any" });
+    })
+    .catch(function() {
+      spellDictionaryFailed = true;
+    })
+    .then(function() {
+      spellDictionaryLoading = false;
+      scheduleTextAudit(50);
+    });
+}
+
+function isKeyboardCharacter(ch) {
+  if (ch === "\n" || ch === "\r" || ch === "\t") return true;
+  if (!ch || ch.length !== 1) return false;
+  var code = ch.charCodeAt(0);
+  return code >= 32 && code <= 126;
+}
+
+function isSuperscriptOrSubscript(ch) {
+  return /[\u00B2\u00B3\u00B9\u2070-\u209F]/.test(ch);
+}
+
+function decodedEntity(entity) {
+  var node = document.createElement("textarea");
+  node.innerHTML = entity;
+  return node.value;
+}
+
+function entityNeedsRedline(entity) {
+  var decoded = decodedEntity(entity);
+  for (var i = 0; i < decoded.length; i++) {
+    if (!isKeyboardCharacter(decoded.charAt(i))) return true;
+  }
+  return false;
+}
+
+function textRangesOutsideTags(text) {
+  var ranges = [];
+  var start = null;
+  var inTag = false;
+  var quote = null;
+  for (var i = 0; i < text.length; i++) {
+    var ch = text.charAt(i);
+    if (inTag) {
+      if (quote) {
+        if (ch === quote) quote = null;
+      } else if (ch === '"' || ch === "'") {
+        quote = ch;
+      } else if (ch === ">") {
+        inTag = false;
+      }
+      continue;
+    }
+    if (ch === "<") {
+      if (start !== null && i > start) ranges.push({ start: start, end: i });
+      start = null;
+      inTag = true;
+      quote = null;
+      continue;
+    }
+    if (start === null) start = i;
+  }
+  if (start !== null && start < text.length) ranges.push({ start: start, end: text.length });
+  return ranges;
+}
+
+function markAuditRange(start, end, className, title) {
+  if (!cm || start >= end || auditMarkers.length >= MAX_AUDIT_MARKS) return;
+  auditMarkers.push(cm.markText(cm.posFromIndex(start), cm.posFromIndex(end), {
+    className: className,
+    title: title
+  }));
+}
+
+function isInsideEntity(text, start, end) {
+  var amp = text.lastIndexOf("&", start);
+  if (amp === -1) return false;
+  var semi = text.indexOf(";", amp);
+  if (semi === -1 || semi + 1 < end) return false;
+  return /^&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);$/i.test(text.slice(amp, semi + 1));
+}
+
+function shouldSkipSpellWord(word, start, end, fullText) {
+  var lower = word.toLowerCase();
+  if (word.length < 3) return true;
+  if (SPELL_IGNORE_WORDS[lower]) return true;
+  if (isInsideEntity(fullText, start, end)) return true;
+  if (/[0-9_]/.test(word)) return true;
+  if (/^[A-Z]{2,}$/.test(word)) return true;
+  if (/[a-z][A-Z]|[A-Z][a-z]+[A-Z]/.test(word)) return true;
+  if (/[^A-Za-z']/.test(word)) return true;
+  return false;
+}
+
+function isWordCorrect(word) {
+  if (!spellDictionary) return true;
+  var lower = word.toLowerCase();
+  if (spellDictionary.check(word) || spellDictionary.check(lower)) return true;
+  var stem = lower
+    .replace(/'(s|re|ve|d|ll|m)$/i, "")
+    .replace(/n't$/i, "");
+  return stem !== lower && spellDictionary.check(stem);
+}
+
+function runTextAudit() {
+  if (!cm) return;
+  auditTimer = null;
+  clearAuditMarkers();
+  var text = cm.getValue();
+  if (!text) return;
+  var ranges = textRangesOutsideTags(text);
+  cm.operation(function() {
+    for (var r = 0; r < ranges.length; r++) {
+      var segment = text.slice(ranges[r].start, ranges[r].end);
+      var entityRx = /&(?:#[0-9]+|#x[0-9a-f]+|[a-z][a-z0-9]+);/gi;
+      var entityMatch;
+      while ((entityMatch = entityRx.exec(segment)) !== null) {
+        if (entityNeedsRedline(entityMatch[0])) {
+          markAuditRange(
+            ranges[r].start + entityMatch.index,
+            ranges[r].start + entityMatch.index + entityMatch[0].length,
+            "cm-redline cm-redline-special",
+            "Non-keyboard character/entity"
+          );
+        }
+      }
+
+      for (var i = 0; i < segment.length; i++) {
+        var ch = segment.charAt(i);
+        if (!isKeyboardCharacter(ch)) {
+          var title = isSuperscriptOrSubscript(ch)
+            ? "Superscript/subscript character"
+            : "Non-keyboard character";
+          markAuditRange(ranges[r].start + i, ranges[r].start + i + 1, "cm-redline cm-redline-special", title);
+        }
+      }
+
+      if (!spellDictionary) continue;
+      var wordRx = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
+      var wordMatch;
+      while ((wordMatch = wordRx.exec(segment)) !== null) {
+        var word = wordMatch[0];
+        var start = ranges[r].start + wordMatch.index;
+        var end = start + word.length;
+        if (shouldSkipSpellWord(word, start, end, text)) continue;
+        if (!isWordCorrect(word)) {
+          markAuditRange(start, end, "cm-redline cm-redline-spelling", "Possible US English spelling issue");
+        }
+      }
+    }
+  });
+}
 function wrapSel(open, close) {
   var sel = cm.getSelection() || "text";
   cm.replaceSelection(open + sel + close, "around");
@@ -409,6 +785,8 @@ var findInput = null;
 var replInput = null;
 var findStatus = null;
 var lastFindPos = null;
+var findScope = null;
+var currentFindMatch = null;
 function setupFindBar() {
   findBar = document.getElementById("find-bar");
   findInput = document.getElementById("find-input");
@@ -419,11 +797,71 @@ function setupFindBar() {
     if (e.key === "Enter") { e.preventDefault(); doFind(true); }
     if (e.key === "Escape") { e.preventDefault(); toggleFind(); }
   });
+  findInput.addEventListener("input", resetFindMatch);
+}
+function resetFindMatch() {
+  lastFindPos = null;
+  currentFindMatch = null;
+}
+function captureFindScope() {
+  findScope = null;
+  resetFindMatch();
+  if (!cm) return;
+  var from = cm.getCursor("from");
+  var to = cm.getCursor("to");
+  var start = cm.indexFromPos(from);
+  var end = cm.indexFromPos(to);
+  if (end > start) findScope = { start: start, end: end };
+  setFindStatus(findScope ? "Selection scope" : "");
+}
+function clearFindScope() {
+  findScope = null;
+  resetFindMatch();
+  setFindStatus("");
+}
+function getFindBounds() {
+  var length = cm.getValue().length;
+  if (!findScope) return { start: 0, end: length, scoped: false };
+  findScope.start = Math.max(0, Math.min(findScope.start, length));
+  findScope.end = Math.max(findScope.start, Math.min(findScope.end, length));
+  return { start: findScope.start, end: findScope.end, scoped: true };
+}
+function setFindStatus(message) {
+  if (!findStatus) return;
+  findStatus.textContent = message ? (message + (findScope ? " (selection)" : "")) : "";
+}
+function selectionMatchesCurrentFind() {
+  if (!currentFindMatch) return false;
+  var start = cm.indexFromPos(cm.getCursor("from"));
+  var end = cm.indexFromPos(cm.getCursor("to"));
+  return start === currentFindMatch.start && end === currentFindMatch.end;
+}
+function findIndexInRange(src, ndl, begin, end, from, forward) {
+  if (!ndl || end - begin < ndl.length) return -1;
+  if (forward) {
+    var idx = src.indexOf(ndl, Math.max(begin, from));
+    return idx !== -1 && idx + ndl.length <= end ? idx : -1;
+  }
+  var pos = Math.min(end - ndl.length, from);
+  idx = src.lastIndexOf(ndl, pos);
+  while (idx !== -1) {
+    if (idx >= begin && idx + ndl.length <= end) return idx;
+    if (idx < begin) return -1;
+    idx = src.lastIndexOf(ndl, idx - 1);
+  }
+  return -1;
 }
 function toggleFind() {
+  var opening = findBar.classList.contains("hidden");
   findBar.classList.toggle("hidden");
-  if (!findBar.classList.contains("hidden")) { findInput.focus(); findInput.select(); }
-  else { cm.focus(); }
+  if (opening) {
+    captureFindScope();
+    findInput.focus();
+    findInput.select();
+  } else {
+    clearFindScope();
+    cm.focus();
+  }
 }
 function findNext() { doFind(true); }
 function findPrev() { doFind(false); }
@@ -432,20 +870,36 @@ function doFind(forward) {
   var cs = document.getElementById("find-case").checked;
   var src = cs ? cm.getValue() : cm.getValue().toLowerCase();
   var ndl = cs ? txt : txt.toLowerCase();
-  var from = lastFindPos !== null ? (forward ? lastFindPos + 1 : lastFindPos - 1) : (forward ? 0 : src.length);
-  var idx = forward ? src.indexOf(ndl, from) : src.lastIndexOf(ndl, from);
-  if (idx === -1) { idx = forward ? src.indexOf(ndl) : src.lastIndexOf(ndl); }
-  if (idx === -1) { findStatus.textContent = "Not found"; return; }
+  var bounds = getFindBounds();
+  var from = lastFindPos !== null && lastFindPos >= bounds.start && lastFindPos < bounds.end
+    ? (forward ? lastFindPos + 1 : lastFindPos - 1)
+    : (forward ? bounds.start : bounds.end - ndl.length);
+  var idx = findIndexInRange(src, ndl, bounds.start, bounds.end, from, forward);
+  if (idx === -1) {
+    idx = findIndexInRange(src, ndl, bounds.start, bounds.end, forward ? bounds.start : bounds.end - ndl.length, forward);
+  }
+  if (idx === -1) { currentFindMatch = null; setFindStatus("Not found"); return; }
   lastFindPos = idx;
+  currentFindMatch = { start: idx, end: idx + ndl.length };
   var f = cm.posFromIndex(idx), t = cm.posFromIndex(idx + ndl.length);
   cm.setSelection(f, t);
   cm.scrollIntoView({ from: f, to: t });
-  findStatus.textContent = "Found at " + (idx + 1);
+  setFindStatus("Found at " + (idx + 1));
 }
 function doReplace() {
-  if (!cm.getSelection()) { doFind(true); return; }
-  cm.replaceSelection(replInput.value);
-  lastFindPos = cm.indexFromPos(cm.getCursor()) - 1;
+  var txt = findInput.value; if (!txt) return;
+  if (!selectionMatchesCurrentFind()) { doFind(true); return; }
+  var replacement = replInput.value;
+  var start = currentFindMatch.start;
+  var end = currentFindMatch.end;
+  cm.replaceRange(replacement, cm.posFromIndex(start), cm.posFromIndex(end));
+  var delta = replacement.length - (end - start);
+  if (findScope && start >= findScope.start && start <= findScope.end) {
+    findScope.end = Math.max(findScope.start, findScope.end + delta);
+  }
+  lastFindPos = start + replacement.length - 1;
+  currentFindMatch = null;
+  doFind(true);
 }
 function doReplaceAll() {
   var txt = findInput.value; if (!txt) return;
@@ -453,9 +907,20 @@ function doReplaceAll() {
   var escaped = txt.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   var rx = new RegExp(escaped, flags);
   var old = cm.getValue();
-  var count = (old.match(rx) || []).length;
-  setValue(old.replace(rx, replInput.value));
-  findStatus.textContent = "Replaced " + count;
+  var bounds = getFindBounds();
+  var scopedText = old.slice(bounds.start, bounds.end);
+  var count = (scopedText.match(rx) || []).length;
+  var replacement = replInput.value;
+  var replaced = scopedText.replace(rx, function() { return replacement; });
+  cm.replaceRange(replaced, cm.posFromIndex(bounds.start), cm.posFromIndex(bounds.end));
+  if (findScope) {
+    findScope.end = bounds.start + replaced.length;
+    cm.setSelection(cm.posFromIndex(findScope.start), cm.posFromIndex(findScope.end));
+  } else {
+    cm.setCursor(cm.posFromIndex(bounds.start + replaced.length));
+  }
+  resetFindMatch();
+  setFindStatus("Replaced " + count);
 }
 
 function setupShortcuts() {
@@ -504,6 +969,29 @@ function applyMods(text, rule) {
 
 var pasteMenu = null;
 var pendingClipboard = null;
+
+function positionPasteMenuNearCursor() {
+  if (!pasteMenu || !cm) return;
+  var coords = cm.cursorCoords(cm.getCursor(), "window");
+  var margin = 8;
+  pasteMenu.style.visibility = "hidden";
+  pasteMenu.classList.remove("hidden");
+  var rect = pasteMenu.getBoundingClientRect();
+  var left = coords.left;
+  var top = coords.bottom + 8;
+
+  if (left + rect.width > window.innerWidth - margin) {
+    left = Math.max(margin, window.innerWidth - rect.width - margin);
+  }
+  if (top + rect.height > window.innerHeight - margin) {
+    top = Math.max(margin, coords.top - rect.height - 8);
+  }
+
+  pasteMenu.style.left = Math.round(left) + "px";
+  pasteMenu.style.top = Math.round(top) + "px";
+  pasteMenu.style.visibility = "";
+}
+
 function setupPasteMenu() {
   pasteMenu = document.getElementById("paste-menu");
   var cmWrap = document.getElementById("cm-wrap");
@@ -513,7 +1001,7 @@ function setupPasteMenu() {
     if (!html) return;
     e.preventDefault(); e.stopPropagation();
     pendingClipboard = { plain: plain, html: html };
-    pasteMenu.classList.remove("hidden");
+    positionPasteMenuNearCursor();
   }, true);
 }
 function hidePasteMenu() { pasteMenu.classList.add("hidden"); pendingClipboard = null; cm.focus(); }
@@ -536,56 +1024,196 @@ function doPaste(mode) {
 }
 function cleanHtml(html) {
   try {
-    html = html.replace(/<html[^>]*>|<\/html>/gi, "");
-    html = html.replace(/<body[^>]*>|<\/body>/gi, "");
-    html = html.replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "");
-    html = html.replace(/<!--[\s\S]*?-->/g, "");
-    html = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
-    html = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
-    html = html.replace(/<noscript[^>]*>[\s\S]*?<\/noscript>/gi, "");
-    html = html.replace(/<svg[^>]*>[\s\S]*?<\/svg>/gi, "");
-    html = html.replace(/<link[^>]+rel=["']stylesheet["'][^>]*>/gi, "");
+    var source = String(html || "");
+    var doc = new DOMParser().parseFromString(source, "text/html");
+    var BLOCK_TAGS = [
+      "address", "article", "aside", "blockquote", "dd", "details", "div", "dl", "dt",
+      "figcaption", "figure", "footer", "form", "header", "hr", "main", "nav", "p",
+      "pre", "section", "table", "tbody", "td", "tfoot", "th", "thead", "tr"
+    ];
 
-    var ATTR_STRIP = "class|style|id|role|tabindex|onclick|onload|onerror|onmouseover|onmouseout|onfocus|onblur";
-    var reAttrDQ = new RegExp("\\s+(?:" + ATTR_STRIP + ")\\s*=\\s*\"[^\"]*\"", "gi");
-    var reAttrSQ = new RegExp("\\s+(?:" + ATTR_STRIP + ")\\s*=\\s*'[^']*'", "gi");
-    html = html.replace(reAttrDQ, "");
-    html = html.replace(reAttrSQ, "");
-    html = html.replace(/\s+data-[a-z0-9-]+\s*=\s*"[^"]*"/gi, "");
-    html = html.replace(/\s+data-[a-z0-9-]+\s*=\s*'[^']*'/gi, "");
-    html = html.replace(/\s+aria-[a-z-]+\s*=\s*"[^"]*"/gi, "");
-    html = html.replace(/\s+aria-[a-z-]+\s*=\s*'[^']*'/gi, "");
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
 
-    html = html.replace(/<\/([^>]+)>>+/g, "</$1>");
-    html = html.replace(/<([^\/][^>]*)>>+/g, "<$1>");
+    function tagName(node) {
+      return node && node.nodeType === Node.ELEMENT_NODE ? node.tagName.toLowerCase() : "";
+    }
 
-    html = html.replace(/[ \t]+/g, " ");
-    html = html.replace(/[ \t]*\n[ \t]*/g, "\n");
+    function isIgnoredTag(tag) {
+      return ["script", "style", "noscript", "svg", "meta", "link"].indexOf(tag) !== -1;
+    }
 
-    html = html.replace(/<(ul|ol|table)([^>]*)>/gi, "<$1$2>\n");
-    html = html.replace(/<li([^>]*)>/gi, "\n<li$1>");
-    html = html.replace(/<\/li>/gi, "</li>\n");
-    html = html.replace(/<\/(ul|ol|table)>/gi, "\n</$1>\n");
+    function isHeadingTag(tag) {
+      return /^h[1-6]$/.test(tag);
+    }
 
-    var em = {
-      "&amp;":"&", "&lt;":"<", "&gt;":">", "&quot;":"\"", "&apos;":"'",
-      "&nbsp;":" ",
-      "&copy;":"©", "&reg;":"®", "&trade;":"™",
-      "&mdash;":"—", "&ndash;":"–",
-      "&ldquo;":"“", "&rdquo;":"”",
-      "&lsquo;":"‘", "&rsquo;":"’",
-      "&bull;":"•", "&middot;":"·", "&hellip;":"…",
-      "&euro;":"€", "&pound;":"£", "&cent;":"¢", "&deg;":"°"
-    };
-    for (var k in em) { html = html.split(k).join(em[k]); }
+    function isListTag(tag) {
+      return tag === "ul" || tag === "ol";
+    }
 
-    html = html.replace(/\n{3,}/g, "\n\n");
-    return html.trim();
+    function isBlockTag(tag) {
+      return BLOCK_TAGS.indexOf(tag) !== -1;
+    }
+
+    function isStructuralNode(node) {
+      var tag = tagName(node);
+      return isHeadingTag(tag) || tag === "li" || isListTag(tag) || isBlockTag(tag);
+    }
+
+    function trimBreaks(value) {
+      return String(value || "")
+        .replace(/^(?:\s*<br>\s*)+/gi, "")
+        .replace(/(?:\s*<br>\s*)+$/gi, "")
+        .trim();
+    }
+
+    function normalizeInline(value) {
+      return trimBreaks(String(value || "")
+        .replace(/[ \t\f\v]+/g, " ")
+        .replace(/\s*<br>\s*/gi, "<br>")
+        .replace(/(?:<br>){3,}/gi, "<br><br>")
+        .replace(/<b>\s+/gi, "<b>")
+        .replace(/\s+<\/b>/gi, "</b>"));
+    }
+
+    function normalizeCleanOutput(value) {
+      return String(value || "")
+        .replace(/[ \t\f\v]+/g, " ")
+        .replace(/\s*<br>\s*/gi, "<br>")
+        .replace(/(?:<br>){3,}/gi, "<br><br>")
+        .replace(/<b>\s+/gi, "<b>")
+        .replace(/\s+<\/b>/gi, "</b>")
+        .replace(/^(?:<br>)+/gi, "")
+        .replace(/(?:<br>)+$/gi, "")
+        .trim();
+    }
+
+    function cleanText(text) {
+      var raw = String(text || "").replace(/\u00a0/g, " ").replace(/\r\n?/g, "\n");
+      if (!raw.trim()) return raw.indexOf("\n") === -1 && raw.indexOf(" ") !== -1 ? " " : "";
+      var hasLeadingSpace = /^[ \t\n]/.test(raw);
+      var hasTrailingSpace = /[ \t\n]$/.test(raw);
+      raw = raw.replace(/[ \t\f\v]+/g, " ").replace(/[ \t]*\n[ \t]*/g, "\n");
+      var parts = raw.split("\n").map(function(part) { return escapeHtml(part); });
+      var cleaned = parts.join("<br>");
+      if (hasLeadingSpace) cleaned = " " + cleaned;
+      if (hasTrailingSpace) cleaned += " ";
+      return cleaned;
+    }
+
+    function cleanInlineChildren(node) {
+      var pieces = [];
+      for (var child = node.firstChild; child; child = child.nextSibling) {
+        pieces.push(cleanInlineNode(child));
+      }
+      return pieces.join("");
+    }
+
+    function cleanInlineNode(node) {
+      if (!node) return "";
+      if (node.nodeType === Node.TEXT_NODE) return cleanText(node.nodeValue || "");
+      if (node.nodeType !== Node.ELEMENT_NODE) return "";
+
+      var tag = tagName(node);
+      if (isIgnoredTag(tag)) return "";
+      if (tag === "br") return "<br>";
+
+      if (tag === "b" || tag === "strong" || isHeadingTag(tag)) {
+        var bold = normalizeInline(cleanInlineChildren(node));
+        return bold ? "<b>" + bold + "</b>" : "";
+      }
+
+      return cleanInlineChildren(node);
+    }
+
+    function addBlock(blocks, type, html) {
+      html = normalizeInline(html);
+      if (html) blocks.push({ type: type, html: html });
+    }
+
+    function collectBlocks(node, blocks) {
+      if (!node) return;
+      if (node.nodeType === Node.TEXT_NODE) {
+        addBlock(blocks, "paragraph", cleanText(node.nodeValue || ""));
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      var tag = tagName(node);
+      if (isIgnoredTag(tag)) return;
+      if (isHeadingTag(tag)) {
+        var heading = normalizeInline(cleanInlineChildren(node));
+        addBlock(blocks, "heading", heading ? "<b>" + heading + "</b>" : "");
+        return;
+      }
+      if (tag === "li") {
+        var bullet = normalizeInline(cleanInlineChildren(node));
+        addBlock(blocks, "bullet", bullet ? "@@ " + bullet : "");
+        return;
+      }
+      if (isListTag(tag)) {
+        for (var item = node.firstChild; item; item = item.nextSibling) {
+          collectBlocks(item, blocks);
+        }
+        return;
+      }
+
+      if (tag === "body" || isBlockTag(tag)) {
+        var inlinePieces = [];
+        function flushInline() {
+          var inlineHtml = normalizeInline(inlinePieces.join(""));
+          if (inlineHtml) blocks.push({ type: "paragraph", html: inlineHtml });
+          inlinePieces = [];
+        }
+
+        for (var child = node.firstChild; child; child = child.nextSibling) {
+          if (isStructuralNode(child)) {
+            flushInline();
+            collectBlocks(child, blocks);
+          } else {
+            inlinePieces.push(cleanInlineNode(child));
+          }
+        }
+        flushInline();
+        return;
+      }
+
+      addBlock(blocks, "paragraph", cleanInlineChildren(node));
+    }
+
+    function separatorBetween(left, right) {
+      if (!left || !right) return "";
+      if (left.type === "heading" && (right.type === "paragraph" || right.type === "bullet")) return "<br>";
+      if (left.type === "bullet" && right.type === "bullet") return "<br>";
+      return "<br><br>";
+    }
+
+    function joinBlocks(blocks) {
+      var output = "";
+      for (var i = 0; i < blocks.length; i++) {
+        if (!blocks[i].html) continue;
+        if (output) output += separatorBetween(blocks[i - 1], blocks[i]);
+        output += blocks[i].html;
+      }
+      return output;
+    }
+
+    var blocks = [];
+    collectBlocks(doc.body, blocks);
+    return normalizeCleanOutput(joinBlocks(blocks));
   } catch (e) {
-    return html;
+    return String(html || "")
+      .replace(/<br\s*\/?\s*>/gi, "<br>")
+      .replace(/<\/p\s*>\s*<p[^>]*>/gi, "<br><br>")
+      .replace(/<[^>]+>/g, "")
+      .replace(/\r\n?|\n/g, "<br>")
+      .trim();
   }
 }
-
 Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, renderComponent);
 Streamlit.setComponentReady();
 </script>

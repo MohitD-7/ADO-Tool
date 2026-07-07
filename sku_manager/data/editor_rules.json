@@ -5,7 +5,7 @@
     "apply_on_paste": false,
     "apply_per_line": true,
     "add_start": true,
-    "start_text": "@@",
+    "start_text": "@@ ",
     "add_end": true,
     "end_text": "<br>",
     "add_tags": true,

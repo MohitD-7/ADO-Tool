@@ -9,7 +9,7 @@ from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, drag_reorder, links_panel, page_header, right_feedback_panel
 
 
-def render(show_header: bool = True) -> None:
+def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
@@ -17,13 +17,13 @@ def render(show_header: bool = True) -> None:
     details = item["details"]
     if show_header:
         page_header("Item Details Extraction", "Features", status=details.get("item_no"))
-    main, pane = st.columns([3.5, 1])
+    if embedded:
+        main = st.container()
+        pane = None
+    else:
+        main, pane = st.columns([3.5, 1])
 
     with main:
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown("### Current Features")
         st.caption("Edit feature text directly in the table below. Rows export with Value1 = 10, 20, 30… and Value2 = feature text.")
 
@@ -38,15 +38,10 @@ def render(show_header: bool = True) -> None:
         feature_df = pd.DataFrame({"Feature": features_list})
         edited = st.data_editor(feature_df, num_rows="dynamic", width="stretch", key=f"features_editor_{details['item_no']}")
         item["features"] = [format_text(str(value), st.session_state["special_rules_df"]) for value in edited["Feature"].tolist() if str(value).strip()]
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #f28c00;border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown("### Add Feature")
         new_feature = st.text_input("Type a single feature and click Add Feature", key=f"new_feature_{details['item_no']}")
         character_counter(new_feature, LIMITS["feature"])
+        st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
         a, b, c = st.columns(3)
         if a.button("Add Feature", width="stretch"):
             if new_feature.strip():
@@ -58,17 +53,15 @@ def render(show_header: bool = True) -> None:
         if c.button("Clear Features", width="stretch"):
             item["features"] = []
             st.rerun()
-
-        st.markdown('<div class="vo-divider"></div>', unsafe_allow_html=True)
         bulk = st.text_area("Paste multiple features here (one per line)", height=150, placeholder="One feature per line")
         if st.button("Add Multiple Features", width="stretch"):
             item["features"].extend(
                 [format_text(line, st.session_state["special_rules_df"]) for line in parse_lines(bulk) if len(line) <= LIMITS["feature_bulk"]]
             )
             st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+    if show_links:
+        links_panel(item, key_suffix="features")
 
-    links_panel(item, key_suffix="features")
-
-    with pane:
-        right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="features_feedback")
+    if show_feedback and pane is not None:
+        with pane:
+            right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="features_feedback")

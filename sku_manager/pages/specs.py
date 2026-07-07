@@ -20,10 +20,6 @@ def render(show_header: bool = True) -> None:
     main, pane = st.columns([3.5, 1])
 
     with main:
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown("### Current Specifications")
         st.caption(
             "Edit specs directly in the table. Rows export with "
@@ -82,20 +78,17 @@ def render(show_header: bool = True) -> None:
             if key or value or category or group:
                 cleaned.append({"category": category, "group": group, "Spec": key, "Value": value})
         item["specs"] = cleaned
-        st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #f28c00;border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown("### Add Specification")
         c1, c2, c3, c4 = st.columns(4)
         new_category = c1.text_input("V1 Category", key=f"new_spec_cat_{details['item_no']}", placeholder="optional")
         new_group    = c2.text_input("V3 Group",    key=f"new_spec_grp_{details['item_no']}", placeholder="optional")
-        new_key      = c3.text_input("V4 Spec",     key=f"new_spec_key_{details['item_no']}", placeholder="e.g. Color")
-        new_value    = c4.text_input("V5 Value",    key=f"new_spec_value_{details['item_no']}", placeholder="e.g. Matte Black")
-        character_counter(new_key, LIMITS["spec_key"])
-        character_counter(new_value, LIMITS["spec_value"])
+        with c3:
+            new_key = st.text_input("V4 Spec", key=f"new_spec_key_{details['item_no']}", placeholder="e.g. Color")
+            character_counter(new_key, LIMITS["spec_key"])
+        with c4:
+            new_value = st.text_input("V5 Value", key=f"new_spec_value_{details['item_no']}", placeholder="e.g. Matte Black")
+            character_counter(new_value, LIMITS["spec_value"])
+        st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
         a, b = st.columns(2)
         if a.button("Add Specification", width="stretch"):
             if new_key.strip() or new_value.strip() or new_category.strip() or new_group.strip():
@@ -112,8 +105,6 @@ def render(show_header: bool = True) -> None:
         if b.button("Clear Specifications", width="stretch"):
             item["specs"] = []
             st.rerun()
-
-        st.markdown('<div class="vo-divider"></div>', unsafe_allow_html=True)
         bulk = st.text_area(
             "Paste multiple specs here (tab-separated per line: spec name → tab → value). "
             "Leave either side blank to add a value-only or label-only row.",
@@ -123,8 +114,6 @@ def render(show_header: bool = True) -> None:
         if st.button("Add Multiple Specifications", width="stretch"):
             item["specs"].extend(_parse_bulk_specs(bulk))
             st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
-
     links_panel(item)
 
     with pane:

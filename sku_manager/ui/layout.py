@@ -1,41 +1,42 @@
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from sku_manager.state import current_item, has_batch, set_current_item, sync_description_state
 
 
 PAGE_LABELS = {
-    "Upload":        "Upload Batch",
+    "Upload":        "Batch Input",
     "SKU Batch":     "Work Queue",
-    "SKU Workspace": "SKU Workspace",
+    "SKU Workspace": "SKU Editor",
     "Reference Data":"Reference Data",
     "Editor Rules":  "Editor Rules",
     "Review":        "Review",
 }
 
 WORKSPACE_TABS = {
-    "Basics":               "Name, brand, model, warranty, battery",
-    "Description":          "Description and includes",
-    "Features & Highlights":"Features and highlights",
-    "Specs":                "Technical specifications",
-    "Review":               "Preview and export",
+    "Content": "General information, description, features, and highlights",
+    "Specs":   "Technical specifications",
+    "Review":  "Preview and export",
 }
 
 WORKSPACE_PAGE_ALIASES = {
-    "General":          "Basics",
-    "Description":      "Description",
-    "Features":         "Features & Highlights",
-    "Highlights":       "Features & Highlights",
-    "Selling Points":   "Features & Highlights",
+    "General":          "Content",
+    "Basics":           "Content",
+    "Description":      "Content",
+    "Features":         "Content",
+    "Highlights":       "Content",
+    "Selling Points":   "Content",
     "Specs":            "Specs",
     "Preview & Export": "Review",
 }
 
 _LEGACY_TAB_MAP = {
-    "1 Basics": "Basics", "2 Description": "Description",
-    "3 Selling Points": "Features & Highlights",
-    "Selling Points": "Features & Highlights",
+    "Basics": "Content", "1 Basics": "Content", "2 Description": "Content",
+    "Description": "Content", "Features & Highlights": "Content",
+    "3 Selling Points": "Content", "Selling Points": "Content",
     "4 Specs": "Specs", "5 Review": "Review",
 }
 
@@ -56,8 +57,18 @@ def _page_for_label(label: str) -> str:
 def sidebar_nav() -> str:
     """Render sidebar brand + page nav. Returns the active page key."""
     # ── Brand ─────────────────────────────────────────────────────────────
-    st.sidebar.markdown('<div class="vo-brand">VirtualOps</div>', unsafe_allow_html=True)
-    st.sidebar.markdown('<div class="vo-subtle">SKU Manager &nbsp;·&nbsp; Batch v2.4.0</div>', unsafe_allow_html=True)
+    st.sidebar.markdown(
+        """
+        <div class="vo-brand-lockup">
+          <div class="vo-brand-mark">VO</div>
+          <div>
+            <div class="vo-brand">SKU Manager</div>
+            <div class="vo-subtle">VirtualOps v2.4.0</div>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.sidebar.markdown("---")
 
     # ── Resolve active page ───────────────────────────────────────────────
@@ -93,49 +104,75 @@ def sidebar_nav() -> str:
     return page
 
 
+_DV2_TAB_LABELS = {
+    "Content": "General Description",
+    "Specs":   "Specs",
+    "Review":  "Review",
+}
+
+
+def _dv2_workspace_header(details: dict) -> None:
+    """Render the DESIGN.md-style SKU header card (ID chip + DRAFT pill + title + MPN line)."""
+    item_no  = html.escape(str(details.get("item_no", "")))
+    title    = html.escape(str(details.get("title", "") or "Untitled SKU"))
+    mfg_item = html.escape(str(details.get("mfg_item", "") or details.get("mfg_model", "")))
+    category = html.escape(str(details.get("category", "") or ""))
+
+    meta_bits = []
+    if mfg_item:
+        meta_bits.append(f'<span class="dv2-lbl">MPN:</span> <span class="dv2-mono">{mfg_item}</span>')
+    if category:
+        meta_bits.append(f'<span class="dv2-lbl">Category:</span> {category}')
+    meta_html = ' <span class="dv2-sep">|</span> '.join(meta_bits)
+
+    st.markdown(
+        f"""
+        <div class="dv2-header">
+          <div class="dv2-header-left">
+            <div class="dv2-chip-row">
+              <span class="dv2-id-chip">ID: {item_no}</span>
+              <span class="dv2-status-chip dv2-status-draft">Draft</span>
+            </div>
+            <h1 class="dv2-header-title">{title}</h1>
+            <p class="dv2-header-meta">{meta_html}</p>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def workspace_topbar() -> str:
     """
-    Sticky context bar rendered at the top of the main content area.
-    Shows the SKU number and product title on top, and standard button navigation below.
-    Returns the active tab name.
+    DESIGN.md-styled workspace top region:
+      1. Product header card (ID, DRAFT, title, MPN)
+      2. Underlined sub-tabs (General / Description / Features/Highlights / Specs / Review)
+    Returns the active tab name (internal key).
     """
-    raw = st.session_state.get("workspace_tab", "Basics")
+    raw = st.session_state.get("workspace_tab", "Content")
     if raw in _LEGACY_TAB_MAP:
         raw = _LEGACY_TAB_MAP[raw]
     if raw not in WORKSPACE_TABS:
-        raw = "Basics"
+        raw = "Content"
     active_tab = raw
     st.session_state["workspace_tab"] = active_tab
 
     item = current_item()
     if item and not st.session_state.get("_review_loaded"):
-        details = item["details"]
-        item_no = details.get("item_no", "")
-        mfg_item = details.get("mfg_item", "")
-        title = details.get("title", "")
-        mfg_str = f'<span class="vo-topbar-label" style="margin-left:12px;">Mfg Item:</span><span class="vo-topbar-ino">{mfg_item}</span>' if mfg_item else ""
-        bar = (
-            f'<div class="vo-topbar"><div class="vo-topbar-sku">'
-            f'<span class="vo-topbar-label">SKU:</span>'
-            f'<span class="vo-topbar-ino">{item_no}</span>'
-            f'{mfg_str}'
-            f'<span class="vo-topbar-title" style="margin-left:15px;">- {title}</span>'
-            f'</div></div>'
-        )
-        st.markdown(bar, unsafe_allow_html=True)
+        _dv2_workspace_header(item["details"])
 
     tab_names = list(WORKSPACE_TABS.keys())
     btn_cols  = st.columns(len(tab_names))
     clicked   = None
     for col, tab_name in zip(btn_cols, tab_names):
+        display = _DV2_TAB_LABELS.get(tab_name, tab_name)
         if col.button(
-            tab_name,
+            display,
             key=f"topbar_tab_{tab_name}",
             type="primary" if tab_name == active_tab else "secondary",
             use_container_width=True,
         ):
             clicked = tab_name
-
     if clicked and clicked != active_tab:
         sync_description_state()
         st.session_state["workspace_tab"] = clicked
@@ -160,5 +197,5 @@ def review_sku_bar() -> None:
 
     if clicked_ino and clicked_ino != current_ino:
         set_current_item(clicked_ino)
-        st.session_state["workspace_tab"] = "Basics"
+        st.session_state["workspace_tab"] = "Content"
         st.rerun()

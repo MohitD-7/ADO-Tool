@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import streamlit as st
 
 
@@ -8,14 +10,14 @@ def inject_styles() -> None:
         """
         <style>
         :root {
-          --vo-orange: #f28c00;
-          --vo-brown: #8a4d00;
+          --vo-orange: #ef8e0d;
+          --vo-brown: #8b5000;
           --vo-border: #dfc8b3;
           --vo-muted: #6f6258;
           --vo-bg: #eef0f2;
           --vo-input-bg: #ffffff;
-          --vo-input-border: #8fa3b8;
-          --vo-input-focus: #2f6f73;
+          --vo-input-border: #cbd5e1;
+          --vo-input-focus: #ef8e0d;
           --vo-label: #1a2330;
           --vo-disabled-bg: #f0f0f0;
           --vo-disabled-text: #999;
@@ -166,13 +168,13 @@ def inject_styles() -> None:
         }
         /* Active nav item */
         section[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div p {
-          color: #2f6f73 !important;
+          color: #ef8e0d !important;
           font-weight: 800 !important;
         }
         section[data-testid="stSidebar"] .stRadio label:has(input:checked) {
-          background: #e8f4f4 !important;
-          color: #2f6f73 !important;
-          border-left: 3px solid #2f6f73 !important;
+          background: #fff7ed !important;
+          color: #ef8e0d !important;
+          border-left: 3px solid #ef8e0d !important;
         }
 
         /* â”€â”€ Brand â”€â”€ */
@@ -242,7 +244,7 @@ def inject_styles() -> None:
           font-weight: 700 !important;
           font-size: 0.95rem !important;
           padding-bottom: 0.2rem;
-          border-bottom: 2px solid #dde3ea;
+          border-bottom: 2px solid #e2e8f0;
           margin-top: 0 !important;
           margin-bottom: 0.4rem !important;
         }
@@ -276,7 +278,7 @@ def inject_styles() -> None:
         .stTextInput input:focus,
         .stNumberInput input:focus {
           border-color: var(--vo-input-focus) !important;
-          box-shadow: 0 0 0 3px rgba(47,111,115,0.18) !important;
+          box-shadow: 0 0 0 3px rgba(239,142,13,0.24) !important;
           outline: none !important;
         }
         .stTextInput input:hover:not(:focus):not(:disabled),
@@ -305,7 +307,7 @@ def inject_styles() -> None:
         }
         .stTextArea textarea:focus {
           border-color: var(--vo-input-focus) !important;
-          box-shadow: 0 0 0 3px rgba(47,111,115,0.18) !important;
+          box-shadow: 0 0 0 3px rgba(239,142,13,0.24) !important;
           outline: none !important;
         }
         .stTextArea textarea:hover:not(:focus) {
@@ -320,7 +322,7 @@ def inject_styles() -> None:
         }
         .stSelectbox > div > div:focus-within {
           border-color: var(--vo-input-focus) !important;
-          box-shadow: 0 0 0 3px rgba(47,111,115,0.18) !important;
+          box-shadow: 0 0 0 3px rgba(239,142,13,0.24) !important;
         }
         /* Disabled selectboxes â€” match disabled text inputs */
         .stSelectbox div[data-baseweb="select"][aria-disabled="true"],
@@ -363,14 +365,14 @@ def inject_styles() -> None:
         /* â”€â”€ Divider â”€â”€ */
         .vo-divider {
           border: none;
-          border-top: 1px solid #dde3ea;
+          border-top: 1px solid #e2e8f0;
           margin: 0.5rem 0;
         }
 
         /* â”€â”€ Buttons â”€â”€ */
         .stButton button {
           border-radius: 6px;
-          border: 1.5px solid #8fa3b8;
+          border: 1.5px solid #cbd5e1;
           font-weight: 700;
           font-size: 0.82rem;
           padding: 0.25rem 0.7rem;
@@ -378,19 +380,19 @@ def inject_styles() -> None:
         }
         .stButton button:hover {
           border-color: var(--vo-input-focus);
-          background: #f0f7f7;
+          background: #f8fafc;
         }
         .stButton button:focus {
           outline: none !important;
           box-shadow: none !important;
         }
         .stButton button[kind="primary"] {
-          background: #2f6f73 !important;
-          border-color: #2f6f73 !important;
+          background: #ef8e0d !important;
+          border-color: #ef8e0d !important;
           color: #fff !important;
         }
         .stButton button[kind="primary"]:hover {
-          background: #245558 !important;
+          background: #d97f06 !important;
         }
 
         /* â”€â”€ Metric cards â”€â”€ */
@@ -422,7 +424,7 @@ def inject_styles() -> None:
         }
         div[data-testid="stFileUploader"] > div:hover {
           border-color: var(--vo-input-focus) !important;
-          background: #f0f7f7 !important;
+          background: #f8fafc !important;
         }
 
         /* â”€â”€ Sticky workspace / review topbar â”€â”€ */
@@ -453,19 +455,19 @@ def inject_styles() -> None:
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: .07em;
-          color: #8fa3b8;
+          color: #cbd5e1;
           white-space: nowrap;
         }
         .vo-topbar-ino {
           font-size: .85rem;
           font-weight: 800;
-          color: #e8f4f4;
+          color: #fff7ed;
           white-space: nowrap;
           flex-shrink: 0;
         }
         .vo-topbar-title {
           font-size: .8rem;
-          color: #8fa3b8;
+          color: #cbd5e1;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -473,7 +475,286 @@ def inject_styles() -> None:
         .vo-workspace-content-gap {
           height: 0.1rem;
         }
+
+        /* ═══════════════════════════════════════════════════════════════
+           DESIGNv2 — VirtualOps SKU Manager (per DESIGN.md prose)
+           Cool-gray neutral stack, orange primary, high density.
+           Scoped under `.dv2` so it doesn't leak onto legacy pages.
+           ═══════════════════════════════════════════════════════════════ */
+        .dv2 {
+          /* Brand */
+          --dv2-primary:        #EF8E0D;   /* buttons, active tabs, focus */
+          --dv2-primary-hover:  #D97F06;
+          --dv2-on-primary:     #FFFFFF;
+          --dv2-secondary:      #1A1A1B;   /* high-contrast text, nav bg */
+
+          /* Cool-gray neutral stack (DESIGN.md > Colors) */
+          --dv2-neutral-50:  #F8FAFC;   /* Surface 0 — app canvas, table headers */
+          --dv2-neutral-100: #F1F5F9;   /* zebra stripe */
+          --dv2-neutral-200: #E2E8F0;   /* card border */
+          --dv2-neutral-300: #CBD5E1;   /* secondary button border, input border */
+          --dv2-neutral-400: #94A3B8;
+          --dv2-neutral-500: #64748B;   /* muted text */
+          --dv2-neutral-700: #334155;
+          --dv2-neutral-900: #0F172A;   /* body text */
+
+          /* Status */
+          --dv2-success: #22C55E;
+          --dv2-danger:  #EF4444;
+          --dv2-info:    #3B82F6;
+
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          color: var(--dv2-neutral-900);
+        }
+
+        /* ── Header card ─────────────────────────────────────────────── */
+        .dv2 .dv2-header {
+          background: #FFFFFF;
+          border: 1px solid var(--dv2-neutral-200);
+          border-radius: 4px;                 /* Shapes: 0.25rem */
+          padding: 16px 20px;                 /* Density: high, 4px base */
+          margin-bottom: 12px;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 16px;
+        }
+        .dv2 .dv2-header-left { min-width: 0; flex: 1; }
+        .dv2 .dv2-chip-row {
+          display: flex; align-items: center; gap: 8px;
+          margin-bottom: 8px;
+        }
+        .dv2 .dv2-id-chip {
+          background: var(--dv2-neutral-100);
+          color: var(--dv2-neutral-900);
+          border: 1px solid var(--dv2-neutral-200);
+          border-radius: 12px;                /* Shapes: chips are pill 12px */
+          padding: 2px 10px;
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          font-size: 12px; line-height: 18px; font-weight: 400;
+        }
+        .dv2 .dv2-status-chip {
+          border-radius: 12px;                /* pill */
+          padding: 2px 10px;
+          font-size: 11px; line-height: 18px; font-weight: 700;
+          letter-spacing: .06em; text-transform: uppercase;
+        }
+        .dv2 .dv2-status-draft {
+          background: rgba(239,142,13,.14);   /* Active tint */
+          color: #8b5000;
+        }
+        .dv2 .dv2-status-alert {
+          background: var(--dv2-danger);      /* Alerts: high-contrast + dark text */
+          color: #FFFFFF;
+        }
+        .dv2 .dv2-status-neutral {
+          background: var(--dv2-neutral-100);
+          color: var(--dv2-neutral-700);
+        }
+        .dv2 .dv2-header-title {
+          font-family: 'Inter', sans-serif;
+          font-size: 24px; line-height: 30px; font-weight: 700;
+          letter-spacing: -.01em;
+          color: var(--dv2-neutral-900);
+          margin: 0 0 4px 0;
+        }
+        .dv2 .dv2-header-meta {
+          font-size: 13px; line-height: 18px;
+          color: var(--dv2-neutral-500);
+          display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+          margin: 0;
+        }
+        .dv2 .dv2-header-meta .dv2-sep { color: var(--dv2-neutral-300); }
+        .dv2 .dv2-header-meta .dv2-lbl { font-weight: 600; color: var(--dv2-neutral-700); }
+        .dv2 .dv2-header-meta .dv2-mono {
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+          color: var(--dv2-neutral-900);
+        }
+
+        /* ── Form card (Surface 1: white + 1px border, NO shadow) ────── */
+        .dv2 .dv2-card {
+          background: #FFFFFF;
+          border: 1px solid var(--dv2-neutral-200);
+          border-radius: 4px;
+          padding: 16px 20px;
+          margin-bottom: 12px;
+        }
+        .dv2 .dv2-section + .dv2-section { margin-top: 20px; }
+        .dv2 .dv2-section-title {
+          font-family: 'Inter', sans-serif;
+          font-size: 13px; line-height: 18px; font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: .06em;
+          color: var(--dv2-neutral-700);
+          border-bottom: 1px solid var(--dv2-neutral-200);
+          padding-bottom: 6px;
+          margin: 0 0 10px 0 !important;
+          border-top: none !important;
+        }
+
+        /* ── Label row (LABEL … 47/150) ─────────────────────────────── */
+        .dv2 .dv2-label-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          font-family: 'Inter', sans-serif;
+          font-size: 11px; line-height: 16px;
+          letter-spacing: .06em;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: var(--dv2-neutral-500);
+          margin-bottom: 4px;
+        }
+        .dv2 .dv2-label-row .dv2-count {
+          font-size: 10px; font-weight: 500;
+          color: var(--dv2-neutral-400);
+          letter-spacing: 0;
+          text-transform: none;
+          font-family: 'JetBrains Mono', ui-monospace, monospace;
+        }
+        .dv2 .dv2-label-row .dv2-count.bad { color: var(--dv2-danger); font-weight: 700; }
+
+        /* ── Inputs (flat white, 1px border, orange glow on focus) ──── */
+        .dv2 .stTextInput input,
+        .dv2 .stNumberInput input,
+        .dv2 .stTextArea textarea,
+        .dv2 .stSelectbox > div > div {
+          background-color: #FFFFFF !important;
+          border: 1px solid var(--dv2-neutral-300) !important;
+          border-radius: 4px !important;
+          color: var(--dv2-neutral-900) !important;
+          font-family: 'Inter', sans-serif !important;
+          font-size: 13px !important;
+          line-height: 18px !important;
+          padding: 6px 10px !important;
+          box-shadow: none !important;
+          transition: border-color .12s, box-shadow .12s;
+        }
+        /* Mono for numeric fields — DESIGN.md: "SKU numbers, quantities, UPC codes" */
+        .dv2 .stNumberInput input,
+        .dv2 .dv2-mono-input .stTextInput input {
+          font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+          font-size: 13px !important;
+        }
+        .dv2 .stTextInput input:focus,
+        .dv2 .stNumberInput input:focus,
+        .dv2 .stTextArea textarea:focus {
+          border-color: var(--dv2-primary) !important;
+          box-shadow: 0 0 0 2px rgba(239,142,13,.28) !important;   /* orange glow, 2px offset */
+          outline: none !important;
+        }
+        .dv2 .stSelectbox > div > div:focus-within {
+          border-color: var(--dv2-primary) !important;
+          box-shadow: 0 0 0 2px rgba(239,142,13,.28) !important;
+        }
+        .dv2 .stTextInput input::placeholder,
+        .dv2 .stTextArea textarea::placeholder {
+          color: var(--dv2-neutral-400) !important;
+        }
+
+        /* Hide Streamlit's built-in label — we render our own dv2-label-row */
+        .dv2 .dv2-field .stTextInput label,
+        .dv2 .dv2-field .stNumberInput label,
+        .dv2 .dv2-field .stSelectbox label,
+        .dv2 .dv2-field .stTextArea label {
+          display: none !important;
+        }
+
+        /* ── Buttons ─────────────────────────────────────────────────── */
+        .dv2 .stButton button {
+          border-radius: 4px !important;
+          font-family: 'Inter', sans-serif !important;
+          font-size: 13px !important;
+          line-height: 18px !important;
+          font-weight: 600 !important;
+          letter-spacing: 0 !important;
+          padding: 6px 12px !important;
+          height: auto !important;
+          min-height: 32px !important;
+          box-shadow: none !important;
+          transition: background .12s, opacity .12s, border-color .12s !important;
+        }
+        /* Secondary: white bg + 1px gray border + BLACK text */
+        .dv2 .stButton button[kind="secondary"],
+        .dv2 .stButton button:not([kind="primary"]) {
+          background: #FFFFFF !important;
+          border: 1px solid var(--dv2-neutral-300) !important;
+          color: var(--dv2-neutral-900) !important;
+        }
+        .dv2 .stButton button[kind="secondary"]:hover,
+        .dv2 .stButton button:not([kind="primary"]):hover {
+          background: var(--dv2-neutral-50) !important;
+          border-color: var(--dv2-neutral-400) !important;
+        }
+        /* Primary: solid orange with WHITE text */
+        .dv2 .stButton button[kind="primary"] {
+          background: var(--dv2-primary) !important;
+          border: 1px solid var(--dv2-primary) !important;
+          color: var(--dv2-on-primary) !important;
+        }
+        .dv2 .stButton button[kind="primary"]:hover {
+          background: var(--dv2-primary-hover) !important;
+          border-color: var(--dv2-primary-hover) !important;
+        }
+        /* Focus: 2px solid orange with 2px offset (accessible) */
+        .dv2 .stButton button:focus-visible {
+          outline: 2px solid var(--dv2-primary) !important;
+          outline-offset: 2px !important;
+        }
+
+        /* ── Sub-tab strip (General / Description / …) ─────────────── */
+        /* Streamlit renders each tab as its own st.button. We paint them
+           as flat underlined tabs and mark the active one with orange. */
+        .dv2-tabs { margin-bottom: 12px; }
+        .dv2-tabs div[data-testid="stHorizontalBlock"] {
+          gap: 4px !important;
+          border-bottom: 1px solid var(--dv2-neutral-200);
+          padding: 0 4px;
+        }
+        .dv2-tabs .stButton button {
+          background: transparent !important;
+          border: none !important;
+          border-bottom: 2px solid transparent !important;
+          border-radius: 0 !important;
+          color: var(--dv2-neutral-500) !important;
+          font-weight: 600 !important;
+          font-size: 13px !important;
+          padding: 10px 4px !important;
+          min-height: 0 !important;
+          margin-bottom: -1px !important;   /* overlap the strip's border */
+          text-transform: none !important;
+          letter-spacing: 0 !important;
+        }
+        .dv2-tabs .stButton button:hover {
+          color: var(--dv2-neutral-900) !important;
+          background: transparent !important;
+          border-bottom-color: var(--dv2-neutral-300) !important;
+        }
+        /* Active tab: primary-kind button carries the orange underline */
+        .dv2-tabs .stButton button[kind="primary"] {
+          background: transparent !important;
+          color: var(--dv2-primary) !important;
+          border: none !important;
+          border-bottom: 2px solid var(--dv2-primary) !important;
+          border-radius: 0 !important;
+          font-weight: 700 !important;
+        }
+        .dv2-tabs .stButton button[kind="primary"]:hover {
+          background: transparent !important;
+          color: var(--dv2-primary-hover) !important;
+          border-bottom-color: var(--dv2-primary-hover) !important;
+        }
+        .dv2-tabs .stButton button:focus-visible {
+          outline: none !important;
+          border-bottom-color: var(--dv2-primary) !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
     )
+    overrides_path = Path(__file__).with_name("design_overrides.css")
+    if overrides_path.exists():
+        st.markdown(
+            f"<style>{overrides_path.read_text(encoding='utf-8')}</style>",
+            unsafe_allow_html=True,
+        )

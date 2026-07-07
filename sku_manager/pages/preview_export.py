@@ -40,12 +40,6 @@ def render(show_header: bool = True) -> None:
             st.markdown(f"- {warning}", unsafe_allow_html=True)
     else:
         st.success("Current item is ready for submit/export.")
-
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;'
-        'border-radius:8px;padding:0.9rem 1.2rem 1rem 1.2rem;margin-bottom:1rem;">',
-        unsafe_allow_html=True,
-    )
     fname_col, _ = st.columns([2, 1])
     export_filename = fname_col.text_input(
         "File name",
@@ -81,8 +75,6 @@ def render(show_header: bool = True) -> None:
         mime="text/csv",
         use_container_width=True,
     )
-    st.markdown("</div>", unsafe_allow_html=True)
-
     tab_preview, tab_rows, tab_html = st.tabs(["Product Preview", "Output Rows", "HTML Template"])
     with tab_preview:
         html = render_html(item, st.session_state["html_template"])

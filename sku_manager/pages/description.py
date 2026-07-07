@@ -11,7 +11,7 @@ from sku_manager.ui.components import drag_reorder, hidden_notes, links_panel, p
 from sku_manager.ui.editor import html_editor
 
 
-def render(show_header: bool = True) -> None:
+def render(show_header: bool = True, show_links: bool = True, show_validation: bool = True, show_item_notes: bool = True) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
@@ -24,18 +24,12 @@ def render(show_header: bool = True) -> None:
 
     if show_header:
         page_header("Content Layer", "Description and Includes", status=ino)
-
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;'
-        'border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-        unsafe_allow_html=True,
-    )
     th1, th2 = st.columns([5, 1])
     with th1:
         st.markdown("### Product Description")
         st.caption("Use the toolbar to insert HTML tags. Type directly in HTML.")
     with th2:
-        st.markdown("<div class='vo-spacer-btn'></div>", unsafe_allow_html=True)
+        st.markdown('<div class="vo-spacer-btn">&#8203;</div>', unsafe_allow_html=True)
         fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
 
     details["description"] = html_editor(
@@ -45,8 +39,6 @@ def render(show_header: bool = True) -> None:
     )
 
     hidden_notes(item, "description")
-    st.markdown("</div>", unsafe_allow_html=True)
-
     if fmt_click:
         current = sync_description_state(item)
         rules_df = st.session_state["special_rules_df"]
@@ -63,12 +55,6 @@ def render(show_header: bool = True) -> None:
             spec["Spec"]  = format_text(str(spec.get("Spec",  "") or ""), rules_df)
             spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
         st.rerun()
-
-    st.markdown(
-        '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #f28c00;'
-        'border-radius:8px;padding:0.5rem 0.8rem 0.4rem 0.8rem;margin-bottom:0.4rem;">',
-        unsafe_allow_html=True,
-    )
     st.markdown("### Includes / Box Contents")
 
     item.setdefault("includes", [])
@@ -76,9 +62,8 @@ def render(show_header: bool = True) -> None:
     _render_includes_bulk(item, ino)
 
     hidden_notes(item, "includes")
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    links_panel(item)
+    if show_links:
+        links_panel(item)
 
     warnings = item_warnings(
         details,
@@ -88,7 +73,7 @@ def render(show_header: bool = True) -> None:
         st.session_state.get("special_rules_df"),
         includes=item["includes"],
     )
-    if warnings:
+    if show_validation and warnings:
         with st.expander(
             f"Validation ({len(warnings)} warning{'s' if len(warnings) != 1 else ''})",
             expanded=True,
@@ -96,13 +81,14 @@ def render(show_header: bool = True) -> None:
             for warning in warnings:
                 st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
 
-    with st.expander("Item notes", expanded=False):
-        item["details"]["comments"] = st.text_area(
-            "Item-level comment",
-            value=item["details"].get("comments", ""),
-            key=f"desc_item_comment_{ino}",
-            height=80,
-        )
+    if show_item_notes:
+        with st.expander("Item notes", expanded=False):
+            item["details"]["comments"] = st.text_area(
+                "Item-level comment",
+                value=item["details"].get("comments", ""),
+                key=f"desc_item_comment_{ino}",
+                height=80,
+            )
 
 
 def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> None:

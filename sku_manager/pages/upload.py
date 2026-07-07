@@ -14,15 +14,15 @@ def render() -> None:
     st.markdown(
         """
         <div style="display:flex;gap:1.5rem;margin-bottom:1.2rem;">
-          <div style="flex:1;background:#fff;border:1px solid #dde3ea;border-top:3px solid #2f6f73;border-radius:8px;padding:.8rem 1rem;">
+          <div style="flex:1;background:#fff;border:1px solid #e2e8f0;border-top:3px solid #ef8e0d;border-radius:8px;padding:.8rem 1rem;">
             <div style="font-weight:800;font-size:.9rem;color:#1a2330;margin-bottom:.2rem;">Step 1: Upload</div>
             <div style="font-size:.82rem;color:#555;">Drop your Excel file below and click <strong>Start Batch</strong>.</div>
           </div>
-          <div style="flex:1;background:#fff;border:1px solid #dde3ea;border-top:3px solid #8fa3b8;border-radius:8px;padding:.8rem 1rem;">
+          <div style="flex:1;background:#fff;border:1px solid #e2e8f0;border-top:3px solid #cbd5e1;border-radius:8px;padding:.8rem 1rem;">
             <div style="font-weight:800;font-size:.9rem;color:#1a2330;margin-bottom:.2rem;">Step 2: Work Queue</div>
             <div style="font-size:.82rem;color:#555;">Pick a SKU and click <strong>Process Item</strong> to open its form.</div>
           </div>
-          <div style="flex:1;background:#fff;border:1px solid #dde3ea;border-top:3px solid #8fa3b8;border-radius:8px;padding:.8rem 1rem;">
+          <div style="flex:1;background:#fff;border:1px solid #e2e8f0;border-top:3px solid #cbd5e1;border-radius:8px;padding:.8rem 1rem;">
             <div style="font-weight:800;font-size:.9rem;color:#1a2330;margin-bottom:.2rem;">Step 3: Edit and Export</div>
             <div style="font-size:.82rem;color:#555;">Fill in each section tab, then go to <strong>Review</strong> to export.</div>
           </div>
@@ -43,7 +43,7 @@ def render() -> None:
     if uploaded is None:
         with right:
             st.markdown(
-                '<div style="background:#f0f7f7;border:1px solid #7cba8c;border-left:4px solid #2f6f73;border-radius:6px;padding:.8rem 1rem;color:#1b5e30;font-size:.9rem;">'
+                '<div style="background:#f8fafc;border:1px solid #7cba8c;border-left:4px solid #ef8e0d;border-radius:6px;padding:.8rem 1rem;color:#1b5e30;font-size:.9rem;">'
                 "<strong>No file uploaded yet.</strong><br>Drag and drop your Excel queue file into the box on the left, or click Browse Files."
                 "</div>",
                 unsafe_allow_html=True,

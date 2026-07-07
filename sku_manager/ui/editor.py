@@ -18,7 +18,7 @@ _html_editor_component = components.declare_component(
     "html_editor_component",
     path=str(_COMPONENT_DIR),
 )
-_WORKSPACE_TABS = {"Basics", "Description", "Features & Highlights", "Specs", "Review"}
+_WORKSPACE_TABS = {"Content", "Specs", "Review"}
 
 
 def html_editor(value: str, sync_key: str, height: int = 320) -> str:
@@ -88,47 +88,25 @@ def _toolbar_html() -> str:
     return """
 <div id="toolbar">
   <div class="tb-group">
-    <button class="btn bld" onclick="wrap('<b>','</b>')"     title="Bold (Ctrl+B)">B</button>
-    <button class="btn itl" onclick="wrap('<i>','</i>')"     title="Italic (Ctrl+I)">I</button>
-    <button class="btn uln" onclick="wrap('<u>','</u>')"     title="Underline">U</button>
-    <button class="btn stk" onclick="wrap('<s>','</s>')"     title="Strikethrough">S</button>
+    <button id="fullscreen-btn" class="btn accent" onclick="toggleFullscreen()" title="Open editor full screen">Full screen</button>
   </div>
   <div class="sep"></div>
   <div class="tb-group">
-    <button class="btn" onclick="insertLink()"               title="Hyperlink">Link</button>
+    <button class="btn bld" onclick="wrap('<b>','</b>')" title="Bold (Ctrl+B)">B</button>
+    <button class="btn" onclick="ins('&lt;br&gt;')" title="Insert &lt;br&gt;">BR</button>
   </div>
   <div class="sep"></div>
   <div class="tb-group">
-    <button class="btn sym" onclick="ins('%')"               title="Insert %">%</button>
-    <button class="btn sym" onclick="ins('&amp;amp;')"       title="&amp;amp;">&amp;</button>
-    <button class="btn sym" onclick="ins('&amp;reg;')"       title="&amp;reg;">&reg;</button>
-    <button class="btn sym" onclick="ins('&amp;trade;')"     title="&amp;trade;">&trade;</button>
-    <button class="btn sym" onclick="ins('&amp;copy;')"      title="&amp;copy;">&copy;</button>
+    <button class="btn" onclick="doSingleLine()" title="Single line (Ctrl+L)">&#8645;1L</button>
+    <button class="btn" onclick="doCase('upper')" title="UPPERCASE">AA</button>
+    <button class="btn" onclick="doCase('lower')" title="lowercase">aa</button>
+    <button class="btn" onclick="doCase('sentence')" title="Sentence case">Aa</button>
   </div>
   <div class="sep"></div>
   <div class="tb-group">
-    <button class="btn" onclick="ins('&lt;br /&gt;')"        title="&lt;br /&gt;">BR</button>
-    <button class="btn" onclick="ins('&amp;nbsp;')"          title="&amp;nbsp;">NBSP</button>
+    <button class="btn accent" onclick="toggleFind()" title="Find and replace (Ctrl+F)">Find/Replace</button>
   </div>
-  <div class="sep"></div>
-  <div class="tb-group">
-    <button class="btn" onclick="doSingleLine()"             title="Single line (Ctrl+L)">&#8645;1L</button>
-    <button class="btn" onclick="doCase('upper')"            title="UPPERCASE">AA</button>
-    <button class="btn" onclick="doCase('lower')"            title="lowercase">aa</button>
-    <button class="btn" onclick="doCase('sentence')"         title="Sentence case">Aa</button>
-  </div>
-  <div class="sep"></div>
-  <div class="tb-group">
-    <button class="btn accent" onclick="toggleFind()"        title="Find &amp; Replace (Ctrl+F)">&#128269; Find</button>
-  </div>
-</div>
-<div id="link-bar" class="bar hidden">
-  <span class="bar-lbl">URL:</span>
-  <input id="link-url" type="url" placeholder="https://" />
-  <button class="btn primary" onclick="confirmLink()">Insert</button>
-  <button class="btn"         onclick="cancelLink()">Cancel</button>
 </div>"""
-
 
 def _find_bar_html() -> str:
     return """
@@ -163,67 +141,67 @@ html, body { margin: 0; padding: 0; background: transparent;
   font-size: 13px; color: #1a2330; }
 #toolbar {
   display: flex; align-items: center; gap: 3px; flex-wrap: wrap;
-  background: #f4f6f8;
-  border: 2px solid #8fa3b8; border-bottom: 1px solid #c5d0da;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1; border-bottom: 1px solid #e2e8f0;
   border-radius: 6px 6px 0 0; padding: 5px 8px;
 }
 .tb-group { display: flex; gap: 2px; }
-.sep { width: 1px; height: 20px; background: #c5d0da; margin: 0 3px; flex-shrink: 0; }
+.sep { width: 1px; height: 20px; background: #e2e8f0; margin: 0 3px; flex-shrink: 0; }
 .btn {
-  background: #fff; border: 1px solid #c5d0da; border-radius: 4px;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 4px;
   padding: 3px 8px; font-size: 12px; cursor: pointer; color: #1a2330;
   font-family: inherit; line-height: 1.5; white-space: nowrap;
   transition: background .1s, border-color .1s;
 }
-.btn:hover   { background: #e8f0f7; border-color: #2f6f73; color: #2f6f73; }
+.btn:hover   { background: #f8fafc; border-color: #ef8e0d; color: #ef8e0d; }
 .btn.bld     { font-weight: 800; }
 .btn.itl     { font-style: italic; }
 .btn.uln     { text-decoration: underline; }
 .btn.stk     { text-decoration: line-through; }
 .btn.sym     { min-width: 26px; text-align: center; }
-.btn.accent  { background: #e8f4f4; border-color: #2f6f73; color: #2f6f73; font-weight: 700; }
-.btn.primary { background: #2f6f73; color: #fff; border-color: #2f6f73; font-weight: 700; }
-.btn.primary:hover { background: #245558; }
+.btn.accent  { background: #fff7ed; border-color: #ef8e0d; color: #ef8e0d; font-weight: 700; }
+.btn.primary { background: #ef8e0d; color: #fff; border-color: #ef8e0d; font-weight: 700; }
+.btn.primary:hover { background: #d97f06; }
 .bar {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  background: #f0f7f7;
-  border: 2px solid #8fa3b8; border-top: none; border-bottom: 1px solid #c5d0da;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1; border-top: none; border-bottom: 1px solid #e2e8f0;
   padding: 5px 8px;
 }
 .bar input {
   flex: 1; min-width: 120px; max-width: 240px;
-  padding: 3px 7px; border: 1.5px solid #8fa3b8; border-radius: 4px;
+  padding: 3px 7px; border: 1.5px solid #cbd5e1; border-radius: 4px;
   font-size: 12px; font-family: inherit; outline: none;
 }
-.bar input:focus { border-color: #2f6f73; }
+.bar input:focus { border-color: #ef8e0d; }
 .bar label { display: flex; align-items: center; gap: 3px; font-size: 11px; white-space: nowrap; }
 .bar-lbl   { font-size: 11px; font-weight: 700; color: #555; white-space: nowrap; }
 #find-status { font-size: 11px; color: #555; margin-left: 4px; }
 #resize-handle {
   height: 10px; cursor: ns-resize; user-select: none;
-  background: linear-gradient(#f4f6f8, #dde3ea);
-  border: 1px solid #8fa3b8; border-top: none;
+  background: linear-gradient(#f8fafc, #e2e8f0);
+  border: 1px solid #cbd5e1; border-top: none;
   border-radius: 0 0 6px 6px;
   position: relative;
 }
 #resize-handle::before {
   content: ""; position: absolute; left: 50%; top: 3px; transform: translateX(-50%);
-  width: 42px; height: 3px; background: #8fa3b8; border-radius: 2px;
+  width: 42px; height: 3px; background: #cbd5e1; border-radius: 2px;
 }
-#resize-handle:hover { background: linear-gradient(#e8f0f7, #c5d0da); }
-#resize-handle:hover::before { background: #2f6f73; }
-.rules-bar-flex { background: #fdf4e6; border-color: #e5c894; }
-.rules-label { font-size: 11px; font-weight: 800; color: #8a4d00; text-transform: uppercase; letter-spacing: .04em; margin-right: 4px; }
+#resize-handle:hover { background: linear-gradient(#f8fafc, #e2e8f0); }
+#resize-handle:hover::before { background: #ef8e0d; }
+.rules-bar-flex { background: #fff7ed; border-color: #fed7aa; }
+.rules-label { font-size: 11px; font-weight: 800; color: #8b5000; text-transform: uppercase; letter-spacing: .04em; margin-right: 4px; }
 .rules-empty { font-size: 11px; color: #6f8090; font-style: italic; }
-.btn.rule-btn { background: #fff; border-color: #e5c894; color: #1a2330; font-weight: 600; }
-.btn.rule-btn:hover { background: #fff2d6; border-color: #f28c00; color: #8a4d00; }
-.rule-kbd { display: inline-block; margin-left: 4px; padding: 1px 5px; background: #f6ebd3; border: 1px solid #e5c894; border-radius: 3px; font-family: Consolas, monospace; font-size: 10px; color: #6b4400; }
+.btn.rule-btn { background: #fff; border-color: #fed7aa; color: #1a2330; font-weight: 600; }
+.btn.rule-btn:hover { background: #ffedd5; border-color: #ef8e0d; color: #8b5000; }
+.rule-kbd { display: inline-block; margin-left: 4px; padding: 1px 5px; background: #f6ebd3; border: 1px solid #fed7aa; border-radius: 3px; font-family: Consolas, monospace; font-size: 10px; color: #6b4400; }
 .hidden { display: none !important; }
 #main-panels { display: flex; width: 100%; }
 #editor-panel { flex: 1 1 55%; min-width: 0; }
 #preview-panel {
   flex: 1 1 45%; min-width: 0;
-  border: 2px solid #8fa3b8; border-top: none; border-left: 1px solid #c5d0da;
+  border: 2px solid #cbd5e1; border-top: none; border-left: 1px solid #e2e8f0;
   border-radius: 0 0 6px 0;
   overflow-y: auto; height: {{HEIGHT}}px;
   background: #fff; padding: 10px 14px;
@@ -231,29 +209,29 @@ html, body { margin: 0; padding: 0; background: transparent;
 }
 #preview-label {
   font-size: 10px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .06em; color: #8fa3b8;
+  letter-spacing: .06em; color: #cbd5e1;
   border-bottom: 1px solid #e8edf2; padding-bottom: 5px; margin-bottom: 8px;
 }
-#preview-content a { color: #2f6f73; }
+#preview-content a { color: #ef8e0d; }
 #preview-placeholder { color: #bbb; font-style: italic; font-size: 13px; margin-top: 20px; }
 #cm-wrap .CodeMirror {
   height: {{HEIGHT}}px;
-  border: 2px solid #8fa3b8; border-top: none;
+  border: 2px solid #cbd5e1; border-top: none;
   border-radius: 0 0 0 6px; border-right: none;
   font-size: 14px; line-height: 1.65;
   font-family: "Consolas", "Menlo", "Monaco", monospace;
 }
 #cm-wrap .CodeMirror-gutters {
-  background: #f4f6f8;
-  border-right: 1px solid #c5d0da;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
 }
 #cm-wrap .CodeMirror-linenumber {
-  color: #8fa3b8;
+  color: #cbd5e1;
   font-size: 11px;
   padding-right: 6px;
 }
 #cm-wrap .CodeMirror-focused {
-  border-color: #2f6f73; box-shadow: 0 0 0 3px rgba(47,111,115,.12);
+  border-color: #ef8e0d; box-shadow: 0 0 0 3px rgba(239,142,13,.18);
 }
 .cm-s-default .cm-tag       { color: #0000cc; font-weight: 600; }
 .cm-s-default .cm-attribute { color: #cc0000; }
@@ -261,14 +239,23 @@ html, body { margin: 0; padding: 0; background: transparent;
 .cm-s-default .cm-atom      { color: #7c4dff; font-weight: 600; }
 .cm-s-default .cm-comment   { color: #888; font-style: italic; }
 .cm-s-default .cm-bracket   { color: #444; }
+#cm-wrap .cm-redline {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #d92d20;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+#cm-wrap .cm-redline-special { background: rgba(217, 45, 32, .07); }
+#cm-wrap .cm-redline-spelling { background: rgba(217, 45, 32, .03); }
 #counter { text-align: right; font-size: 11px; font-weight: 700; padding: 3px 2px; }
 .cnt-ok  { color: #2a7a3a; }
 .cnt-bad { color: #c62828; }
 #paste-menu {
   position: fixed; background: #fff;
-  border: 1.5px solid #8fa3b8; border-radius: 8px;
+  border: 1.5px solid #cbd5e1; border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0,0,0,.18);
-  padding: 8px 6px; min-width: 190px; z-index: 9999;
+  padding: 8px 6px; min-width: 190px; max-width: calc(100vw - 16px); z-index: 99999;
   top: 80px; left: 30px;
 }
 .pm-title {
@@ -282,6 +269,39 @@ html, body { margin: 0; padding: 0; background: transparent;
   padding: 7px 10px; font-size: 13px; cursor: pointer;
   color: #1a2330; font-family: inherit;
 }
-#paste-menu button:hover { background: #e8f0f7; }
+#paste-menu button:hover { background: #f8fafc; }
 .pm-cancel { color: #888 !important; font-size: 12px !important; margin-top: 4px; }
+#editor-shell { background: transparent; }
+body.fullscreen-mode {
+  background: #f7f9fb;
+  padding: 12px;
+  overflow: hidden;
+}
+body.fullscreen-mode #editor-shell {
+  height: calc(100vh - 24px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+body.fullscreen-mode #toolbar,
+body.fullscreen-mode .bar {
+  flex: 0 0 auto;
+}
+body.fullscreen-mode #main-panels {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+body.fullscreen-mode #editor-panel,
+body.fullscreen-mode #preview-panel {
+  min-height: 0;
+}
+body.fullscreen-mode #resize-handle {
+  display: none;
+}
+body.fullscreen-mode #counter {
+  background: #fff;
+  border-left: 2px solid #cbd5e1;
+  border-right: 2px solid #cbd5e1;
+  border-bottom: 2px solid #cbd5e1;
+}
 """

@@ -63,7 +63,7 @@ def render() -> None:
 
     # ── Header row ───────────────────────────────────────────────────
     header_cols = st.columns([0.6, 1.9, 3.4, 1.9, 1.5, 1.3, 1.2])
-    header_style = "font-size:11px;font-weight:800;text-transform:uppercase;color:#6f8090;padding-bottom:2px;border-bottom:1px solid #dde3ea;"
+    header_style = "font-size:11px;font-weight:800;text-transform:uppercase;color:#6f8090;padding-bottom:2px;border-bottom:1px solid #e2e8f0;"
     for col, label in zip(
         header_cols,
         ["#", "Item No", "Title", "Mfg Item", "Status", "Done By", ""],
@@ -84,7 +84,7 @@ def render() -> None:
         row_cols = st.columns([0.6, 1.9, 3.4, 1.9, 1.5, 1.3, 1.2])
         pos_style = "padding-top:0.55rem;color:#6f8090;font-weight:700;"
         if picked_orig == orig_idx:
-            pos_style = "padding-top:0.55rem;color:#2f6f73;font-weight:800;background:#e8f4f4;border-radius:6px;padding-left:6px;"
+            pos_style = "padding-top:0.55rem;color:#ef8e0d;font-weight:800;background:#fff7ed;border-radius:6px;padding-left:6px;"
         row_cols[0].markdown(f"<div style='{pos_style}'>{pos}</div>", unsafe_allow_html=True)
         row_cols[1].markdown(
             f"<div style='padding-top:0.55rem;font-weight:700;color:#1a2330;'>{item_no}</div>",
@@ -131,7 +131,7 @@ def render() -> None:
                 set_current_item(item_no)
                 mark_status(item_no, "In Progress", new_done_by)
                 st.session_state["active_page"] = "SKU Workspace"
-                st.session_state["workspace_tab"] = "Basics"
+                st.session_state["workspace_tab"] = "Content"
                 st.rerun()
 
     if changed:

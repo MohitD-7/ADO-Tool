@@ -22,11 +22,6 @@ def render() -> None:
 
     # ── Left: rule list ───────────────────────────────────────────────
     with left:
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #2f6f73;'
-            'border-radius:8px;padding:0.5rem 0.8rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown("### Rules")
         if not rules:
             st.caption("No rules yet. Create one on the right.")
@@ -48,7 +43,6 @@ def render() -> None:
                     rules_store.delete_rule(rule["name"])
                     st.success(f"Deleted '{rule['name']}'.")
                     st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
         if st.button("+ New Rule", type="primary", use_container_width=True):
             st.session_state["_editing_rule"] = None
             st.session_state["_rule_form"] = _blank_rule()
@@ -63,12 +57,6 @@ def render() -> None:
         form = st.session_state["_rule_form"]
         editing_name = st.session_state.get("_editing_rule")
         heading = f"Edit: {editing_name}" if editing_name else "New Rule"
-
-        st.markdown(
-            '<div style="background:#fff;border:1px solid #dde3ea;border-left:4px solid #f28c00;'
-            'border-radius:8px;padding:0.5rem 0.8rem 1.2rem 1.2rem;">',
-            unsafe_allow_html=True,
-        )
         st.markdown(f"### {heading}")
 
         form["name"] = st.text_input(
@@ -115,7 +103,7 @@ def render() -> None:
             value=form.get("apply_per_line", False),
         )
 
-        st.markdown('<div style="border-top:1px solid #dde3ea;margin:10px 0"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="border-top:1px solid #e2e8f0;margin:10px 0"></div>', unsafe_allow_html=True)
         st.markdown("**Modifications**")
 
         c1, c2 = st.columns(2)
@@ -149,12 +137,12 @@ def render() -> None:
             form["tag"] = form.get("tag", "")
 
         # Preview
-        st.markdown('<div style="border-top:1px solid #dde3ea;margin:10px 0"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="border-top:1px solid #e2e8f0;margin:10px 0"></div>', unsafe_allow_html=True)
         preview_text = st.text_input("Preview input text", value="Sample text", key="_rule_preview_input")
         if preview_text:
             preview_out = logic.apply_rule(preview_text, form)
             st.markdown(
-                f'<div style="background:#f8fafc;border:1px solid #dde3ea;border-radius:6px;'
+                f'<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;'
                 f'padding:.6rem .9rem;font-family:monospace;font-size:.88rem;color:#1a2330;">'
                 f'{preview_out}</div>',
                 unsafe_allow_html=True,
@@ -184,10 +172,6 @@ def render() -> None:
             del st.session_state["_rule_form"]
             st.session_state.pop("_editing_rule", None)
             st.rerun()
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
-
 def _blank_rule() -> dict:
     return {
         "name": "", "shortcut": "",
