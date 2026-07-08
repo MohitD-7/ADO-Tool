@@ -27,25 +27,26 @@ def character_counter(value: str, limit: int) -> None:
     st.markdown(f'<div class="{cls}">{count} / {limit} characters</div>', unsafe_allow_html=True)
 
 
-def hidden_notes(item: dict, field_key: str) -> None:
-    with st.expander("Comments and source links", expanded=False):
+def field_notes_editor(
+    item: dict,
+    field_key: str,
+    title: str | None = None,
+    *,
+    expanded: bool = False,
+) -> None:
+    """Edit field-level comments only."""
+    safe_title = html.escape(title or "Comments")
+    st.markdown(f'<div class="vo-field-notes-label">{safe_title}</div>', unsafe_allow_html=True)
+    with st.expander("Comments", expanded=expanded):
         comments = item.setdefault("comments", {})
         comments[field_key] = st.text_area(
             "Comment",
             value=comments.get(field_key, ""),
             key=f"comment_{item['details']['item_no']}_{field_key}",
-            height=80,
+            height=92,
         )
-        links = item.setdefault("links", {})
-        field_links = links.setdefault(field_key, [""])
-        text_value = "\n".join(field_links)
-        updated = st.text_area(
-            "Links",
-            value=text_value,
-            key=f"links_{item['details']['item_no']}_{field_key}",
-            height=80,
-        )
-        links[field_key] = [line.strip() for line in updated.splitlines() if line.strip()]
+def hidden_notes(item: dict, field_key: str) -> None:
+    field_notes_editor(item, field_key)
 
 
 def drag_reorder(labels: list[str]) -> list[int] | None:
@@ -169,31 +170,45 @@ def drag_reorder(labels: list[str]) -> list[int] | None:
     return coerced
 
 
-def links_panel(item: dict, key_suffix: str = "shared") -> None:
-    """
-    Shared 'Links' section for every workspace tab.
+def _line_list(value) -> list[str]:
+    if isinstance(value, list):
+        raw = value
+    else:
+        raw = str(value or "").splitlines()
+    return [str(line).strip() for line in raw if str(line).strip()]
 
-    One textarea; one link per line. Stored under item['links']['general'] as a
-    list. Exports as a single Excel cell with each link on its own line inside
-    the cell.
-    """
+
+def links_panel(item: dict, key_suffix: str = "shared") -> None:
+    """Common source-link box for the current SKU."""
     ino = item["details"]["item_no"]
-    st.markdown("### Links")
-    st.caption("One link per line. Exports as a single cell with all links stacked.")
-    existing = item.setdefault("links", {}).setdefault("general", [])
-    if not isinstance(existing, list):
-        existing = [str(existing)] if existing else []
-    text_value = "\n".join(str(x) for x in existing if str(x).strip())
+    links = item.setdefault("links", {})
+    existing = _line_list(links.get("general", []))
     updated = st.text_area(
-        "Links",
-        value=text_value,
-        key=f"links_{key_suffix}_{ino}",
-        height=120,
-        label_visibility="collapsed",
+        "Source links",
+        value="\n".join(existing),
+        key=f"source_links_{key_suffix}_{ino}",
+        height=110,
         placeholder="https://example.com/source-1\nhttps://example.com/source-2",
     )
-    item["links"]["general"] = [line.strip() for line in updated.splitlines() if line.strip()]
+    links["general"] = _line_list(updated)
 
+
+def source_video_panel(item: dict, key_suffix: str = "shared", *, expanded: bool = False) -> None:
+    """One common place for all SKU source links and video links."""
+    safe_title = html.escape("Common source / video links")
+    st.markdown(f'<div class="vo-field-notes-label">{safe_title}</div>', unsafe_allow_html=True)
+    with st.expander("Source and video links", expanded=expanded):
+        st.caption("Put one link per line. These apply to the whole SKU.")
+        links_panel(item, key_suffix=key_suffix)
+        video_value = "\n".join(_line_list(item.setdefault("details", {}).get("video_link", "")))
+        updated_video = st.text_area(
+            "Video links",
+            value=video_value,
+            key=f"video_links_{key_suffix}_{item['details']['item_no']}",
+            height=92,
+            placeholder="https://example.com/video-1\nhttps://example.com/video-2",
+        )
+        item["details"]["video_link"] = "\n".join(_line_list(updated_video))
 _RESERVED_CHORDS = {
     # Chrome / OS-level shortcuts that would either intercept our keydown or
     # steal focus even if we preventDefault them. Numeric digit chords with

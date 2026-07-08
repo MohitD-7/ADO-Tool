@@ -5,7 +5,7 @@ import streamlit as st
 from sku_manager.pages import description, features, general, highlights, preview_export, specs
 from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, sync_description_state
-from sku_manager.ui.components import links_panel, right_feedback_panel
+from sku_manager.ui.components import field_notes_editor, right_feedback_panel, source_video_panel
 from sku_manager.ui.layout import workspace_topbar
 
 
@@ -15,7 +15,6 @@ def _section_gap() -> None:
 
 def _render_content_tab(item: dict) -> None:
     main, pane = st.columns([3.5, 1])
-
     with main:
         general.render(
             show_header=False,
@@ -23,23 +22,59 @@ def _render_content_tab(item: dict) -> None:
             show_links=False,
             show_feedback=False,
             show_format=False,
+            show_notes=False,
         )
-        _section_gap()
+    with pane:
+        field_notes_editor(item, "title", "Basic information notes")
+
+    _section_gap()
+    main, pane = st.columns([3.5, 1])
+    with main:
         description.render(
             show_header=False,
             show_links=False,
             show_validation=False,
             show_item_notes=False,
+            show_notes=False,
+            show_description=True,
+            show_includes=False,
         )
-        _section_gap()
+    with pane:
+        field_notes_editor(item, "description", "Product description notes")
+
+    _section_gap()
+    main, pane = st.columns([3.5, 1])
+    with main:
+        description.render(
+            show_header=False,
+            show_links=False,
+            show_validation=False,
+            show_item_notes=False,
+            show_notes=False,
+            show_description=False,
+            show_includes=True,
+        )
+    with pane:
+        field_notes_editor(item, "includes", "Includes / box contents notes")
+
+    _section_gap()
+    main, pane = st.columns([3.5, 1])
+    with main:
         st.markdown("### Feature Bullets")
         features.render(show_header=False, embedded=True, show_links=False, show_feedback=False)
-        _section_gap()
+    with pane:
+        field_notes_editor(item, "features", "Feature bullet notes")
+
+    _section_gap()
+    main, pane = st.columns([3.5, 1])
+    with main:
         st.markdown("### PDP Highlights")
         highlights.render(show_header=False, embedded=True, show_links=False, show_feedback=False)
-        _section_gap()
-        links_panel(item, key_suffix="content")
+    with pane:
+        field_notes_editor(item, "highlights", "PDP highlight notes")
 
+    _section_gap()
+    _, pane = st.columns([3.5, 1])
     with pane:
         details = item["details"]
         right_feedback_panel(
@@ -66,10 +101,12 @@ def render() -> None:
     active_tab = workspace_topbar()
 
     st.markdown('<div class="vo-workspace-content-gap">&#8203;</div>', unsafe_allow_html=True)
+    source_video_panel(item, key_suffix="workspace", expanded=False)
+    st.markdown('<div class="vo-workspace-content-gap">&#8203;</div>', unsafe_allow_html=True)
 
     if active_tab == "Content":
         _render_content_tab(item)
     elif active_tab == "Specs":
-        specs.render(show_header=False)
+        specs.render(show_header=False, show_links=False)
     else:
         preview_export.render(show_header=False)

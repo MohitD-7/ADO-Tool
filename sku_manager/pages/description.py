@@ -7,11 +7,19 @@ import streamlit.components.v1 as components
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, description_state_keys, sync_description_state
-from sku_manager.ui.components import drag_reorder, hidden_notes, links_panel, page_header
+from sku_manager.ui.components import drag_reorder, field_notes_editor, page_header, source_video_panel
 from sku_manager.ui.editor import html_editor
 
 
-def render(show_header: bool = True, show_links: bool = True, show_validation: bool = True, show_item_notes: bool = True) -> None:
+def render(
+    show_header: bool = True,
+    show_links: bool = True,
+    show_validation: bool = True,
+    show_item_notes: bool = True,
+    show_notes: bool = True,
+    show_description: bool = True,
+    show_includes: bool = True,
+) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
@@ -24,46 +32,52 @@ def render(show_header: bool = True, show_links: bool = True, show_validation: b
 
     if show_header:
         page_header("Content Layer", "Description and Includes", status=ino)
-    th1, th2 = st.columns([5, 1])
-    with th1:
-        st.markdown("### Product Description")
-        st.caption("Use the toolbar to insert HTML tags. Type directly in HTML.")
-    with th2:
-        st.markdown('<div class="vo-spacer-btn">&#8203;</div>', unsafe_allow_html=True)
-        fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
 
-    details["description"] = html_editor(
-        value=details.get("description", ""),
-        sync_key=sync_key,
-        height=320,
-    )
+    use_side_pane = show_notes or show_links or show_validation or show_item_notes
+    if use_side_pane:
+        main, pane = st.columns([3.5, 1])
+    else:
+        main = st.container()
+        pane = None
 
-    hidden_notes(item, "description")
-    if fmt_click:
-        current = sync_description_state(item)
-        rules_df = st.session_state["special_rules_df"]
-        for key in ["title", "short_title", "mfg_model", "description"]:
-            details[key] = format_text(details.get(key, ""), rules_df)
-        details["description"] = format_text(current, rules_df)
-        st.session_state[force_key] = details["description"]
-        for entry in item.setdefault("includes", []):
-            if entry.get("text"):
-                entry["text"] = format_text(entry["text"], rules_df)
-        item["features"]   = [format_text(str(f), rules_df) for f in item.get("features", [])]
-        item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
-        for spec in item.get("specs", []):
-            spec["Spec"]  = format_text(str(spec.get("Spec",  "") or ""), rules_df)
-            spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
-        st.rerun()
-    st.markdown("### Includes / Box Contents")
+    with main:
+        if show_description:
+            th1, th2 = st.columns([5, 1])
+            with th1:
+                st.markdown("### Product Description")
+                st.caption("Use the toolbar to insert HTML tags. Type directly in HTML.")
+            with th2:
+                st.markdown('<div class="vo-spacer-btn">&#8203;</div>', unsafe_allow_html=True)
+                fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
 
-    item.setdefault("includes", [])
-    _render_includes_editor(item, ino, item["includes"])
-    _render_includes_bulk(item, ino)
+            details["description"] = html_editor(
+                value=details.get("description", ""),
+                sync_key=sync_key,
+                height=320,
+            )
 
-    hidden_notes(item, "includes")
-    if show_links:
-        links_panel(item)
+            if fmt_click:
+                current = sync_description_state(item)
+                rules_df = st.session_state["special_rules_df"]
+                for key in ["title", "short_title", "mfg_model", "description"]:
+                    details[key] = format_text(details.get(key, ""), rules_df)
+                details["description"] = format_text(current, rules_df)
+                st.session_state[force_key] = details["description"]
+                for entry in item.setdefault("includes", []):
+                    if entry.get("text"):
+                        entry["text"] = format_text(entry["text"], rules_df)
+                item["features"] = [format_text(str(f), rules_df) for f in item.get("features", [])]
+                item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
+                for spec in item.get("specs", []):
+                    spec["Spec"] = format_text(str(spec.get("Spec", "") or ""), rules_df)
+                    spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
+                st.rerun()
+
+        if show_includes:
+            st.markdown("### Includes / Box Contents")
+            item.setdefault("includes", [])
+            _render_includes_editor(item, ino, item["includes"])
+            _render_includes_bulk(item, ino)
 
     warnings = item_warnings(
         details,
@@ -71,25 +85,35 @@ def render(show_header: bool = True, show_links: bool = True, show_validation: b
         item["specs"],
         item["highlights"],
         st.session_state.get("special_rules_df"),
-        includes=item["includes"],
+        includes=item.get("includes", []),
     )
-    if show_validation and warnings:
-        with st.expander(
-            f"Validation ({len(warnings)} warning{'s' if len(warnings) != 1 else ''})",
-            expanded=True,
-        ):
-            for warning in warnings:
-                st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
 
-    if show_item_notes:
-        with st.expander("Item notes", expanded=False):
-            item["details"]["comments"] = st.text_area(
-                "Item-level comment",
-                value=item["details"].get("comments", ""),
-                key=f"desc_item_comment_{ino}",
-                height=80,
-            )
-
+    if pane is not None:
+        with pane:
+            if show_links:
+                source_video_panel(item, key_suffix="description_side", expanded=False)
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+            if show_notes and show_description:
+                field_notes_editor(item, "description", "Product description notes")
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+            if show_notes and show_includes:
+                field_notes_editor(item, "includes", "Includes / box contents notes")
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+            if show_validation and warnings:
+                with st.expander(
+                    f"Validation ({len(warnings)} warning{'s' if len(warnings) != 1 else ''})",
+                    expanded=True,
+                ):
+                    for warning in warnings:
+                        st.markdown(f'<div class="vo-warning">{warning}</div>', unsafe_allow_html=True)
+            if show_item_notes:
+                with st.expander("Item notes", expanded=False):
+                    item["details"]["comments"] = st.text_area(
+                        "Item-level comment",
+                        value=item["details"].get("comments", ""),
+                        key=f"desc_item_comment_{ino}",
+                        height=80,
+                    )
 
 def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> None:
     st.caption(

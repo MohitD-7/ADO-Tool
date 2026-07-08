@@ -6,7 +6,7 @@ import streamlit as st
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import drag_reorder, links_panel, page_header, right_feedback_panel
+from sku_manager.ui.components import drag_reorder, field_notes_editor, page_header, right_feedback_panel, source_video_panel
 
 
 def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
@@ -15,6 +15,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         st.warning("Upload and select a SKU first.")
         return
     details = item["details"]
+    ino = details["item_no"]
     if show_header:
         page_header("Item Details Extraction", "Highlights", status=details.get("item_no"))
     if embedded:
@@ -24,31 +25,58 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         main, pane = st.columns([3.5, 1])
 
     with main:
-        st.markdown("### Current Highlights")
-        st.caption("Max 8 highlights. Rows export with Value1 = 10, 20, 30…, Value2 = highlight text, Value3 = PDP.")
+        with st.expander("Highlights", expanded=False):
+            if st.button("Copy Features", width="stretch", key=f"copy_features_to_highlights_{ino}"):
+                item["highlights"] = [str(feature) for feature in item.get("features", []) if str(feature).strip()]
+                st.rerun()
 
-        highlights_list = item.setdefault("highlights", [])
-        if highlights_list:
-            with st.expander(f"Reorder ({len(highlights_list)} rows)", expanded=False):
+            st.markdown("### Current Highlights")
+            st.caption("Max 8 highlights. Rows export with Value1 = 10, 20, 30..., Value2 = highlight text, Value3 = PDP.")
+
+            highlights_list = item.setdefault("highlights", [])
+            if highlights_list:
+                st.caption(f"Reorder ({len(highlights_list)} rows)")
                 perm = drag_reorder([str(h) for h in highlights_list])
                 if perm is not None:
                     item["highlights"] = [highlights_list[i] for i in perm]
                     st.rerun()
 
-        highlight_df = pd.DataFrame({"Highlight": highlights_list})
-        edited = st.data_editor(highlight_df, num_rows="dynamic", width="stretch", key=f"highlights_editor_{details['item_no']}")
-        item["highlights"] = [format_text(str(value), st.session_state["special_rules_df"]) for value in edited["Highlight"].tolist() if str(value).strip()]
-        st.markdown("### Add Highlights in Bulk")
-        bulk = st.text_area("Paste multiple highlights here (one per line)", height=150, placeholder="One highlight per line")
-        if st.button("Add Multiple Highlights", width="stretch"):
-            item["highlights"].extend(
-                [format_text(line, st.session_state["special_rules_df"]) for line in parse_lines(bulk) if len(line) <= LIMITS["highlight_bulk"]]
+            highlight_df = pd.DataFrame({"Highlight": highlights_list})
+            edited = st.data_editor(
+                highlight_df,
+                num_rows="dynamic",
+                width="stretch",
+                key=f"highlights_editor_{ino}",
             )
-            item["highlights"] = item["highlights"][:8]
-            st.rerun()
-    if show_links:
-        links_panel(item, key_suffix="highlights")
+            item["highlights"] = [
+                format_text(str(value), st.session_state["special_rules_df"])
+                for value in edited["Highlight"].tolist()
+                if str(value).strip()
+            ]
+
+            st.markdown("### Add Highlights in Bulk")
+            bulk = st.text_area(
+                "Paste multiple highlights here (one per line)",
+                height=150,
+                placeholder="One highlight per line",
+                key=f"highlights_bulk_{ino}",
+            )
+            if st.button("Add Multiple Highlights", width="stretch", key=f"add_bulk_highlights_{ino}"):
+                item["highlights"].extend(
+                    [
+                        format_text(line, st.session_state["special_rules_df"])
+                        for line in parse_lines(bulk)
+                        if len(line) <= LIMITS["highlight_bulk"]
+                    ]
+                )
+                item["highlights"] = item["highlights"][:8]
+                st.rerun()
 
     if show_feedback and pane is not None:
         with pane:
+            if show_links:
+                source_video_panel(item, key_suffix="highlights_side", expanded=False)
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+            field_notes_editor(item, "highlights", "PDP highlight notes")
+            st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
             right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="highlights_feedback")

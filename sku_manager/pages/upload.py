@@ -38,7 +38,7 @@ def render() -> None:
             type=["xlsx", "xls", "xlsm"],
             accept_multiple_files=False,
         )
-        st.caption("Required columns: " + ", ".join(REQUIRED_COLUMNS))
+        st.caption("Required columns: " + ", ".join(REQUIRED_COLUMNS) + ". Optional: ATR Type (Parent, parent SKU, or blank).")
 
     if uploaded is None:
         with right:

@@ -6,10 +6,10 @@ import streamlit as st
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import character_counter, drag_reorder, links_panel, page_header, right_feedback_panel
+from sku_manager.ui.components import character_counter, drag_reorder, field_notes_editor, page_header, right_feedback_panel, source_video_panel
 
 
-def render(show_header: bool = True) -> None:
+def render(show_header: bool = True, show_links: bool = True) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
@@ -114,9 +114,12 @@ def render(show_header: bool = True) -> None:
         if st.button("Add Multiple Specifications", width="stretch"):
             item["specs"].extend(_parse_bulk_specs(bulk))
             st.rerun()
-    links_panel(item)
-
     with pane:
+        if show_links:
+            source_video_panel(item, key_suffix="specs_side", expanded=False)
+            st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+        field_notes_editor(item, "specs", "Specification notes")
+        st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
         right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="specs_feedback")
 
 

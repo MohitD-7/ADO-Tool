@@ -13,6 +13,7 @@ from sku_manager.pages import workspace
 from sku_manager.services.export import (
     build_input_sheet_df,
     build_output_df,
+    build_video_links_df,
     excel_bytes,
     parse_output_excel,
     text_bytes,
@@ -97,11 +98,12 @@ def _render_review_workspace() -> None:
     sync_description_state()
     output_df = build_output_df(st.session_state["queue_df"], st.session_state["items"])
     input_df = build_input_sheet_df(st.session_state["queue_df"], st.session_state["items"])
+    video_links_df = build_video_links_df(st.session_state["queue_df"], st.session_state["items"])
 
     xl_col, txt_col = st.columns(2)
     xl_col.download_button(
         "Download Excel",
-        data=excel_bytes(output_df, input_df),
+        data=excel_bytes(output_df, input_df, video_links_df),
         file_name=f"{excel_name}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,

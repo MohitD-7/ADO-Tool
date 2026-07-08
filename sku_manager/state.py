@@ -43,9 +43,12 @@ def clear_description_state() -> None:
 def set_batch(queue_df: pd.DataFrame) -> None:
     clear_description_state()
     queue_df = queue_df.copy()
+    had_atr_column = "ATR Type" in queue_df.columns
     for col in QUEUE_COLUMNS:
         if col not in queue_df.columns:
             queue_df[col] = ""
+    if not had_atr_column:
+        queue_df["ATR Type"] = "Standalone"
     queue_df = queue_df[QUEUE_COLUMNS].fillna("").astype(str)
     st.session_state["queue_df"] = queue_df
     st.session_state["items"] = {}
@@ -57,6 +60,7 @@ def set_batch(queue_df: pd.DataFrame) -> None:
             item_no=item_no,
             title=str(row["Title"]),
             mfg_item=str(row["Mfg Item"]),
+            atr_type=str(row.get("ATR Type", "")),
         )
     st.session_state["current_item_no"] = next(iter(st.session_state["items"]), "")
 
@@ -133,3 +137,8 @@ def sync_item_identity(item_no: str, title: str, mfg_item: str) -> None:
         item["details"]["title"] = title
     if not item["details"].get("mfg_item"):
         item["details"]["mfg_item"] = mfg_item
+    queue = st.session_state.get("queue_df")
+    if queue is not None and "ATR Type" in queue.columns:
+        match = queue[queue["Item No"].astype(str) == str(item_no)]
+        if not match.empty:
+            item["details"]["atr_type"] = str(match.iloc[0].get("ATR Type", ""))

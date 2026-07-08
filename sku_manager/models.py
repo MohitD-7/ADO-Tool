@@ -11,6 +11,7 @@ DETAIL_DEFAULTS: dict[str, Any] = {
     "description": "",
     "mfg_item": "",
     "mfg_model": "",
+    "atr_type": "",
     "manufacturer": "",
     "warranty_months": "",
     "battery_info": "no battery used",
@@ -26,11 +27,12 @@ DETAIL_DEFAULTS: dict[str, Any] = {
 }
 
 
-def new_item_record(item_no: str = "", title: str = "", mfg_item: str = "") -> dict[str, Any]:
+def new_item_record(item_no: str = "", title: str = "", mfg_item: str = "", atr_type: str = "") -> dict[str, Any]:
     details = deepcopy(DETAIL_DEFAULTS)
     details["item_no"] = item_no
     details["title"] = title
     details["mfg_item"] = mfg_item
+    details["atr_type"] = atr_type
     return {
         "details": details,
         "features": [],

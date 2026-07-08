@@ -8,7 +8,7 @@ from sku_manager.config import BATTERY_INFO_OPTIONS
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import hidden_notes, links_panel, page_header, right_feedback_panel
+from sku_manager.ui.components import field_notes_editor, hidden_notes, page_header, right_feedback_panel, source_video_panel
 
 
 def _select_options(df, column: str) -> list[str]:
@@ -35,7 +35,7 @@ def _dv2_label(text: str, value: str | None = None, limit: int | None = None) ->
         )
 
 
-def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True, show_format: bool = True) -> None:
+def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True, show_format: bool = True, show_notes: bool = True) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
@@ -95,7 +95,8 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         with cs_btn:
             st.button("Copy Title", key=f"copy_title_{details['item_no']}",
                       on_click=_copy_title, use_container_width=True)
-        hidden_notes(item, "title")
+        if show_notes and pane is None:
+            hidden_notes(item, "title")
         st.markdown('<h2 class="dv2-section-title">Battery &amp; Compliance</h2>', unsafe_allow_html=True)
 
         b1, b2, b3, b4 = st.columns(4)
@@ -138,7 +139,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             )
         if show_links:
             st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
-            links_panel(item)
+            source_video_panel(item, key_suffix="general_main", expanded=False)
         if show_format and st.button("Format Visible Text", key=f"format_all_{details['item_no']}",
                                      type="primary", use_container_width=True):
             rules_df = st.session_state["special_rules_df"]
@@ -157,6 +158,9 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
 
     if show_feedback and pane is not None:
         with pane:
+            if show_notes:
+                field_notes_editor(item, "title", "Basic information notes")
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
             right_feedback_panel(
                 item,
                 item_warnings(details, item["features"], item["specs"], item["highlights"]),

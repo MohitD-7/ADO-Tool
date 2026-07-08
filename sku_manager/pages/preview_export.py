@@ -6,6 +6,7 @@ import streamlit.components.v1 as components
 from sku_manager.services.export import (
     build_input_sheet_df,
     build_output_df,
+    build_video_links_df,
     excel_bytes,
     render_html,
     text_bytes,
@@ -34,6 +35,7 @@ def render(show_header: bool = True) -> None:
 
     output_df = build_output_df(st.session_state["queue_df"], st.session_state["items"])
     input_df = build_input_sheet_df(st.session_state["queue_df"], st.session_state["items"])
+    video_links_df = build_video_links_df(st.session_state["queue_df"], st.session_state["items"])
     blockers = submit_blockers(item)
     item_warning_list = item_warnings(details, item["features"], item["specs"], item["highlights"])
 
@@ -78,7 +80,7 @@ def render(show_header: bool = True) -> None:
             st.rerun()
     b.download_button(
         "Download Excel",
-        data=excel_bytes(output_df, input_df),
+        data=excel_bytes(output_df, input_df, video_links_df),
         file_name=f"{excel_filename}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,

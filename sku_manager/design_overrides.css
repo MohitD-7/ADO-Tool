@@ -963,3 +963,31 @@ h3,
   white-space: nowrap !important;
   text-align: right !important;
 }
+.vo-field-notes-label {
+  color: var(--vo-text) !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  font-weight: 600 !important;
+  margin: 2px 0 3px !important;
+}
+
+/* Keep row-selection affordances visible inside Streamlit data editors. */
+div[data-testid="stDataFrame"] [role="checkbox"],
+div[data-testid="stDataEditor"] [role="checkbox"],
+div[data-testid="stDataFrame"] input[type="checkbox"],
+div[data-testid="stDataEditor"] input[type="checkbox"],
+div[data-testid="stDataFrame"] [data-testid="stCheckbox"],
+div[data-testid="stDataEditor"] [data-testid="stCheckbox"],
+div[data-testid="stDataFrame"] [class*="checkbox"],
+div[data-testid="stDataEditor"] [class*="checkbox"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+div[data-testid="stDataFrame"] [role="gridcell"]:first-child,
+div[data-testid="stDataEditor"] [role="gridcell"]:first-child,
+div[data-testid="stDataFrame"] [role="columnheader"]:first-child,
+div[data-testid="stDataEditor"] [role="columnheader"]:first-child {
+  border-color: var(--vo-border) !important;
+  background: #ffffff !important;
+}
