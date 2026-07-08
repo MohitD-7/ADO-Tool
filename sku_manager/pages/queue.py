@@ -13,6 +13,7 @@ from sku_manager.services.export import (
     excel_bytes,
     render_html,
     text_bytes,
+    warranty_excel_bytes,
 )
 from sku_manager.state import mark_status, set_current_item, sync_description_state
 from sku_manager.ui.components import page_header
@@ -46,7 +47,7 @@ def render() -> None:
 
     st.subheader("Item Processing List")
 
-    ctrl1, ctrl2, ctrl3 = st.columns([3, 2, 1.6])
+    ctrl1, ctrl2 = st.columns([3, 2])
     with ctrl1:
         search = st.text_input("Search SKU or title", placeholder="Search SKUs, titles, mfg items...", label_visibility="collapsed")
     with ctrl2:
@@ -56,8 +57,6 @@ def render() -> None:
             index=0,
             label_visibility="collapsed",
         )
-    with ctrl3:
-        reorder_mode = st.toggle("Reorder mode", value=st.session_state.get("_queue_reorder_mode", False), key="_queue_reorder_mode")
 
     sort_col = _SORT_OPTIONS[sort_label]
 
@@ -71,33 +70,26 @@ def render() -> None:
     else:
         filtered = filtered.reset_index().rename(columns={"index": "orig_index"})
 
-    if reorder_mode:
-        _render_reorder_hint()
-
-    header_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.5, 1.25, 1.15, 0.95, 0.95])
+    header_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6])
     header_style = "font-size:11px;font-weight:800;text-transform:uppercase;color:#6f8090;padding-bottom:2px;border-bottom:1px solid #e2e8f0;"
     for col, label in zip(
         header_cols,
-        ["#", "ATR", "Item No", "Title", "Mfg Item", "Status", "Done By", "Preview", ""],
+        ["#", "ATR", "Item No", "Title", "Status", "Done By", "Preview", "Open"],
     ):
         col.markdown(f"<div style='{header_style}'>{label}</div>", unsafe_allow_html=True)
 
     changed = False
-    picked_orig = st.session_state.get("_queue_swap_pick")
 
     for pos, (_, row) in enumerate(filtered.iterrows(), start=1):
         orig_idx = int(row["orig_index"])
         atr_type = _queue_atr_label(row.get("ATR Type", ""))
         item_no = str(row["Item No"])
         title = str(row["Title"])
-        mfg = str(row["Mfg Item"])
         status = str(row["Status"])
         done_by = str(row["Done By"])
 
-        row_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.5, 1.25, 1.15, 0.95, 0.95])
+        row_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6])
         pos_style = "padding-top:0.55rem;color:#6f8090;font-weight:700;"
-        if picked_orig == orig_idx:
-            pos_style = "padding-top:0.55rem;color:#ef8e0d;font-weight:800;background:#fff7ed;border-radius:6px;padding-left:6px;"
         row_cols[0].markdown(f"<div style='{pos_style}'>{pos}</div>", unsafe_allow_html=True)
         row_cols[1].markdown(
             f"<div style='padding-top:0.55rem;color:#405166;'>{html.escape(atr_type)}</div>",
@@ -111,19 +103,15 @@ def render() -> None:
             f"<div style='padding-top:0.55rem;'>{html.escape(title[:90])}</div>",
             unsafe_allow_html=True,
         )
-        row_cols[4].markdown(
-            f"<div style='padding-top:0.55rem;color:#6f8090;'>{html.escape(mfg)}</div>",
-            unsafe_allow_html=True,
-        )
         current_status = status if status in STATUS_OPTIONS else STATUS_OPTIONS[0]
-        new_status = row_cols[5].selectbox(
+        new_status = row_cols[4].selectbox(
             "status",
             STATUS_OPTIONS,
             index=STATUS_OPTIONS.index(current_status),
             key=f"queue_status_{item_no}",
             label_visibility="collapsed",
         )
-        new_done_by = row_cols[6].text_input(
+        new_done_by = row_cols[5].text_input(
             "done_by",
             value=done_by,
             key=f"queue_done_{item_no}",
@@ -137,22 +125,15 @@ def render() -> None:
             queue_df.at[orig_idx, "Done By"] = new_done_by
             changed = True
 
-        if row_cols[7].button("Preview", key=f"queue_preview_{item_no}", use_container_width=True):
+        if row_cols[6].button("Preview", key=f"queue_preview_{item_no}", use_container_width=True):
             _preview_dialog(item_no)
 
-        if reorder_mode:
-            btn_label = "Pick" if picked_orig is None else ("Swap" if picked_orig != orig_idx else "Cancel")
-            btn_type = "primary" if picked_orig == orig_idx else "secondary"
-            if row_cols[8].button(btn_label, key=f"queue_reorder_{item_no}", type=btn_type, use_container_width=True):
-                _handle_reorder_click(queue_df, orig_idx)
-                st.rerun()
-        else:
-            if row_cols[8].button("Open", key=f"queue_open_{item_no}", type="primary", use_container_width=True):
-                set_current_item(item_no)
-                mark_status(item_no, "In Progress", new_done_by)
-                st.session_state["active_page"] = "SKU Workspace"
-                st.session_state["workspace_tab"] = "Content"
-                st.rerun()
+        if row_cols[7].button("Open", key=f"queue_open_{item_no}", type="primary", use_container_width=True):
+            set_current_item(item_no)
+            mark_status(item_no, "In Progress", new_done_by)
+            st.session_state["active_page"] = "SKU Workspace"
+            st.session_state["workspace_tab"] = "Content"
+            st.rerun()
 
     if changed:
         st.session_state["queue_df"] = queue_df
@@ -197,6 +178,67 @@ def _render_downloads() -> None:
             use_container_width=True,
         )
 
+        st.markdown("---")
+        st.markdown("### Warranty Export")
+        warranty_rows = []
+        for _, queue_row in queue_df.iterrows():
+            item_no = str(queue_row["Item No"]).strip()
+            if not item_no or item_no not in items:
+                continue
+            item = items[item_no]
+            brand = item["details"].get("warranty_brand", "").strip()
+            months = item["details"].get("warranty_months", "").strip()
+            if brand:
+                warranty_rows.append((item_no, brand, months))
+
+        warranty_name = st.text_input(
+            "Warranty file name",
+            value=st.session_state.get("_queue_warranty_filename", "Warranty Data"),
+            placeholder="Enter warranty file name",
+            key="_queue_warranty_filename",
+        ).strip() or "Warranty Data"
+
+        if warranty_rows:
+            import pandas as pd
+            warranty_data = []
+            warranty_master = st.session_state.get("warranty_df", pd.DataFrame())
+            for item_no, brand, months in warranty_rows:
+                if not warranty_master.empty:
+                    brand_lower = brand.lower()
+                    matched = warranty_master[warranty_master["Brand Name"].str.lower() == brand_lower]
+                    if not matched.empty:
+                        match = matched.iloc[0]
+                        warranty_data.append({
+                            "SKU": item_no,
+                            "SKIP_Y_N": "N",
+                            "MFG_CODE": match.get("Mfg Code", ""),
+                            "DESCR": match.get("Warranty Description", ""),
+                            "MO_PARTS": months,
+                            "MO_LABOR": "",
+                            "URL": match.get("Warranty URL", ""),
+                            "INT_PREFIX": "",
+                            "PHONE#": match.get("Warranty Tel#", ""),
+                            "EXTENSION": "",
+                            "DISCONT": "",
+                        })
+            warranty_df = pd.DataFrame(warranty_data, columns=[
+                "SKU", "SKIP_Y_N", "MFG_CODE", "DESCR", "MO_PARTS", "MO_LABOR",
+                "URL", "INT_PREFIX", "PHONE#", "EXTENSION", "DISCONT"
+            ]) if warranty_data else pd.DataFrame(columns=[
+                "SKU", "SKIP_Y_N", "MFG_CODE", "DESCR", "MO_PARTS", "MO_LABOR",
+                "URL", "INT_PREFIX", "PHONE#", "EXTENSION", "DISCONT"
+            ])
+            st.download_button(
+                "Download Warranty Excel",
+                data=warranty_excel_bytes(warranty_df) if not warranty_df.empty else b"",
+                file_name=f"{warranty_name}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+                disabled=warranty_df.empty,
+            )
+        else:
+            st.caption("No SKUs with warranty information filled in yet.")
+
 
 def _queue_atr_label(value) -> str:
     text = str(value or "").strip()
@@ -216,30 +258,3 @@ def _preview_dialog(item_no: str) -> None:
     components.html(render_html(item, st.session_state["html_template"]), height=760, scrolling=True)
 
 
-def _render_reorder_hint() -> None:
-    picked = st.session_state.get("_queue_swap_pick")
-    if picked is None:
-        msg = "**Reorder mode:** click **Pick** on the row you want to move, then click **Swap** on the target row."
-    else:
-        msg = "**Reorder mode:** click **Swap** on the target row, or **Cancel** on the picked row to abort."
-    st.info(msg, icon="<->")
-
-
-def _handle_reorder_click(queue_df, clicked_orig_idx: int) -> None:
-    picked = st.session_state.get("_queue_swap_pick")
-    if picked is None:
-        st.session_state["_queue_swap_pick"] = clicked_orig_idx
-        return
-    if picked == clicked_orig_idx:
-        st.session_state.pop("_queue_swap_pick", None)
-        return
-    order = list(queue_df.index)
-    if picked not in order or clicked_orig_idx not in order:
-        st.session_state.pop("_queue_swap_pick", None)
-        return
-    order.remove(picked)
-    insert_at = order.index(clicked_orig_idx)
-    order.insert(insert_at, picked)
-    new_df = queue_df.loc[order].reset_index(drop=True)
-    st.session_state["queue_df"] = new_df
-    st.session_state.pop("_queue_swap_pick", None)

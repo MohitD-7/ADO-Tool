@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: transparent; }
+  #box {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 14px;
+    color: #1a2330;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    transition: border-color .12s, box-shadow .12s;
+  }
+  #box:focus {
+    border-color: #ef8e0d;
+    box-shadow: 0 0 0 3px rgba(239,142,13,.18);
+  }
+</style>
+</head>
+<body>
+<input id="box" type="text" list="brand-options" spellcheck="false" placeholder="e.g., Apple, Dell, Lenovo" />
+<datalist id="brand-options"></datalist>
+<script>
+var Streamlit = (function() {
+  var API_VERSION = 1;
+  var RENDER_EVENT = "streamlit:render";
+  var lastHeight = null;
+  var renderHandlers = [];
+
+  function sendBackMsg(type, data) {
+    var payload = Object.assign({ isStreamlitMessage: true, type: type }, data || {});
+    window.parent.postMessage(payload, "*");
+  }
+
+  function onMessageEvent(event) {
+    if (!event.data || event.data.type !== RENDER_EVENT) return;
+    var args = event.data.args || {};
+    renderHandlers.forEach(function(handler) {
+      handler({ args: args, disabled: Boolean(event.data.disabled), theme: event.data.theme });
+    });
+  }
+
+  return {
+    RENDER_EVENT: RENDER_EVENT,
+    events: {
+      addEventListener: function(type, handler) {
+        if (type === RENDER_EVENT) renderHandlers.push(function(event) {
+          handler({ detail: event });
+        });
+      }
+    },
+    setComponentReady: function() {
+      window.addEventListener("message", onMessageEvent);
+      sendBackMsg("streamlit:componentReady", { apiVersion: API_VERSION });
+    },
+    setFrameHeight: function(height) {
+      height = height || document.body.scrollHeight;
+      if (height !== lastHeight) {
+        lastHeight = height;
+        sendBackMsg("streamlit:setFrameHeight", { height: height });
+      }
+    },
+    setComponentValue: function(value) {
+      sendBackMsg("streamlit:setComponentValue", { value: value, dataType: "json" });
+    }
+  };
+})();
+
+var box = document.getElementById('box');
+var datalist = document.getElementById('brand-options');
+var eventCounter = 0;
+var optionsPainted = false;
+var lastSent = null;
+
+function paintOptions(brands) {
+  if (optionsPainted) return;
+  optionsPainted = true;
+  var frag = document.createDocumentFragment();
+  (brands || []).forEach(function(name) {
+    var opt = document.createElement('option');
+    opt.value = name;
+    frag.appendChild(opt);
+  });
+  datalist.appendChild(frag);
+}
+
+function commit() {
+  var value = box.value;
+  if (value === lastSent) return;
+  lastSent = value;
+  Streamlit.setComponentValue({
+    value: value,
+    eventId: String(Date.now()) + ":" + String(++eventCounter)
+  });
+}
+
+box.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    commit();
+    box.blur();
+  }
+});
+box.addEventListener('blur', function() { commit(); });
+
+Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, function(event) {
+  var args = event.detail.args || {};
+  paintOptions(args.brands);
+  var initial = args.initial == null ? "" : String(args.initial);
+  if (document.activeElement !== box && box.value !== initial) {
+    box.value = initial;
+    lastSent = initial;
+  }
+  Streamlit.setFrameHeight(44);
+});
+
+Streamlit.setComponentReady();
+</script>
+</body>
+</html>

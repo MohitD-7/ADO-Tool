@@ -14,6 +14,7 @@ from sku_manager.data.defaults import (
     default_html_template,
     default_manufacturers,
     default_special_character_rules,
+    default_warranty,
 )
 
 
@@ -25,12 +26,21 @@ TABLE_DEFINITIONS = {
     "battery_types_df": ("battery_types", default_battery_types),
     "special_rules_df": ("special_rules", default_special_character_rules),
     "checklist_df": ("checklist", default_checklist),
+    "warranty_df": ("warranty", default_warranty),
 }
+
+
+def coerce_uploaded_frame(df: pd.DataFrame, state_key: str) -> pd.DataFrame:
+    """Align an uploaded replacement table to a reference table's expected columns/types."""
+    _, default_factory = TABLE_DEFINITIONS[state_key]
+    return _coerce_frame(df.to_dict("records"), default_factory)
 
 
 def _coerce_frame(raw_rows: Any, default_factory) -> pd.DataFrame:
     default_df = default_factory()
-    if isinstance(raw_rows, list):
+    if isinstance(raw_rows, pd.DataFrame):
+        df = raw_rows.copy()
+    elif isinstance(raw_rows, list):
         df = pd.DataFrame(raw_rows)
     else:
         df = default_df.copy()

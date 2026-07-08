@@ -465,6 +465,38 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
     return queue_df, items
 
 
+def load_warranty_data(warranty_df: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Load warranty data from session state or provided DataFrame.
+
+    Warranty data is stored in reference_data.json and cached in session state.
+    Creates a lowercase brand index for case-insensitive lookups.
+    """
+    import streamlit as st
+    if warranty_df is not None:
+        df = warranty_df.copy()
+    else:
+        try:
+            df = st.session_state.get("warranty_df", pd.DataFrame()).copy()
+        except Exception:
+            df = pd.DataFrame()
+
+    if df.empty:
+        return pd.DataFrame()
+
+    df = df.fillna("")
+    if "Brand Name" in df.columns:
+        df["brand_lower"] = df["Brand Name"].str.lower()
+    return df
+
+
+def warranty_excel_bytes(warranty_df: pd.DataFrame) -> bytes:
+    """Generate Excel bytes for warranty data."""
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
+        _write_sheet(writer, warranty_df, "Warranty")
+    return buffer.getvalue()
+
+
 def render_html(item: dict, template: str) -> str:
     details = item["details"]
     include_rows = []

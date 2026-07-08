@@ -7,6 +7,65 @@ import streamlit as st
 from sku_manager.services.validation import char_count_status
 
 
+def enable_global_spellcheck() -> None:
+    """Force browser spellcheck (red squiggly underlines) on every native text input/textarea,
+    including fields that aren't currently focused.
+
+    Must be called on every render (not gated behind a "ran once" flag): the
+    HTML below is identical across reruns, so Streamlit keeps the same iframe
+    without reloading it, which is what lets the interval/observer persist. If
+    this were only called once, Streamlit would unmount the iframe on the next
+    rerun (since it would no longer appear in that run's output) and it
+    would be destroyed.
+
+    Browsers only actively spellcheck text entered via real keystrokes while a
+    field has focus; when Streamlit re-renders and sets a field's value
+    programmatically, the browser never re-scans it, so marks vanish the
+    moment focus leaves. To work around this, unfocused fields get their
+    `spellcheck` attribute toggled off/on periodically, which forces the
+    browser to redo its check against whatever text is currently there.
+    """
+    import streamlit.components.v1 as components
+    components.html(
+        """
+        <script>
+        (function() {
+          function recheck(el) {
+            try {
+              el.setAttribute('spellcheck', 'false');
+              void el.offsetHeight;
+              el.setAttribute('spellcheck', 'true');
+            } catch (e) {}
+          }
+
+          function applySpellcheck(doc) {
+            if (!doc) return;
+            var els = doc.querySelectorAll('textarea, input[type="text"], input:not([type])');
+            els.forEach(function(el) {
+              if (!el.getAttribute('lang')) el.setAttribute('lang', 'en-US');
+              if (el.getAttribute('spellcheck') !== 'true') {
+                el.setAttribute('spellcheck', 'true');
+              } else if (doc.activeElement !== el) {
+                recheck(el);
+              }
+            });
+          }
+
+          try {
+            var doc = window.parent.document;
+            doc.documentElement.setAttribute('lang', 'en-US');
+            applySpellcheck(doc);
+            var observer = new MutationObserver(function() { applySpellcheck(doc); });
+            observer.observe(doc.body, { childList: true, subtree: true });
+            setInterval(function() { applySpellcheck(doc); }, 700);
+          } catch (e) {}
+        })();
+        </script>
+        """,
+        height=0,
+    )
+
+
 def page_header(kicker: str, title: str, status: str | None = None) -> None:
     safe_kicker = html.escape(str(kicker))
     safe_title = html.escape(str(title))
@@ -266,6 +325,27 @@ def shortcut_capture(current: str, key: str) -> str:
     result = comp(initial=current or "", key=key, default={"chord": current or ""})
     if isinstance(result, dict) and "chord" in result:
         return str(result.get("chord") or "")
+    return current or ""
+
+
+def _get_brand_autocomplete_component():
+    from pathlib import Path
+    import streamlit.components.v1 as components
+    _dir = Path(__file__).with_name("brand_autocomplete_component")
+    return components.declare_component("brand_autocomplete", path=str(_dir))
+
+
+def brand_autocomplete(current: str, brands: list[str], key: str) -> str:
+    """
+    Text box backed by a native browser datalist, so typing e.g. "de" shows a
+    live dropdown of every brand in `brands` containing that text. The value
+    is sent back to Python on Enter or on losing focus (not per keystroke).
+    Returns the committed value, or `current` if nothing committed yet.
+    """
+    comp = _get_brand_autocomplete_component()
+    result = comp(initial=current or "", brands=brands, key=key, default={"value": current or ""})
+    if isinstance(result, dict) and "value" in result:
+        return str(result.get("value") or "")
     return current or ""
 
 

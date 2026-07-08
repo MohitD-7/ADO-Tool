@@ -101,6 +101,26 @@ def default_html_template() -> str:
 </html>"""
 
 
+def default_warranty() -> pd.DataFrame:
+    from pathlib import Path
+    warranty_file = Path(__file__).parent / "warranty_master.tsv"
+    if warranty_file.exists():
+        try:
+            df = pd.read_csv(warranty_file, sep="\t", dtype=str)
+            # Convert warranty months to numeric
+            numeric_cols = ["Warranty Months", "Months for Parts"]
+            for col in numeric_cols:
+                if col in df.columns:
+                    df[col] = pd.to_numeric(df[col], errors="coerce")
+            return df.fillna("")
+        except Exception:
+            pass
+    return pd.DataFrame(columns=[
+        "Brand Name", "Mfg Code", "Warranty Description", "Warranty URL",
+        "Warranty Tel#", "Warranty Months", "Months for Parts", "Comments"
+    ])
+
+
 def default_checklist() -> pd.DataFrame:
     return pd.DataFrame(
         {

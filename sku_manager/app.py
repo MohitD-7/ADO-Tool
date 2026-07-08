@@ -19,6 +19,7 @@ from sku_manager.pages import (
 )
 from sku_manager.state import init_state, sync_description_state
 from sku_manager.styles import inject_styles
+from sku_manager.ui.components import enable_global_spellcheck
 from sku_manager.ui.layout import sidebar_nav
 
 
@@ -46,6 +47,7 @@ def main() -> None:
     )
     init_state()
     inject_styles()
+    enable_global_spellcheck()
     sync_description_state()
     page = sidebar_nav()
     PAGE_RENDERERS[page]()

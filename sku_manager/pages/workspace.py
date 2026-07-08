@@ -89,6 +89,9 @@ def _render_content_tab(item: dict) -> None:
             ),
             key_prefix="content_feedback",
         )
+        st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+        st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
+        source_video_panel(item, key_suffix="workspace", expanded=False)
 
 
 def render() -> None:
@@ -100,8 +103,6 @@ def render() -> None:
     sync_description_state(item)
     active_tab = workspace_topbar()
 
-    st.markdown('<div class="vo-workspace-content-gap">&#8203;</div>', unsafe_allow_html=True)
-    source_video_panel(item, key_suffix="workspace", expanded=False)
     st.markdown('<div class="vo-workspace-content-gap">&#8203;</div>', unsafe_allow_html=True)
 
     if active_tab == "Content":

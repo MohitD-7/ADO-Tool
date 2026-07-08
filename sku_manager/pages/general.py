@@ -8,7 +8,14 @@ from sku_manager.config import BATTERY_INFO_OPTIONS
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import field_notes_editor, hidden_notes, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.components import (
+    brand_autocomplete,
+    field_notes_editor,
+    hidden_notes,
+    page_header,
+    right_feedback_panel,
+    source_video_panel,
+)
 
 
 def _select_options(df, column: str) -> list[str]:
@@ -16,6 +23,13 @@ def _select_options(df, column: str) -> list[str]:
         return [""]
     values = [str(value).strip() for value in df[column].tolist() if str(value).strip()]
     return values or [""]
+
+
+def _warranty_brand_options() -> list[str]:
+    df = st.session_state.get("warranty_df")
+    if df is None or df.empty or "Brand Name" not in df.columns:
+        return []
+    return sorted({str(value).strip() for value in df["Brand Name"].tolist() if str(value).strip()})
 
 
 def _dv2_label(text: str, value: str | None = None, limit: int | None = None) -> None:
@@ -97,6 +111,43 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                       on_click=_copy_title, use_container_width=True)
         if show_notes and pane is None:
             hidden_notes(item, "title")
+
+        # Warranty fields
+        details.setdefault("warranty_brand", "")
+        details.setdefault("warranty_months", "")
+        wb_col, wm_col = st.columns(2)
+        with wb_col:
+            _dv2_label("Warranty Brand (optional)")
+            brand_options = _warranty_brand_options()
+            details["warranty_brand"] = brand_autocomplete(
+                details.get("warranty_brand", ""),
+                brand_options,
+                key=f"warranty_brand_{details['item_no']}",
+            )
+            typed_brand = details["warranty_brand"].strip()
+            if typed_brand:
+                matched = any(typed_brand.lower() == b.lower() for b in brand_options)
+                if matched:
+                    st.markdown(
+                        '<div style="color:#2a7a3a;font-size:12px;font-weight:700;margin-top:2px;">'
+                        '&#9989; Matched in warranty master list</div>',
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.markdown(
+                        '<div style="color:#c62828;font-size:12px;font-weight:700;margin-top:2px;">'
+                        '&#9888; Not found in warranty master list</div>',
+                        unsafe_allow_html=True,
+                    )
+        with wm_col:
+            _dv2_label("Warranty Months (optional)")
+            details["warranty_months"] = st.text_input(
+                "Warranty Months", value=details.get("warranty_months", ""),
+                key=f"warranty_months_{details['item_no']}",
+                label_visibility="collapsed",
+                placeholder="e.g., 12",
+            )
+
         st.markdown('<h2 class="dv2-section-title">Battery &amp; Compliance</h2>', unsafe_allow_html=True)
 
         b1, b2, b3, b4 = st.columns(4)
@@ -137,9 +188,6 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 disabled=battery_disabled,
                 label_visibility="collapsed",
             )
-        if show_links:
-            st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
-            source_video_panel(item, key_suffix="general_main", expanded=False)
         if show_format and st.button("Format Visible Text", key=f"format_all_{details['item_no']}",
                                      type="primary", use_container_width=True):
             rules_df = st.session_state["special_rules_df"]
@@ -166,3 +214,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 item_warnings(details, item["features"], item["specs"], item["highlights"]),
                 key_prefix="general_feedback",
             )
+            if show_links:
+                st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+                st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
+                source_video_panel(item, key_suffix="general_main", expanded=False)
