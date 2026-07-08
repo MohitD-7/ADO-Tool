@@ -61,8 +61,7 @@ def render() -> None:
             st.code(result.message)
         return
 
-    st.success(f"Loaded {len(result.queue_df)} SKUs. Review the preview below, then click Start Batch.")
-    st.dataframe(result.queue_df.head(25), width="stretch", hide_index=True)
+    st.success(f"Loaded {len(result.queue_df)} SKUs. Click Start Batch, or review the preview below first.")
 
     col_a, col_b = st.columns([1, 4])
     with col_a:
@@ -72,3 +71,5 @@ def render() -> None:
             st.rerun()
     with col_b:
         st.caption("You can still edit reference data from the Reference Data page before or after starting.")
+
+    st.dataframe(result.queue_df.head(25), width="stretch", hide_index=True)

@@ -512,31 +512,31 @@ def inject_styles() -> None:
           background: #FFFFFF;
           border: 1px solid var(--dv2-neutral-200);
           border-radius: 4px;                 /* Shapes: 0.25rem */
-          padding: 16px 20px;                 /* Density: high, 4px base */
-          margin-bottom: 12px;
+          padding: 8px 16px;                  /* Density: high, 4px base */
+          margin-bottom: 8px;
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 16px;
         }
-        .dv2 .dv2-header-left { min-width: 0; flex: 1; }
+        .dv2 .dv2-header-left { min-width: 0; flex: 1; overflow: hidden; }
         .dv2 .dv2-chip-row {
-          display: flex; align-items: center; gap: 8px;
-          margin-bottom: 8px;
+          display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+          margin-bottom: 3px;
         }
         .dv2 .dv2-id-chip {
           background: var(--dv2-neutral-100);
           color: var(--dv2-neutral-900);
           border: 1px solid var(--dv2-neutral-200);
-          border-radius: 12px;                /* Shapes: chips are pill 12px */
-          padding: 2px 10px;
+          border-radius: 10px;                /* Shapes: chips are pill 12px */
+          padding: 1px 8px;
           font-family: 'JetBrains Mono', ui-monospace, monospace;
-          font-size: 12px; line-height: 18px; font-weight: 400;
+          font-size: 11px; line-height: 15px; font-weight: 400;
         }
         .dv2 .dv2-status-chip {
-          border-radius: 12px;                /* pill */
-          padding: 2px 10px;
-          font-size: 11px; line-height: 18px; font-weight: 700;
+          border-radius: 10px;                /* pill */
+          padding: 1px 8px;
+          font-size: 10px; line-height: 15px; font-weight: 700;
           letter-spacing: .06em; text-transform: uppercase;
         }
         .dv2 .dv2-status-draft {
@@ -553,13 +553,17 @@ def inject_styles() -> None:
         }
         .dv2 .dv2-header-title {
           font-family: 'Inter', sans-serif;
-          font-size: 24px; line-height: 30px; font-weight: 700;
+          font-size: 16px; line-height: 20px; font-weight: 700;
           letter-spacing: -.01em;
           color: var(--dv2-neutral-900);
-          margin: 0 0 4px 0;
+          margin: 0 0 2px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100%;
         }
         .dv2 .dv2-header-meta {
-          font-size: 13px; line-height: 18px;
+          font-size: 11px; line-height: 14px;
           color: var(--dv2-neutral-500);
           display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
           margin: 0;
@@ -587,8 +591,8 @@ def inject_styles() -> None:
           letter-spacing: .06em;
           color: var(--dv2-neutral-700);
           border-bottom: 1px solid var(--dv2-neutral-200);
-          padding-bottom: 6px;
-          margin: 0 0 10px 0 !important;
+          padding: 16px 0 6px;
+          margin: 0 0 12px 0 !important;
           border-top: none !important;
         }
 

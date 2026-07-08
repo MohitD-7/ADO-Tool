@@ -51,22 +51,8 @@ def render(show_header: bool = True) -> None:
                 st.markdown(f"- {warning}", unsafe_allow_html=True)
     else:
         st.success("Current item is ready for submit/export.")
-    xlsx_col, txt_col = st.columns(2)
-    excel_filename = xlsx_col.text_input(
-        "Excel file name",
-        value=st.session_state.get("_export_excel_filename", "Items Processed"),
-        placeholder="Enter Excel file name (no extension needed)",
-        key="_export_excel_filename",
-    ).strip() or "Items Processed"
-    text_filename = txt_col.text_input(
-        "Text file name",
-        value=st.session_state.get("_export_text_filename", "Items Processed"),
-        placeholder="Enter text file name (no extension needed)",
-        key="_export_text_filename",
-    ).strip() or "Items Processed"
-
-    a, b, c = st.columns([1, 1, 1])
-    submit_clicked = a.button(
+    submit_col, _ = st.columns([1, 2])
+    submit_clicked = submit_col.button(
         "Submit Current Item",
         type="primary",
         use_container_width=True,
@@ -78,20 +64,37 @@ def render(show_header: bool = True) -> None:
             mark_status(ino, "Completed")
             st.session_state["_submitted_ino"] = ino
             st.rerun()
-    b.download_button(
-        "Download Excel",
-        data=excel_bytes(output_df, input_df, video_links_df),
-        file_name=f"{excel_filename}.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        use_container_width=True,
-    )
-    c.download_button(
-        "Download Text",
-        data=text_bytes(output_df),
-        file_name=f"{text_filename}.txt",
-        mime="text/plain",
-        use_container_width=True,
-    )
+
+    with st.expander("Download", expanded=False):
+        xlsx_col, txt_col = st.columns(2)
+        excel_filename = xlsx_col.text_input(
+            "Excel file name",
+            value=st.session_state.get("_export_excel_filename", "Items Processed"),
+            placeholder="Enter Excel file name (no extension needed)",
+            key="_export_excel_filename",
+        ).strip() or "Items Processed"
+        text_filename = txt_col.text_input(
+            "Text file name",
+            value=st.session_state.get("_export_text_filename", "Items Processed"),
+            placeholder="Enter text file name (no extension needed)",
+            key="_export_text_filename",
+        ).strip() or "Items Processed"
+
+        dl_xlsx, dl_text = st.columns(2)
+        dl_xlsx.download_button(
+            "Download Excel",
+            data=excel_bytes(output_df, input_df, video_links_df),
+            file_name=f"{excel_filename}.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            use_container_width=True,
+        )
+        dl_text.download_button(
+            "Download Text",
+            data=text_bytes(output_df),
+            file_name=f"{text_filename}.txt",
+            mime="text/plain",
+            use_container_width=True,
+        )
     tab_preview, tab_rows, tab_html = st.tabs(["Product Preview", "Output Rows", "HTML Template"])
     with tab_preview:
         html = render_html(item, st.session_state["html_template"])

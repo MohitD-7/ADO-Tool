@@ -174,6 +174,29 @@ section[data-testid="stSidebar"] hr {
   margin: 8px 0 12px !important;
 }
 
+/* Collapsed native widget labels (label_visibility="collapsed") reserve a full
+   ~36px by default, which pushed inputs too far from our custom .dv2-label-row.
+   Rather than remove them (which made the label overlap the box), keep them as a
+   small fixed-height spacer so every widget — text box, dropdown, number field —
+   sits a consistent, non-overlapping gap below its label and rows stay aligned. */
+label[data-testid="stWidgetLabel"][aria-hidden="true"] {
+  display: block !important;
+  visibility: hidden !important;   /* keep the reserved space, hide the text */
+  height: 14px !important;
+  min-height: 14px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* The brand autocomplete is a custom iframe component, so it has no collapsed
+   native label to act as a spacer. Give it the same 14px gap below its label
+   so it lines up with the standard text fields. */
+iframe[title="sku_manager.ui.components.brand_autocomplete"] {
+  display: block !important;
+  margin-top: 14px !important;
+}
+
 section[data-testid="stSidebar"] .stRadio > label,
 section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"],
 section[data-testid="stSidebar"] div[data-testid="stWidgetLabel"],
@@ -227,9 +250,18 @@ section[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div p {
   border: 1px solid var(--vo-border) !important;
   border-left: 0 !important;
   border-radius: var(--vo-radius-lg) !important;
-  padding: 16px 20px !important;
-  margin: 0 0 12px !important;
+  padding: 8px 16px !important;
+  margin: 0 0 8px !important;
   box-shadow: none !important;
+}
+
+.dv2-header-left {
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.dv2-chip-row {
+  flex-wrap: wrap !important;
 }
 
 .vo-kicker {
@@ -245,20 +277,25 @@ section[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div p {
 .vo-title,
 .dv2-header-title {
   color: var(--vo-text) !important;
-  font-size: 24px !important;
-  line-height: 32px !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
   margin: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  display: block !important;
 }
 
 .vo-badge,
 .dv2-status-chip,
 .dv2-id-chip {
-  border-radius: 12px !important;
-  padding: 2px 8px !important;
-  font-size: 11px !important;
-  line-height: 16px !important;
+  border-radius: 10px !important;
+  padding: 1px 8px !important;
+  font-size: 10px !important;
+  line-height: 15px !important;
   font-weight: 700 !important;
   letter-spacing: 0 !important;
   text-transform: uppercase !important;
@@ -323,6 +360,7 @@ section[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div p {
 
 .dv2-section-title {
   color: var(--vo-text) !important;
+  background: transparent !important;
   font-size: 12px !important;
   line-height: 16px !important;
   font-weight: 600 !important;
@@ -330,9 +368,8 @@ section[data-testid="stSidebar"] .stRadio input[type="radio"]:checked + div p {
   letter-spacing: 0 !important;
   border-top: none !important;
   border-bottom: 2px solid var(--vo-orange) !important;
-  padding-top: 0 !important;
-  padding-bottom: 6px !important;
-  margin: 12px 0 10px !important;
+  padding: 16px 0 6px !important;
+  margin: 0 0 12px !important;
 }
 
 .vo-divider {
@@ -688,8 +725,7 @@ div[data-testid="stElementContainer"]:has(div[data-testid="stMarkdownContainer"]
 
 /* Keep section headings as the only orange separator, never as rounded bars. */
 h3,
-.stSubheader,
-.dv2-section-title {
+.stSubheader {
   border-radius: 0 !important;
   background: transparent !important;
 }
@@ -932,8 +968,7 @@ div[data-testid="stMarkdownContainer"]:has(> .vo-count-bad) {
 
 /* Section titles carry the orange line; no extra rounded bar around them. */
 h3,
-.stSubheader,
-.dv2-section-title {
+.stSubheader {
   color: var(--vo-text) !important;
   background: transparent !important;
   border-top: 0 !important;
@@ -946,6 +981,13 @@ h3,
   font-weight: 600 !important;
   padding: 0 0 6px !important;
   margin: 14px 0 8px !important;
+}
+
+.dv2-section-title {
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
 }
 .vo-workspace-content-gap { display: block !important; height: 10px !important; min-height: 10px !important; line-height: 0 !important; font-size: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; }
 

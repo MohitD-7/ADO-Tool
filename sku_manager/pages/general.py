@@ -100,7 +100,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             st.session_state.get(short_title_key, ""),
             LIMITS["short_title"],
         )
-        cs_in, cs_btn = st.columns([5, 1])
+        cs_in, cs_btn = st.columns([5, 1], vertical_alignment="bottom")
         with cs_in:
             details["short_title"] = st.text_input(
                 "Short Title", key=short_title_key,

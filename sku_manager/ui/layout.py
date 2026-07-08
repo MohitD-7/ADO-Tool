@@ -133,7 +133,7 @@ def _dv2_workspace_header(details: dict) -> None:
               <span class="dv2-id-chip">ID: {item_no}</span>
               <span class="dv2-status-chip dv2-status-draft">Draft</span>
             </div>
-            <h1 class="dv2-header-title">{title}</h1>
+            <h1 class="dv2-header-title" title="{title}">{title}</h1>
             <p class="dv2-header-meta">{meta_html}</p>
           </div>
         </div>

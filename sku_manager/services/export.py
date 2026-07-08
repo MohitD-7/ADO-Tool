@@ -512,7 +512,13 @@ def render_html(item: dict, template: str) -> str:
     includes = "".join(include_rows)
     features = "".join(f"<tr><td>{idx * 10}</td><td>{feature}</td></tr>" for idx, feature in enumerate(item.get("features", []), start=1))
     specs = "".join(
-        f"<tr><td>{idx * 10}</td><td></td><td></td><td>{spec.get('Spec', '')}</td><td>{spec.get('Value', '')}</td></tr>"
+        "<tr>"
+        f"<td>{str(spec.get('category', '') or '')}</td>"
+        f"<td>{idx * 10}</td>"
+        f"<td>{str(spec.get('group', '') or '')}</td>"
+        f"<td>{spec.get('Spec', '')}</td>"
+        f"<td>{spec.get('Value', '')}</td>"
+        "</tr>"
         for idx, spec in enumerate(item.get("specs", []), start=1)
     )
     highlights = "".join(f"<li>{highlight}</li>" for highlight in item.get("highlights", []))
