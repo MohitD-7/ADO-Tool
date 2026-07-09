@@ -20,6 +20,7 @@ def init_state() -> None:
     defaults = {
         "queue_df": pd.DataFrame(columns=QUEUE_COLUMNS),
         "items": {},
+        "variants": {},
         "current_item_no": "",
         "active_page": "Upload",
         "reference_data_admin": False,
@@ -52,6 +53,7 @@ def set_batch(queue_df: pd.DataFrame) -> None:
     queue_df = queue_df[QUEUE_COLUMNS].fillna("").astype(str)
     st.session_state["queue_df"] = queue_df
     st.session_state["items"] = {}
+    st.session_state["variants"] = {}
     for _, row in queue_df.iterrows():
         item_no = str(row["Item No"]).strip()
         if not item_no:
@@ -119,12 +121,10 @@ def set_current_item(item_no: str) -> None:
         st.session_state["current_item_no"] = item_no
 
 
-def mark_status(item_no: str, status: str, done_by: str | None = None) -> None:
+def mark_status(item_no: str, status: str) -> None:
     queue = st.session_state["queue_df"].copy()
     mask = queue["Item No"].astype(str) == str(item_no)
     queue.loc[mask, "Status"] = status
-    if done_by is not None:
-        queue.loc[mask, "Done By"] = done_by
     st.session_state["queue_df"] = queue
 
 
@@ -138,7 +138,11 @@ def sync_item_identity(item_no: str, title: str, mfg_item: str) -> None:
     if not item["details"].get("mfg_item"):
         item["details"]["mfg_item"] = mfg_item
     queue = st.session_state.get("queue_df")
-    if queue is not None and "ATR Type" in queue.columns:
+    if queue is not None:
         match = queue[queue["Item No"].astype(str) == str(item_no)]
         if not match.empty:
-            item["details"]["atr_type"] = str(match.iloc[0].get("ATR Type", ""))
+            row = match.iloc[0]
+            item["details"]["atr_type"] = str(row.get("ATR Type", ""))
+            item["details"]["jira"] = str(row.get("JIRA", ""))
+            item["details"]["input_title"] = str(row.get("Title", title))
+            item["details"]["input_mfg_item"] = str(row.get("Mfg Item", mfg_item))

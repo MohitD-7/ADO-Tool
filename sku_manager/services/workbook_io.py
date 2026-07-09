@@ -11,6 +11,7 @@ from sku_manager.config import QUEUE_COLUMNS
 
 REQUIRED_COLUMNS = ["Item No", "Title", "Mfg Item"]
 ATR_COLUMN = "ATR Type"
+JIRA_COLUMN = "JIRA"
 
 ALIASES = {
     "atr": ATR_COLUMN,
@@ -19,6 +20,11 @@ ALIASES = {
     "parent child": ATR_COLUMN,
     "parent/child": ATR_COLUMN,
     "relationship": ATR_COLUMN,
+    "jira": JIRA_COLUMN,
+    "jira #": JIRA_COLUMN,
+    "jira#": JIRA_COLUMN,
+    "jira no": JIRA_COLUMN,
+    "jira number": JIRA_COLUMN,
     "item no": "Item No",
     "item number": "Item No",
     "item#": "Item No",
@@ -82,16 +88,17 @@ def _relationship_queue(df: pd.DataFrame) -> pd.DataFrame:
     work = df.copy()
     if ATR_COLUMN not in work.columns:
         work[ATR_COLUMN] = ""
+    if JIRA_COLUMN not in work.columns:
+        work[JIRA_COLUMN] = ""
 
-    for column in [ATR_COLUMN, *REQUIRED_COLUMNS]:
+    for column in [ATR_COLUMN, JIRA_COLUMN, *REQUIRED_COLUMNS]:
         work[column] = work[column].fillna("").astype(str).map(_clean)
 
     work = work[work["Item No"] != ""].copy()
     if work.empty:
-        return pd.DataFrame(columns=[ATR_COLUMN, *REQUIRED_COLUMNS])
+        return pd.DataFrame(columns=[ATR_COLUMN, JIRA_COLUMN, *REQUIRED_COLUMNS])
 
     child_rows_by_parent: dict[str, list[int]] = defaultdict(list)
-    child_row_indices: set[int] = set()
     parent_indices_by_sku: dict[str, int] = {}
 
     for idx, row in work.iterrows():
@@ -103,7 +110,6 @@ def _relationship_queue(df: pd.DataFrame) -> pd.DataFrame:
         parent_sku = _child_parent_sku(raw_atr)
         if parent_sku:
             child_rows_by_parent[_sku_key(parent_sku)].append(idx)
-            child_row_indices.add(idx)
 
     ordered_indices: list[int] = []
     seen: set[int] = set()
@@ -143,7 +149,7 @@ def _relationship_queue(df: pd.DataFrame) -> pd.DataFrame:
         return "Standalone"
 
     work[ATR_COLUMN] = work.apply(label, axis=1)
-    return work.loc[ordered_indices, [ATR_COLUMN, *REQUIRED_COLUMNS]].reset_index(drop=True)
+    return work.loc[ordered_indices, [ATR_COLUMN, JIRA_COLUMN, *REQUIRED_COLUMNS]].reset_index(drop=True)
 
 
 def read_queue_workbook(file: BinaryIO, sheet_name: str | int = 0) -> WorkbookLoadResult:
@@ -160,6 +166,5 @@ def read_queue_workbook(file: BinaryIO, sheet_name: str | int = 0) -> WorkbookLo
 
     queue_df = _relationship_queue(df)
     queue_df["Status"] = ""
-    queue_df["Done By"] = ""
     queue_df = queue_df[QUEUE_COLUMNS]
     return WorkbookLoadResult(True, queue_df, [], original_columns)

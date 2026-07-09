@@ -418,6 +418,10 @@ function applyIncomingValue(args) {
     suppressChange = false;
     dirty = false;
     lastSentValue = next;
+    updateCounter();
+    updatePreview();
+    scheduleTextAudit(80);
+    scheduleRepaint();
     return;
   }
   if (dirty) return;
@@ -463,7 +467,17 @@ function installParentNavigationSync() {
     if (parentClickHandler) doc.removeEventListener("click", parentClickHandler, true);
     if (parentMouseDownHandler) doc.removeEventListener("mousedown", parentMouseDownHandler, true);
 
-    parentMouseDownHandler = null;
+    parentMouseDownHandler = function(event) {
+      if (!cm) return;
+      var target = event.target;
+      if (!target || !target.closest) return;
+      var commitTarget = target.closest(
+        "button, input[type='button'], input[type='submit'], " +
+        "[role='button'], [data-testid='stButton'] button"
+      );
+      if (!commitTarget) return;
+      commitValue({ reason: "parent_mousedown" });
+    };
 
     parentClickHandler = function(event) {
       if (!cm) return;
@@ -479,9 +493,11 @@ function installParentNavigationSync() {
       commitValue({ reason: "parent_click" });
     };
 
+    doc.addEventListener("mousedown", parentMouseDownHandler, true);
     doc.addEventListener("click", parentClickHandler, true);
     window.addEventListener("pagehide", function() {
       try {
+        doc.removeEventListener("mousedown", parentMouseDownHandler, true);
         doc.removeEventListener("click", parentClickHandler, true);
       } catch (e) {}
     });

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from sku_manager.pages import description, features, general, highlights, preview_export, specs
+from sku_manager.pages import description, features, general, highlights, preview_export, specs, var_opts
 from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, sync_description_state
 from sku_manager.ui.components import field_notes_editor, right_feedback_panel, source_video_panel
@@ -106,5 +106,7 @@ def render() -> None:
         _render_content_tab(item)
     elif active_tab == "Specs":
         specs.render(show_header=False, show_links=False)
+    elif active_tab == "VarOpts":
+        var_opts.render()
     else:
         preview_export.render(show_header=False)

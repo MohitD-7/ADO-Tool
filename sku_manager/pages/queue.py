@@ -7,6 +7,8 @@ import streamlit.components.v1 as components
 
 from sku_manager.config import STATUS_OPTIONS
 from sku_manager.services.export import (
+    battery_excel_bytes,
+    build_battery_df,
     build_input_sheet_df,
     build_output_df,
     build_video_links_df,
@@ -14,6 +16,11 @@ from sku_manager.services.export import (
     render_html,
     text_bytes,
     warranty_excel_bytes,
+)
+from sku_manager.services.variants import (
+    build_variant_df,
+    variant_completeness,
+    variant_excel_bytes,
 )
 from sku_manager.state import mark_status, set_current_item, sync_description_state
 from sku_manager.ui.components import page_header
@@ -24,6 +31,7 @@ _SORT_OPTIONS = {
     "Item No":             "Item No",
     "Mfg Item":            "Mfg Item",
     "Title":               "Title",
+    "JIRA":                "JIRA",
     "Status":              "Status",
 }
 
@@ -49,7 +57,7 @@ def render() -> None:
 
     ctrl1, ctrl2 = st.columns([3, 2])
     with ctrl1:
-        search = st.text_input("Search SKU or title", placeholder="Search SKUs, titles, mfg items...", label_visibility="collapsed")
+        search = st.text_input("Search SKU or title", placeholder="Search SKUs, titles, mfg items, JIRA...", label_visibility="collapsed")
     with ctrl2:
         sort_label = st.selectbox(
             "Sort by",
@@ -74,7 +82,7 @@ def render() -> None:
     header_style = "font-size:11px;font-weight:800;text-transform:uppercase;color:#6f8090;padding-bottom:2px;border-bottom:1px solid #e2e8f0;"
     for col, label in zip(
         header_cols,
-        ["#", "ATR", "Item No", "Title", "Status", "Done By", "Preview", "Open"],
+        ["#", "ATR", "Item No", "Title", "Status", "JIRA", "Preview", "Open"],
     ):
         col.markdown(f"<div style='{header_style}'>{label}</div>", unsafe_allow_html=True)
 
@@ -88,10 +96,11 @@ def render() -> None:
     for pos, (_, row) in enumerate(filtered.iterrows(), start=1):
         orig_idx = int(row["orig_index"])
         atr_type = _queue_atr_label(row.get("ATR Type", ""))
+        is_child = str(row.get("ATR Type", "")).strip() == ""
         item_no = str(row["Item No"])
         title = str(row["Title"])
         status = str(row["Status"])
-        done_by = str(row["Done By"])
+        jira = str(row.get("JIRA", ""))
 
         row_cols = st.columns(
             [0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6],
@@ -119,26 +128,33 @@ def render() -> None:
             key=f"queue_status_{item_no}",
             label_visibility="collapsed",
         )
-        new_done_by = row_cols[5].text_input(
-            "done_by",
-            value=done_by,
-            key=f"queue_done_{item_no}",
-            label_visibility="collapsed",
-            placeholder="Done By",
+        row_cols[5].markdown(
+            f"<div style='color:#405166;'>{html.escape(jira)}</div>",
+            unsafe_allow_html=True,
         )
         if status != new_status:
             queue_df.at[orig_idx, "Status"] = new_status
             changed = True
-        if done_by != new_done_by:
-            queue_df.at[orig_idx, "Done By"] = new_done_by
-            changed = True
 
-        if row_cols[6].button("Preview", key=f"queue_preview_{item_no}", use_container_width=True):
+        if row_cols[6].button(
+            "Preview",
+            key=f"queue_preview_{item_no}",
+            use_container_width=True,
+            disabled=is_child,
+            help="Child variants are configured under Var Opts, not previewed individually." if is_child else None,
+        ):
             _preview_dialog(item_no)
 
-        if row_cols[7].button("Open", key=f"queue_open_{item_no}", type="primary", use_container_width=True):
+        if row_cols[7].button(
+            "Open",
+            key=f"queue_open_{item_no}",
+            type="primary",
+            use_container_width=True,
+            disabled=is_child,
+            help="Child variants are never worked on directly — use the parent's Var Opts tab." if is_child else None,
+        ):
             set_current_item(item_no)
-            mark_status(item_no, "In Progress", new_done_by)
+            mark_status(item_no, "In Progress")
             st.session_state["active_page"] = "SKU Workspace"
             st.session_state["workspace_tab"] = "Content"
             st.rerun()
@@ -222,7 +238,7 @@ def _render_downloads() -> None:
                             "MFG_CODE": match.get("Mfg Code", ""),
                             "DESCR": match.get("Warranty Description", ""),
                             "MO_PARTS": months,
-                            "MO_LABOR": "",
+                            "MO_LABOR": 0,
                             "URL": match.get("Warranty URL", ""),
                             "INT_PREFIX": "",
                             "PHONE#": match.get("Warranty Tel#", ""),
@@ -246,6 +262,54 @@ def _render_downloads() -> None:
             )
         else:
             st.caption("No SKUs with warranty information filled in yet.")
+
+        st.markdown("---")
+        st.markdown("### Variant Options Export")
+        variants = st.session_state.get("variants", {})
+        variant_df = build_variant_df(queue_df, variants)
+        var_name = st.text_input(
+            "Variant options file name",
+            value=st.session_state.get("_queue_varopts_filename", "Variant Options"),
+            placeholder="Enter variant options file name",
+            key="_queue_varopts_filename",
+        ).strip() or "Variant Options"
+        if variant_df.empty:
+            st.caption("No parent/child variant data in this batch.")
+        else:
+            complete, problems = variant_completeness(queue_df, variants)
+            if not complete:
+                st.caption(
+                    f"{len(problems)} attribute value(s) still empty — complete them in the "
+                    "Var Opts tab to enable this download."
+                )
+            st.download_button(
+                "Download Variant Options",
+                data=variant_excel_bytes(variant_df),
+                file_name=f"{var_name}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+                disabled=not complete,
+            )
+
+        st.markdown("---")
+        st.markdown("### Battery Export")
+        battery_df = build_battery_df(queue_df, items)
+        battery_name = st.text_input(
+            "Battery file name",
+            value=st.session_state.get("_queue_battery_filename", "Battery Data"),
+            placeholder="Enter battery file name",
+            key="_queue_battery_filename",
+        ).strip() or "Battery Data"
+        if battery_df.empty:
+            st.caption("No SKUs with battery information yet.")
+        else:
+            st.download_button(
+                "Download Battery Excel",
+                data=battery_excel_bytes(battery_df),
+                file_name=f"{battery_name}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+            )
 
 
 def _queue_atr_label(value) -> str:

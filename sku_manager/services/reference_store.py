@@ -35,6 +35,23 @@ def coerce_uploaded_frame(df: pd.DataFrame, state_key: str) -> pd.DataFrame:
     _, default_factory = TABLE_DEFINITIONS[state_key]
     return _coerce_frame(df.to_dict("records"), default_factory)
 
+def _append_missing_default_rows(df: pd.DataFrame, default_df: pd.DataFrame) -> pd.DataFrame:
+    """Keep existing reference rows, then append shipped default rows that are missing."""
+    if "Symbol" not in df.columns or "Symbol" not in default_df.columns:
+        return df
+
+    existing_symbols = {str(value).strip() for value in df["Symbol"].tolist() if str(value).strip()}
+    missing_rows = []
+    for _, row in default_df.iterrows():
+        symbol = str(row.get("Symbol", "")).strip()
+        if not symbol or symbol in existing_symbols:
+            continue
+        missing_rows.append(row.to_dict())
+        existing_symbols.add(symbol)
+
+    if not missing_rows:
+        return df
+    return pd.concat([df, pd.DataFrame(missing_rows, columns=default_df.columns)], ignore_index=True)
 
 def _coerce_frame(raw_rows: Any, default_factory) -> pd.DataFrame:
     default_df = default_factory()
@@ -55,6 +72,9 @@ def _coerce_frame(raw_rows: Any, default_factory) -> pd.DataFrame:
             df[column] = df[column].fillna(False).astype(bool)
         else:
             df[column] = df[column].fillna("").astype(str)
+
+    if default_factory is default_special_character_rules:
+        df = _append_missing_default_rows(df, default_df)
     return df
 
 

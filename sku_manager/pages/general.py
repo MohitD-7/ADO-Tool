@@ -7,7 +7,7 @@ import streamlit as st
 from sku_manager.config import BATTERY_INFO_OPTIONS
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
-from sku_manager.state import current_item
+from sku_manager.state import current_item, set_description_state
 from sku_manager.ui.components import (
     brand_autocomplete,
     field_notes_editor,
@@ -160,17 +160,23 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 label_visibility="collapsed",
             )
         battery_disabled = details["battery_info"] == "no battery used"
+        if battery_disabled:
+            details["battery_material"] = ""
+            details["battery_quantity"] = ""
+            details["battery_type"] = ""
 
         with b2:
             _dv2_label("Battery Material")
             materials = _select_options(st.session_state["battery_materials_df"], "Battery Material")
-            details["battery_material"] = st.selectbox(
-                "Battery Material", materials,
-                index=materials.index(details.get("battery_material", materials[0]))
-                    if details.get("battery_material", materials[0]) in materials else 0,
-                disabled=battery_disabled,
-                label_visibility="collapsed",
-            )
+            if battery_disabled:
+                st.text_input("Battery Material", value="", disabled=True, label_visibility="collapsed")
+            else:
+                details["battery_material"] = st.selectbox(
+                    "Battery Material", materials,
+                    index=materials.index(details.get("battery_material", materials[0]))
+                        if details.get("battery_material", materials[0]) in materials else 0,
+                    label_visibility="collapsed",
+                )
         with b3:
             _dv2_label("Battery Quantity")
             details["battery_quantity"] = st.text_input(
@@ -181,18 +187,21 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         with b4:
             _dv2_label("Battery Type / Form")
             types = _select_options(st.session_state["battery_types_df"], "Battery Type")
-            details["battery_type"] = st.selectbox(
-                "Battery Type", types,
-                index=types.index(details.get("battery_type", types[0]))
-                    if details.get("battery_type", types[0]) in types else 0,
-                disabled=battery_disabled,
-                label_visibility="collapsed",
-            )
+            if battery_disabled:
+                st.text_input("Battery Type", value="", disabled=True, label_visibility="collapsed")
+            else:
+                details["battery_type"] = st.selectbox(
+                    "Battery Type", types,
+                    index=types.index(details.get("battery_type", types[0]))
+                        if details.get("battery_type", types[0]) in types else 0,
+                    label_visibility="collapsed",
+                )
         if show_format and st.button("Format Visible Text", key=f"format_all_{details['item_no']}",
                                      type="primary", use_container_width=True):
             rules_df = st.session_state["special_rules_df"]
             for key in ["title", "short_title", "mfg_model", "description"]:
                 details[key] = format_text(details.get(key, ""), rules_df)
+            set_description_state(details["item_no"], details.get("description", ""))
             for entry in item.setdefault("includes", []):
                 if entry.get("text"):
                     entry["text"] = format_text(entry["text"], rules_df)

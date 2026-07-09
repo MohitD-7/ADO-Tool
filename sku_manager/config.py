@@ -1,8 +1,8 @@
 APP_TITLE = "VirtualOps SKU Manager"
 
-QUEUE_COLUMNS = ["ATR Type", "Item No", "Title", "Mfg Item", "Status", "Done By"]
+QUEUE_COLUMNS = ["ATR Type", "JIRA", "Item No", "Title", "Mfg Item", "Status"]
 
-INPUT_SHEET_COLUMNS = ["ATR Type", "Item No", "Title", "Mfg Item"]
+INPUT_SHEET_COLUMNS = ["ATR Type", "JIRA", "Item No", "Title", "Mfg Item"]
 
 OUTPUT_COLUMNS = [
     "",

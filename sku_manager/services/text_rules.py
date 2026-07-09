@@ -11,6 +11,20 @@ _REPLACE_ACTIONS = {"replace", "replace value", "replace with"}
 _FLAG_ACTIONS = {"flag", "flag only", "review", "manual review", "warn", "warning", "alert"}
 
 
+_COMMON_VARIANTS = {
+    "(c)": ["\u00a9", "&copy;", "&#169;", "&#xA9;", "&#xa9;", "\u00c2\u00a9"],
+    "\u00a9": ["(c)", "(C)", "&copy;", "&#169;", "&#xA9;", "&#xa9;", "\u00c2\u00a9"],
+    "(r)": ["\u00ae", "&reg;", "&#174;", "&#xAE;", "&#xae;", "\u00c2\u00ae"],
+    "\u00ae": ["(r)", "(R)", "&reg;", "&#174;", "&#xAE;", "&#xae;", "\u00c2\u00ae"],
+    "tm": ["\u2122", "&trade;", "&#8482;", "&#x2122;", "(tm)"],
+    "\u2122": ["tm", "TM", "&trade;", "&#8482;", "&#x2122;", "(tm)", "(TM)"],
+    "\u00b0": ["&deg;", "&#176;", "&#xB0;", "&#xb0;", "\u00c2\u00b0"],
+    "\u00b1": ["&plusmn;", "&#177;", "&#xB1;", "&#xb1;", "\u00c2\u00b1", "\u0105"],
+    "\u0105": ["\u00b1", "&plusmn;", "&#177;", "&#xB1;", "&#xb1;", "\u00c2\u00b1"],
+    "\u00d7": ["&times;", "&#215;", "&#xD7;", "&#xd7;", "\u00c3\u0097"],
+}
+
+
 def action_kind(action: str) -> str:
     normalized = re.sub(r"\s+", " ", str(action or "").strip().lower())
     if not normalized:
@@ -44,20 +58,53 @@ def _iter_rule_rows(rules_df: pd.DataFrame | None) -> Iterable[dict[str, str]]:
     return rows
 
 
+def _symbol_variants(symbol: str) -> list[str]:
+    base = str(symbol or "")
+    normalized = base.strip()
+    keys = {base, normalized, normalized.lower(), normalized.upper()}
+    variants: list[str] = []
+    for key in keys:
+        if not key:
+            continue
+        variants.append(key)
+        variants.extend(_COMMON_VARIANTS.get(key, []))
+        variants.extend(_COMMON_VARIANTS.get(key.lower(), []))
+    seen = set()
+    unique = []
+    for variant in sorted(variants, key=len, reverse=True):
+        if variant and variant not in seen:
+            seen.add(variant)
+            unique.append(variant)
+    return unique
+
+
+def _variant_pattern(variant: str, original_symbol: str) -> str:
+    escaped = re.escape(variant)
+    if variant.isalnum() and any(char.isalpha() for char in variant):
+        return rf"(?<![A-Za-z0-9]){escaped}(?![A-Za-z0-9])"
+    return escaped
+
+
 def _symbol_pattern(symbol: str) -> re.Pattern[str]:
+    variants = _symbol_variants(symbol)
+    pattern = "|".join(_variant_pattern(variant, symbol) for variant in variants)
     flags = re.IGNORECASE if any(char.isalpha() for char in symbol) else 0
-    return re.compile(re.escape(symbol), flags)
+    return re.compile(pattern or re.escape(symbol), flags)
 
 
 def _match_case(replacement: str, matched: str) -> str:
     if not replacement or not any(char.isalpha() for char in replacement):
+        return replacement
+    if str(matched).startswith("&") and str(matched).endswith(";"):
+        return replacement
+    if not any(("A" <= char <= "Z") or ("a" <= char <= "z") for char in str(matched)):
         return replacement
     if matched.isupper():
         return replacement.upper()
     if matched.islower():
         return replacement.lower()
     if matched[:1].isupper() and matched[1:].islower():
-        return replacement[:1].upper() + replacement[1:].lower()
+        return replacement
     return replacement
 
 
@@ -73,7 +120,7 @@ def format_text(text: str, rules_df: pd.DataFrame) -> str:
         elif kind == "replace":
             replacement = rule["replacement"]
             value = pattern.sub(lambda match: _match_case(replacement, match.group(0)), value)
-    value = re.sub(r"\s{2,}", " ", value)
+    value = re.sub(r"[ \t]{2,}", " ", value)
     return value.strip()
 
 

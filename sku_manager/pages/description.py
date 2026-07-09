@@ -6,7 +6,7 @@ import streamlit.components.v1 as components
 
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import item_warnings
-from sku_manager.state import current_item, description_state_keys, sync_description_state
+from sku_manager.state import current_item, description_state_keys, set_description_state, sync_description_state
 from sku_manager.ui.components import drag_reorder, field_notes_editor, page_header, source_video_panel
 from sku_manager.ui.editor import html_editor
 
@@ -28,7 +28,7 @@ def render(
     sync_description_state(item)
     details = item["details"]
     ino = details["item_no"]
-    sync_key, _, force_key = description_state_keys(ino)
+    sync_key, _, _ = description_state_keys(ino)
 
     if show_header:
         page_header("Content Layer", "Description and Includes", status=ino)
@@ -58,10 +58,10 @@ def render(
             if fmt_click:
                 current = sync_description_state(item)
                 rules_df = st.session_state["special_rules_df"]
-                for key in ["title", "short_title", "mfg_model", "description"]:
+                for key in ["title", "short_title", "mfg_model"]:
                     details[key] = format_text(details.get(key, ""), rules_df)
                 details["description"] = format_text(current, rules_df)
-                st.session_state[force_key] = details["description"]
+                set_description_state(ino, details["description"])
                 for entry in item.setdefault("includes", []):
                     if entry.get("text"):
                         entry["text"] = format_text(entry["text"], rules_df)

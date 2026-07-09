@@ -19,6 +19,7 @@ PAGE_LABELS = {
 WORKSPACE_TABS = {
     "Content": "General information, description, features, and highlights",
     "Specs":   "Technical specifications",
+    "VarOpts": "Variant options for child SKUs",
     "Review":  "Preview and export",
 }
 
@@ -30,6 +31,8 @@ WORKSPACE_PAGE_ALIASES = {
     "Highlights":       "Content",
     "Selling Points":   "Content",
     "Specs":            "Specs",
+    "Var Opts":         "VarOpts",
+    "VarOpts":          "VarOpts",
     "Preview & Export": "Review",
 }
 
@@ -107,15 +110,28 @@ def sidebar_nav() -> str:
 _DV2_TAB_LABELS = {
     "Content": "General Description",
     "Specs":   "Specs",
+    "VarOpts": "Var Opts",
     "Review":  "Review",
 }
 
 
 def _dv2_workspace_header(details: dict) -> None:
-    """Render the DESIGN.md-style SKU header card (ID chip + DRAFT pill + title + MPN line)."""
-    item_no  = html.escape(str(details.get("item_no", "")))
-    title    = html.escape(str(details.get("title", "") or "Untitled SKU"))
-    mfg_item = html.escape(str(details.get("mfg_item", "") or details.get("mfg_model", "")))
+    """Render the DESIGN.md-style SKU header card using immutable input metadata."""
+    raw_item_no = str(details.get("item_no", ""))
+    queue_title = ""
+    queue_mfg_item = ""
+    queue = st.session_state.get("queue_df")
+    if queue is not None and not queue.empty and "Item No" in queue.columns:
+        match = queue[queue["Item No"].astype(str) == raw_item_no]
+        if not match.empty:
+            queue_title = str(match.iloc[0].get("Title", ""))
+            queue_mfg_item = str(match.iloc[0].get("Mfg Item", ""))
+
+    item_no = html.escape(raw_item_no)
+    title_text = details.get("input_title", "") or queue_title or details.get("title", "") or "Untitled SKU"
+    mfg_text = details.get("input_mfg_item", "") or queue_mfg_item or details.get("mfg_item", "") or details.get("mfg_model", "")
+    title = html.escape(str(title_text))
+    mfg_item = html.escape(str(mfg_text))
     category = html.escape(str(details.get("category", "") or ""))
 
     meta_bits = []
@@ -158,7 +174,7 @@ def workspace_topbar() -> str:
     st.session_state["workspace_tab"] = active_tab
 
     item = current_item()
-    if item and not st.session_state.get("_review_loaded"):
+    if item:
         _dv2_workspace_header(item["details"])
 
     tab_names = list(WORKSPACE_TABS.keys())

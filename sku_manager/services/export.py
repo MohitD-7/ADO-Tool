@@ -86,12 +86,18 @@ def build_item_rows(item: dict) -> list[dict]:
             comments=_field_comment(item, "includes") if index == 1 else "",
         ))
 
+    battery_info = details.get("battery_info", "")
+    no_battery = str(battery_info).strip().lower() == "no battery used"
+    battery_material = "" if no_battery else details.get("battery_material", "")
+    battery_type = "" if no_battery else details.get("battery_type", "")
+    battery_quantity = "" if no_battery else details.get("battery_quantity", "")
+
     rows.extend([
         _row("Mfg Model", item_no, details.get("mfg_model", "")),
-        _row("Battery Info", item_no, details.get("battery_info", "")),
-        _row("Battery Material", item_no, details.get("battery_material", "")),
-        _row("Battery Type", item_no, details.get("battery_type", "")),
-        _row("Battery Quantity", item_no, details.get("battery_quantity", "")),
+        _row("Battery Info", item_no, battery_info),
+        _row("Battery Material", item_no, battery_material),
+        _row("Battery Type", item_no, battery_type),
+        _row("Battery Quantity", item_no, battery_quantity),
     ])
 
     for index, feature in enumerate(item.get("features", []), start=1):
@@ -174,24 +180,25 @@ def _input_atr_value(value: str) -> str:
 def build_input_sheet_df(queue_df: pd.DataFrame, items: dict | None = None) -> pd.DataFrame:
     """Frozen snapshot of the original input/workspace sheet.
 
-    The first column carries the ATR parent-child relationship, followed by
-    the same Item No, Title, and Mfg Item columns used by the original flow.
+    ATR and JIRA are queue metadata. Title and Mfg Item remain the original
+    uploaded values even if the editable SKU title is changed later.
     """
     rows = []
     for _, queue_row in queue_df.iterrows():
         item_no = str(queue_row["Item No"])
+        item_details = items.get(item_no, {}).get("details", {}) if items else {}
         has_atr_column = "ATR Type" in queue_df.columns
         atr_type = _input_atr_value(queue_row.get("ATR Type", "")) if has_atr_column else ""
-        if not atr_type and items and item_no in items:
-            atr_type = _input_atr_value(items[item_no].get("details", {}).get("atr_type", ""))
+        if not atr_type and item_details:
+            atr_type = _input_atr_value(item_details.get("atr_type", ""))
         rows.append({
             "ATR Type": atr_type if has_atr_column else (atr_type or "Standalone"),
-            "Item No":  item_no,
-            "Title":    str(queue_row.get("Title", "")),
-            "Mfg Item": str(queue_row.get("Mfg Item", "")),
+            "JIRA": str(queue_row.get("JIRA", "") or item_details.get("jira", "")),
+            "Item No": item_no,
+            "Title": str(queue_row.get("Title", "") or item_details.get("input_title", "") or item_details.get("title", "")),
+            "Mfg Item": str(queue_row.get("Mfg Item", "") or item_details.get("input_mfg_item", "") or item_details.get("mfg_item", "")),
         })
     return pd.DataFrame(rows, columns=INPUT_SHEET_COLUMNS)
-
 def _coerce_order_values(df: pd.DataFrame, sheet_name: str) -> pd.DataFrame:
     if sheet_name != "-Item Processed Details-" or df.empty or "Field Name" not in df.columns:
         return df
@@ -300,6 +307,7 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
         if item_col is None:
             return [], {}
         atr_col = col("atr type", "atr", "relationship")
+        jira_col = col("jira", "jira #", "jira#", "jira no", "jira number")
         title_col = col("title", "product title")
         mfg_col = col("mfg item", "mfgitem", "mfgitem#", "mfgitem #", "manufacturer item", "mfr item")
         order: list[str] = []
@@ -311,12 +319,12 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
             if ino not in snapshot:
                 order.append(ino)
             snapshot[ino] = {
-                "ATR Type": _input_atr_value(input_row.get(atr_col, "")) if atr_col is not None else "",
+                "ATR Type": _input_atr_value(input_row.get(atr_col, "")) if atr_col is not None else "Standalone",
+                "JIRA": str(input_row.get(jira_col, "")).strip() if jira_col is not None else "",
                 "Title": str(input_row.get(title_col, "")).strip() if title_col is not None else "",
                 "Mfg Item": str(input_row.get(mfg_col, "")).strip() if mfg_col is not None else "",
             }
         return order, snapshot
-
     input_order, input_snapshot = input_queue_snapshot()
 
     # Collect ordered item numbers preserving first-seen order from the output
@@ -338,6 +346,7 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
             title=input_snapshot.get(ino, {}).get("Title", ""),
             mfg_item=input_snapshot.get(ino, {}).get("Mfg Item", ""),
             atr_type=input_snapshot.get(ino, {}).get("ATR Type", "Standalone") if ino in input_snapshot else "Standalone",
+            jira=input_snapshot.get(ino, {}).get("JIRA", ""),
         )
         for ino in item_nos
     }
@@ -453,11 +462,11 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
     queue_rows = [
         {
             "ATR Type": _input_atr_value(items[ino]["details"].get("atr_type", "")),
+            "JIRA": items[ino]["details"].get("jira", ""),
             "Item No":  ino,
-            "Title":    items[ino]["details"].get("title", ""),
-            "Mfg Item": items[ino]["details"].get("mfg_item", ""),
+            "Title":    items[ino]["details"].get("input_title", "") or items[ino]["details"].get("title", ""),
+            "Mfg Item": items[ino]["details"].get("input_mfg_item", "") or items[ino]["details"].get("mfg_item", ""),
             "Status":   "",
-            "Done By":  "",
         }
         for ino in item_nos
     ]
@@ -489,11 +498,74 @@ def load_warranty_data(warranty_df: pd.DataFrame | None = None) -> pd.DataFrame:
     return df
 
 
+def _numeric_cell(value, *, digits_only: bool = False, blank_as_zero: bool = False):
+    text = str(value or "").strip()
+    if digits_only:
+        text = "".join(ch for ch in text if ch.isdigit())
+    if not text:
+        return 0 if blank_as_zero else ""
+    number = pd.to_numeric(text, errors="coerce")
+    if pd.isna(number):
+        return 0 if blank_as_zero else ""
+    as_float = float(number)
+    return int(as_float) if as_float.is_integer() else as_float
+
+
+def _prepare_warranty_export_df(warranty_df: pd.DataFrame) -> pd.DataFrame:
+    out = warranty_df.copy()
+    for column in ["PHONE#", "Phone#"]:
+        if column in out.columns:
+            out[column] = out[column].map(lambda value: _numeric_cell(value, digits_only=True))
+    for column in ["MO_PARTS", "Mo_Parts"]:
+        if column in out.columns:
+            out[column] = out[column].map(_numeric_cell)
+    for column in ["MO_LABOR", "MO_LABOUR", "Mo_Labor", "Mo_Labour"]:
+        if column in out.columns:
+            out[column] = out[column].map(lambda value: _numeric_cell(value, blank_as_zero=True))
+    return out
+
+
 def warranty_excel_bytes(warranty_df: pd.DataFrame) -> bytes:
     """Generate Excel bytes for warranty data."""
     buffer = BytesIO()
     with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
-        _write_sheet(writer, warranty_df, "Warranty")
+        _write_sheet(writer, _prepare_warranty_export_df(warranty_df), "Data")
+    return buffer.getvalue()
+
+
+BATTERY_COLUMNS = ["SKU", "SEQUENCE", "INFO", "MATERIAL", "QUANTITY", "TYPE", "DISCONT"]
+
+
+def build_battery_df(queue_df: pd.DataFrame, items: dict) -> pd.DataFrame:
+    """One row per SKU that actually carries a battery (Battery Info set and not
+    'no battery used'), in queue order. SEQUENCE is 10 and DISCONT stays blank."""
+    rows: list[dict] = []
+    for _, queue_row in queue_df.iterrows():
+        item_no = str(queue_row["Item No"]).strip()
+        item = items.get(item_no)
+        if not item:
+            continue
+        details = item["details"]
+        info = str(details.get("battery_info", "") or "").strip()
+        if not info or info.lower() == "no battery used":
+            continue
+        rows.append({
+            "SKU": item_no,
+            "SEQUENCE": 10,
+            "INFO": info,
+            "MATERIAL": str(details.get("battery_material", "") or "").strip(),
+            "QUANTITY": str(details.get("battery_quantity", "") or "").strip(),
+            "TYPE": str(details.get("battery_type", "") or "").strip(),
+            "DISCONT": "",
+        })
+    return pd.DataFrame(rows, columns=BATTERY_COLUMNS)
+
+
+def battery_excel_bytes(battery_df: pd.DataFrame) -> bytes:
+    """Generate Excel bytes for battery data (single 'Data' sheet)."""
+    buffer = BytesIO()
+    with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
+        _write_sheet(writer, battery_df, "Data")
     return buffer.getvalue()
 
 
