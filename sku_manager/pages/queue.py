@@ -78,6 +78,11 @@ def render() -> None:
     ):
         col.markdown(f"<div style='{header_style}'>{label}</div>", unsafe_allow_html=True)
 
+    st.markdown(
+        "<div style='height:10px;line-height:10px;font-size:0;'>&#8203;</div>",
+        unsafe_allow_html=True,
+    )
+
     changed = False
 
     for pos, (_, row) in enumerate(filtered.iterrows(), start=1):
@@ -88,19 +93,22 @@ def render() -> None:
         status = str(row["Status"])
         done_by = str(row["Done By"])
 
-        row_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6])
-        pos_style = "padding-top:0.55rem;color:#6f8090;font-weight:700;"
+        row_cols = st.columns(
+            [0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6],
+            vertical_alignment="center",
+        )
+        pos_style = "color:#6f8090;font-weight:700;"
         row_cols[0].markdown(f"<div style='{pos_style}'>{pos}</div>", unsafe_allow_html=True)
         row_cols[1].markdown(
-            f"<div style='padding-top:0.55rem;color:#405166;'>{html.escape(atr_type)}</div>",
+            f"<div style='color:#405166;'>{html.escape(atr_type)}</div>",
             unsafe_allow_html=True,
         )
         row_cols[2].markdown(
-            f"<div style='padding-top:0.55rem;font-weight:700;color:#1a2330;'>{html.escape(item_no)}</div>",
+            f"<div style='font-weight:700;color:#1a2330;'>{html.escape(item_no)}</div>",
             unsafe_allow_html=True,
         )
         row_cols[3].markdown(
-            f"<div style='padding-top:0.55rem;'>{html.escape(title[:90])}</div>",
+            f"<div style='color:#1a2330;'>{html.escape(title[:90])}</div>",
             unsafe_allow_html=True,
         )
         current_status = status if status in STATUS_OPTIONS else STATUS_OPTIONS[0]

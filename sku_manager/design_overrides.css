@@ -197,6 +197,16 @@ iframe[title="sku_manager.ui.components.brand_autocomplete"] {
   margin-top: 14px !important;
 }
 
+/* Queue-table row inputs (Status / Done By) sit inline with the Preview/Open
+   buttons and have their header in a separate row — no label above them — so the
+   form-field spacer above must be removed or they drop out of line with the row. */
+div[class*="st-key-queue_status_"] label[data-testid="stWidgetLabel"][aria-hidden="true"],
+div[class*="st-key-queue_done_"] label[data-testid="stWidgetLabel"][aria-hidden="true"] {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+}
+
 section[data-testid="stSidebar"] .stRadio > label,
 section[data-testid="stSidebar"] label[data-testid="stWidgetLabel"],
 section[data-testid="stSidebar"] div[data-testid="stWidgetLabel"],

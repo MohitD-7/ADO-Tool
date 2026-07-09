@@ -26,6 +26,23 @@ def _render_content_tab(item: dict) -> None:
         )
     with pane:
         field_notes_editor(item, "title", "Basic information notes")
+        st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+        details = item["details"]
+        right_feedback_panel(
+            item,
+            item_warnings(
+                details,
+                item["features"],
+                item["specs"],
+                item["highlights"],
+                st.session_state.get("special_rules_df"),
+                includes=item.get("includes", []),
+            ),
+            key_prefix="content_feedback",
+        )
+        st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
+        st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
+        source_video_panel(item, key_suffix="workspace", expanded=False)
 
     _section_gap()
     main, pane = st.columns([3.5, 1])
@@ -72,26 +89,6 @@ def _render_content_tab(item: dict) -> None:
         highlights.render(show_header=False, embedded=True, show_links=False, show_feedback=False)
     with pane:
         field_notes_editor(item, "highlights", "PDP highlight notes")
-
-    _section_gap()
-    _, pane = st.columns([3.5, 1])
-    with pane:
-        details = item["details"]
-        right_feedback_panel(
-            item,
-            item_warnings(
-                details,
-                item["features"],
-                item["specs"],
-                item["highlights"],
-                st.session_state.get("special_rules_df"),
-                includes=item.get("includes", []),
-            ),
-            key_prefix="content_feedback",
-        )
-        st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
-        st.markdown('<h2 class="dv2-section-title">Media &amp; References</h2>', unsafe_allow_html=True)
-        source_video_panel(item, key_suffix="workspace", expanded=False)
 
 
 def render() -> None:

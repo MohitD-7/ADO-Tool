@@ -45,7 +45,6 @@ def render(
             th1, th2 = st.columns([5, 1])
             with th1:
                 st.markdown("### Product Description")
-                st.caption("Use the toolbar to insert HTML tags. Type directly in HTML.")
             with th2:
                 st.markdown('<div class="vo-spacer-btn">&#8203;</div>', unsafe_allow_html=True)
                 fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
