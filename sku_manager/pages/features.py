@@ -29,7 +29,8 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         st.markdown("### Current Features")
         st.caption("Edit feature text directly in the table below. Rows export with Value1 = 10, 20, 30... and Value2 = feature text.")
 
-        features_list = item.setdefault("features", [])
+        features_list = _clean_feature_values(item.setdefault("features", []))
+        item["features"] = features_list
         # Reserve the reorder control's spot above the grid, but fill it *after*
         # the editor below has written the updated list — otherwise a row just
         # added in the grid wouldn't appear here until the next rerun.
@@ -45,16 +46,19 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         )
         rules_df = st.session_state["special_rules_df"]
         pasted_lines = False
+        null_placeholders = False
         features: list[str] = []
         for value in edited["Feature"].tolist():
-            lines = split_cell_lines(value)
+            if _is_null_feature_cell(value):
+                null_placeholders = True
+                continue
+            lines = _feature_cell_lines(value)
             pasted_lines = pasted_lines or len(lines) > 1
             features.extend(format_text(line, rules_df) for line in lines)
         item["features"] = features
-        if pasted_lines:
-            # A paste left embedded newlines in a cell (the grid's clipboard
-            # parser merges lines around unmatched " characters). The lines are
-            # now split into their own rows; remount so the grid shows them.
+        if pasted_lines or null_placeholders:
+            # Remount after direct paste so Streamlit's temporary None/blank
+            # placeholders disappear and split lines become separate rows.
             reset_stable_data_editor(editor_key)
             st.rerun()
 
@@ -109,3 +113,26 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             field_notes_editor(item, "features", "Feature bullet notes")
             st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
             right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="features_feedback")
+
+def _is_null_feature_cell(value) -> bool:
+    if value is None:
+        return True
+    try:
+        if pd.isna(value):
+            return True
+    except (TypeError, ValueError):
+        pass
+    return str(value).strip().lower() == "none"
+
+
+def _feature_cell_lines(value) -> list[str]:
+    if _is_null_feature_cell(value):
+        return []
+    return [line for line in split_cell_lines(value) if line.strip().lower() != "none"]
+
+
+def _clean_feature_values(values: list) -> list[str]:
+    cleaned: list[str] = []
+    for value in values:
+        cleaned.extend(_feature_cell_lines(value))
+    return cleaned

@@ -9,6 +9,7 @@ from sku_manager.services.text_rules import flatten_cell_text, format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.grid import select_first_data_editor_cell
 
 
 _SPEC_COLUMNS = ["Value1 (Category)", "Value2 (Order)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)"]
@@ -64,6 +65,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
                 },
             )
             save_specs = st.form_submit_button("Save Specs", type="primary", use_container_width=True)
+        select_first_data_editor_cell(editor_key)
 
         if save_specs:
             item["specs"] = _clean_specs_from_editor(edited, st.session_state["special_rules_df"])

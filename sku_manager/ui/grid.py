@@ -7,10 +7,79 @@ from typing import Any
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 def _normalise_frame(data: pd.DataFrame) -> pd.DataFrame:
-    return data.copy().reset_index(drop=True)
+    normalised = data.copy().reset_index(drop=True).astype("object")
+    return normalised.where(pd.notna(normalised), "")
+
+
+def select_first_data_editor_cell(key: str) -> None:
+    """Best-effort focus for the most recently rendered Streamlit data editor."""
+    components.html(
+        f"""
+<script>
+(function() {{
+  var key = {json.dumps(key)};
+  var flag = "__vo_grid_first_cell_selected_" + key;
+  if (window.parent[flag]) return;
+
+  function visibleCanvas(canvas) {{
+    var rect = canvas.getBoundingClientRect();
+    return rect.width > 180 && rect.height > 60;
+  }}
+
+  function dispatchMouse(canvas, type, x, y) {{
+    var event = new MouseEvent(type, {{
+      bubbles: true,
+      cancelable: true,
+      view: window.parent,
+      clientX: x,
+      clientY: y,
+      button: 0,
+      buttons: type === "mouseup" || type === "click" ? 0 : 1
+    }});
+    canvas.dispatchEvent(event);
+  }}
+
+  function selectFirstCell() {{
+    var doc = window.parent.document;
+    var frame = window.frameElement;
+    var frameTop = frame ? frame.getBoundingClientRect().top : Number.POSITIVE_INFINITY;
+    var canvases = Array.prototype.slice.call(doc.querySelectorAll("canvas")).filter(visibleCanvas);
+    canvases = canvases.filter(function(canvas) {{
+      return canvas.getBoundingClientRect().top <= frameTop;
+    }});
+    if (!canvases.length) return false;
+    canvases.sort(function(a, b) {{
+      return b.getBoundingClientRect().bottom - a.getBoundingClientRect().bottom;
+    }});
+    var canvas = canvases[0];
+    var rect = canvas.getBoundingClientRect();
+    var x = rect.left + Math.min(Math.max(rect.width * 0.22, 96), 180);
+    var y = rect.top + Math.min(Math.max(rect.height * 0.24, 42), 72);
+    try {{ canvas.focus(); }} catch (e) {{}}
+    dispatchMouse(canvas, "mousemove", x, y);
+    dispatchMouse(canvas, "mousedown", x, y);
+    dispatchMouse(canvas, "mouseup", x, y);
+    dispatchMouse(canvas, "click", x, y);
+    window.parent[flag] = true;
+    return true;
+  }}
+
+  var tries = 0;
+  var timer = window.setInterval(function() {{
+    tries += 1;
+    if (selectFirstCell() || tries > 20) {{
+      window.clearInterval(timer);
+    }}
+  }}, 100);
+}})();
+</script>
+""",
+        height=0,
+    )
 
 
 def _frame_signature(df: pd.DataFrame) -> str:
@@ -206,6 +275,7 @@ def stable_data_editor(data: pd.DataFrame, *, key: str, **kwargs: Any) -> pd.Dat
         key=widget_key,
         **kwargs,
     )
+    select_first_data_editor_cell(widget_key)
 
     value_signature = _widget_value_signature(
         st.session_state[base_key],

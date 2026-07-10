@@ -12,6 +12,7 @@ from sku_manager.services.export import (
     build_input_sheet_df,
     build_output_df,
     build_video_links_df,
+    build_warranty_export_df,
     excel_bytes,
     render_html,
     text_bytes,
@@ -185,10 +186,11 @@ def _render_downloads() -> None:
             key="_queue_text_filename",
         ).strip() or "Items Processed"
 
+        warranty_df = build_warranty_export_df(queue_df, items)
         dl_xlsx, dl_text = st.columns(2)
         dl_xlsx.download_button(
             "Download Excel",
-            data=excel_bytes(output_df, input_df, video_links_df),
+            data=excel_bytes(output_df, input_df, video_links_df, warranty_df),
             file_name=f"{excel_name}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             type="primary",

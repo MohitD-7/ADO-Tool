@@ -228,15 +228,26 @@ def _write_sheet(writer, df: pd.DataFrame, sheet_name: str) -> None:
         worksheet.set_column(col_num, col_num, 20)
 
 
-def excel_bytes(output_df: pd.DataFrame, input_df: pd.DataFrame | None = None, video_links_df: pd.DataFrame | None = None) -> bytes:
+def excel_bytes(
+    output_df: pd.DataFrame,
+    input_df: pd.DataFrame | None = None,
+    video_links_df: pd.DataFrame | None = None,
+    warranty_df: pd.DataFrame | None = None,
+) -> bytes:
     buffer = BytesIO()
     if video_links_df is None:
         video_links_df = pd.DataFrame(columns=["Item Number", "Links", "Source", "Video Links"])
+    if warranty_df is None:
+        warranty_df = pd.DataFrame(columns=[
+            "SKU", "SKIP_Y_N", "MFG_CODE", "DESCR", "MO_PARTS", "MO_LABOR",
+            "URL", "INT_PREFIX", "PHONE#", "EXTENSION", "DISCONT"
+        ])
     with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
         if input_df is not None:
             _write_sheet(writer, input_df, "Input")
         _write_sheet(writer, output_df, "-Item Processed Details-")
         _write_sheet(writer, video_links_df, "Video Links")
+        _write_sheet(writer, warranty_df, "Warranty")
     return buffer.getvalue()
 
 
@@ -458,6 +469,39 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
             if ino and video and ino in items:
                 existing = _line_list(items[ino]["details"].get("video_link", ""))
                 items[ino]["details"]["video_link"] = "\n".join(append_unique(existing, _line_list(video)))
+
+    warranty_df = sheets.get("Warranty")
+    if warranty_df is not None and {"SKU", "MFG_CODE"}.issubset(set(warranty_df.columns)):
+        warranty_df = warranty_df.fillna("")
+        warranty_master = load_warranty_data()
+        for _, row in warranty_df.iterrows():
+            ino = str(row.get("SKU", "")).strip()
+            if ino and ino in items:
+                mfg_code = str(row.get("MFG_CODE", "")).strip()
+                descr = str(row.get("DESCR", "")).strip()
+                months = str(row.get("MO_PARTS", "")).strip()
+                
+                brand = ""
+                if not warranty_master.empty:
+                    conditions = []
+                    if mfg_code:
+                        conditions.append(warranty_master["Mfg Code"].astype(str).str.strip().str.lower() == mfg_code.lower())
+                    if descr:
+                        conditions.append(warranty_master["Warranty Description"].astype(str).str.strip().str.lower() == descr.lower())
+                    
+                    matched = pd.DataFrame()
+                    if len(conditions) == 2:
+                        matched = warranty_master[conditions[0] & conditions[1]]
+                    if matched.empty and mfg_code:
+                        matched = warranty_master[warranty_master["Mfg Code"].astype(str).str.strip().str.lower() == mfg_code.lower()]
+                    if matched.empty and descr:
+                        matched = warranty_master[warranty_master["Warranty Description"].astype(str).str.strip().str.lower() == descr.lower()]
+                    
+                    if not matched.empty:
+                        brand = str(matched.iloc[0].get("Brand Name", "")).strip()
+                
+                items[ino]["details"]["warranty_brand"] = brand
+                items[ino]["details"]["warranty_months"] = months
     # Build a minimal queue_df from the parsed items
     queue_rows = [
         {
@@ -523,6 +567,54 @@ def _prepare_warranty_export_df(warranty_df: pd.DataFrame) -> pd.DataFrame:
         if column in out.columns:
             out[column] = out[column].map(lambda value: _numeric_cell(value, blank_as_zero=True))
     return out
+
+
+def build_warranty_export_df(queue_df: pd.DataFrame, items: dict, warranty_master: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Build a DataFrame representing the Warranty sheet with the same details as the warranty download file."""
+    if warranty_master is None:
+        warranty_master = load_warranty_data()
+
+    warranty_rows = []
+    for _, queue_row in queue_df.iterrows():
+        item_no = str(queue_row.get("Item No", "")).strip()
+        if not item_no or item_no not in items:
+            continue
+        item = items[item_no]
+        brand = item["details"].get("warranty_brand", "").strip()
+        months = item["details"].get("warranty_months", "").strip()
+        if brand:
+            warranty_rows.append((item_no, brand, months))
+
+    warranty_data = []
+    for item_no, brand, months in warranty_rows:
+        if warranty_master is not None and not warranty_master.empty:
+            brand_lower = brand.lower()
+            matched = warranty_master[warranty_master["Brand Name"].str.lower() == brand_lower]
+            if not matched.empty:
+                match = matched.iloc[0]
+                warranty_data.append({
+                    "SKU": item_no,
+                    "SKIP_Y_N": "N",
+                    "MFG_CODE": match.get("Mfg Code", ""),
+                    "DESCR": match.get("Warranty Description", ""),
+                    "MO_PARTS": months,
+                    "MO_LABOR": 0,
+                    "URL": match.get("Warranty URL", ""),
+                    "INT_PREFIX": "",
+                    "PHONE#": match.get("Warranty Tel#", ""),
+                    "EXTENSION": "",
+                    "DISCONT": "",
+                })
+
+    columns = [
+        "SKU", "SKIP_Y_N", "MFG_CODE", "DESCR", "MO_PARTS", "MO_LABOR",
+        "URL", "INT_PREFIX", "PHONE#", "EXTENSION", "DISCONT"
+    ]
+    if warranty_data:
+        df = pd.DataFrame(warranty_data, columns=columns)
+    else:
+        df = pd.DataFrame(columns=columns)
+    return _prepare_warranty_export_df(df)
 
 
 def warranty_excel_bytes(warranty_df: pd.DataFrame) -> bytes:
