@@ -7,7 +7,7 @@ import streamlit as st
 from sku_manager.config import BATTERY_INFO_OPTIONS
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
-from sku_manager.state import current_item, set_description_state
+from sku_manager.state import clone_item_from_similar, current_item, set_description_state
 from sku_manager.ui.components import (
     brand_autocomplete,
     field_notes_editor,
@@ -30,6 +30,100 @@ def _warranty_brand_options() -> list[str]:
     if df is None or df.empty or "Brand Name" not in df.columns:
         return []
     return sorted({str(value).strip() for value in df["Brand Name"].tolist() if str(value).strip()})
+
+
+def _similar_to_source_options(current_item_no: str) -> list[str]:
+    items = st.session_state.get("items", {})
+    queue_df = st.session_state.get("queue_df")
+    options: list[str] = []
+    seen: set[str] = set()
+
+    def row_is_available(row) -> bool:
+        atr_type = str(row.get("ATR Type", "") or "").strip().lower()
+        status = str(row.get("Status", "") or "").strip().lower()
+        is_parent_or_standalone = atr_type == "standalone" or atr_type.startswith("parent")
+        return is_parent_or_standalone and status == "completed"
+
+    def add(item_no: str) -> None:
+        item_no = str(item_no or "").strip()
+        if not item_no or item_no == current_item_no or item_no in seen or item_no not in items:
+            return
+        options.append(item_no)
+        seen.add(item_no)
+
+    if queue_df is not None and not queue_df.empty and "Item No" in queue_df.columns:
+        for _, row in queue_df.iterrows():
+            if row_is_available(row):
+                add(row.get("Item No", ""))
+    return options
+
+
+def _similar_to_labels(options: list[str]) -> dict[str, str]:
+    labels: dict[str, str] = {}
+    items = st.session_state.get("items", {})
+    queue_df = st.session_state.get("queue_df")
+    queue_titles: dict[str, str] = {}
+    if queue_df is not None and not queue_df.empty and {"Item No", "Title"}.issubset(queue_df.columns):
+        for _, row in queue_df.iterrows():
+            item_no = str(row.get("Item No", "")).strip()
+            if item_no and item_no not in queue_titles:
+                queue_titles[item_no] = str(row.get("Title", "")).strip()
+
+    for item_no in options:
+        details = items.get(item_no, {}).get("details", {})
+        title = str(details.get("title", "") or queue_titles.get(item_no, "")).strip()
+        if len(title) > 90:
+            title = f"{title[:87]}..."
+        labels[item_no] = f"{item_no} - {title}" if title else item_no
+    return labels
+
+
+def _apply_similar_to(current_item_no: str, select_key: str) -> None:
+    source_item_no = str(st.session_state.get(select_key, "") or "").strip()
+    if not source_item_no:
+        return
+    if clone_item_from_similar(current_item_no, source_item_no):
+        st.session_state[f"similar_to_message_{current_item_no}"] = f"Copied details from {source_item_no}."
+    else:
+        st.session_state[f"similar_to_error_{current_item_no}"] = "Could not copy details from the selected SKU."
+
+
+def _render_similar_to_control(item: dict) -> None:
+    details = item["details"]
+    item_no = str(details.get("item_no", "")).strip()
+    options = _similar_to_source_options(item_no)
+    if not options:
+        return
+
+    message = st.session_state.pop(f"similar_to_message_{item_no}", "")
+    if message:
+        st.success(message)
+    error = st.session_state.pop(f"similar_to_error_{item_no}", "")
+    if error:
+        st.error(error)
+
+    labels = _similar_to_labels(options)
+    select_key = f"similar_to_select_{item_no}"
+    sku_col, action_col = st.columns([4, 1], vertical_alignment="bottom")
+    with sku_col:
+        _dv2_label("Source SKU")
+        selected = st.selectbox(
+            "Source SKU",
+            ["", *options],
+            key=select_key,
+            format_func=lambda value: "Select SKU" if not value else labels.get(str(value), str(value)),
+            label_visibility="collapsed",
+        )
+    with action_col:
+        st.button(
+            "Similar To",
+            key=f"similar_to_button_{item_no}",
+            disabled=not selected,
+            on_click=_apply_similar_to,
+            args=(item_no, select_key),
+            use_container_width=True,
+        )
+    st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
 
 
 def _dv2_label(text: str, value: str | None = None, limit: int | None = None) -> None:
@@ -71,6 +165,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         main, pane = st.columns([3.5, 1])
 
     with main:
+        _render_similar_to_control(item)
         st.markdown('<h2 class="dv2-section-title">Basic Information</h2>', unsafe_allow_html=True)
 
         c_title, c_mpn = st.columns([2, 1])

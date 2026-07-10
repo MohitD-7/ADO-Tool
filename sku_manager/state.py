@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
 import pandas as pd
 import streamlit as st
 
 from sku_manager.config import QUEUE_COLUMNS
-from sku_manager.models import new_item_record
+from sku_manager.models import DETAIL_DEFAULTS, new_item_record
 from sku_manager.services.reference_store import load_reference_data
 
 
@@ -13,6 +15,15 @@ DESCRIPTION_WIDGET_SUFFIX = "_w"
 DESCRIPTION_FORCE_SUFFIX = "_force"
 DESCRIPTION_COMPONENT_SUFFIX = "_component"
 DESCRIPTION_EVENT_SUFFIX = "_last_event"
+
+_CLONE_PRESERVED_DETAIL_FIELDS = {
+    "item_no",
+    "mfg_item",
+    "atr_type",
+    "jira",
+    "input_title",
+    "input_mfg_item",
+}
 
 
 def init_state() -> None:
@@ -89,6 +100,103 @@ def set_description_state(item_no: str, value: str) -> None:
     st.session_state.pop(widget_key, None)
     st.session_state.pop(f"{sync_key}{DESCRIPTION_COMPONENT_SUFFIX}", None)
     st.session_state.pop(f"{sync_key}{DESCRIPTION_EVENT_SUFFIX}", None)
+
+
+def _should_reset_item_widget_key(state_key: str, item_no: str) -> bool:
+    sync_key, widget_key, force_key = description_state_keys(item_no)
+    exact_keys = {
+        sync_key,
+        widget_key,
+        force_key,
+        f"{sync_key}{DESCRIPTION_COMPONENT_SUFFIX}",
+        f"{sync_key}{DESCRIPTION_EVENT_SUFFIX}",
+        f"title_{item_no}",
+        f"mfg_model_{item_no}",
+        f"short_title_{item_no}",
+        f"warranty_brand_{item_no}",
+        f"warranty_months_{item_no}",
+        f"similar_to_select_{item_no}",
+        f"new_feature_{item_no}",
+        f"features_bulk_{item_no}",
+        f"highlights_bulk_{item_no}",
+        f"inc_bulk_{item_no}",
+        f"new_spec_cat_{item_no}",
+        f"new_spec_grp_{item_no}",
+        f"new_spec_key_{item_no}",
+        f"new_spec_value_{item_no}",
+        f"specs_editor_rev_{item_no}",
+        f"specs_save_message_{item_no}",
+    }
+    internal_prefixes = (
+        f"features_editor_{item_no}__",
+        f"highlights_editor_{item_no}__",
+        f"specs_editor_{item_no}_",
+        f"includes_editor_{item_no}__",
+        f"reorder_features_{item_no}_",
+        f"reorder_highlights_{item_no}_",
+        f"reorder_specs_{item_no}_",
+        f"reorder_includes_{item_no}_",
+        f"comment_{item_no}_",
+    )
+    item_suffix_prefixes = (
+        "source_links_",
+        "video_links_",
+        "general_feedback_item_comment_",
+        "content_feedback_item_comment_",
+        "features_feedback_item_comment_",
+        "specs_feedback_item_comment_",
+        "highlights_feedback_item_comment_",
+        "desc_item_comment_",
+    )
+    return (
+        state_key in exact_keys
+        or any(state_key.startswith(prefix) for prefix in internal_prefixes)
+        or (
+            state_key.endswith(f"_{item_no}")
+            and any(state_key.startswith(prefix) for prefix in item_suffix_prefixes)
+        )
+    )
+
+
+def reset_item_widget_state(item_no: str) -> None:
+    item_no = str(item_no or "").strip()
+    if not item_no:
+        return
+    for state_key in list(st.session_state.keys()):
+        if _should_reset_item_widget_key(str(state_key), item_no):
+            del st.session_state[state_key]
+
+
+def clone_item_from_similar(target_item_no: str, source_item_no: str) -> bool:
+    """Copy editable SKU content from source to target, preserving target identity."""
+    target_item_no = str(target_item_no or "").strip()
+    source_item_no = str(source_item_no or "").strip()
+    if not target_item_no or not source_item_no or target_item_no == source_item_no:
+        return False
+
+    items = st.session_state.get("items", {})
+    target = items.get(target_item_no)
+    source = items.get(source_item_no)
+    if not target or not source:
+        return False
+
+    target_details = target.get("details", {})
+    preserved_details = {
+        field: target_details.get(field, "")
+        for field in _CLONE_PRESERVED_DETAIL_FIELDS
+    }
+
+    cloned = deepcopy(source)
+    cloned_details = deepcopy(DETAIL_DEFAULTS)
+    cloned_details.update(cloned.get("details", {}))
+    cloned_details.update(preserved_details)
+    cloned["details"] = cloned_details
+
+    target.clear()
+    target.update(cloned)
+    reset_item_widget_state(target_item_no)
+    set_description_state(target_item_no, cloned_details.get("description", ""))
+    return True
 
 
 def sync_description_state(item: dict | None = None) -> str:
