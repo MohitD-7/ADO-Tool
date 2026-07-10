@@ -133,39 +133,11 @@ div[data-testid="stSidebarCollapsedControl"] {
   display: none !important;
 }
 
-.vo-brand-lockup {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 2px 4px 16px;
-}
-
-.vo-brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--vo-radius);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--vo-orange);
-  color: #ffffff;
-  font-size: 12px;
-  line-height: 1;
-  font-weight: 800;
-}
-
 .vo-brand {
   color: var(--vo-brown) !important;
   font-size: 18px !important;
   line-height: 24px !important;
   font-weight: 800 !important;
-  margin: 0 !important;
-}
-
-.vo-subtle {
-  color: var(--vo-muted) !important;
-  font-size: 12px !important;
-  line-height: 16px !important;
   margin: 0 !important;
 }
 
@@ -1054,4 +1026,18 @@ div[data-testid="stDataFrame"] [role="columnheader"]:first-child,
 div[data-testid="stDataEditor"] [role="columnheader"]:first-child {
   border-color: var(--vo-border) !important;
   background: #ffffff !important;
+}
+
+/* Sidebar brand: real logo above a single product label. */
+section[data-testid="stSidebar"] div[data-testid="stImage"] {
+  margin: 2px 4px 6px !important;
+}
+
+.vo-brand {
+  color: var(--vo-brown) !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  margin: 0 4px 16px !important;
 }

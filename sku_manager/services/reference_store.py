@@ -10,9 +10,7 @@ import pandas as pd
 from sku_manager.data.defaults import (
     default_battery_materials,
     default_battery_types,
-    default_checklist,
     default_html_template,
-    default_manufacturers,
     default_special_character_rules,
     default_warranty,
 )
@@ -21,11 +19,9 @@ from sku_manager.data.defaults import (
 REFERENCE_DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "reference_data.json"
 
 TABLE_DEFINITIONS = {
-    "manufacturers_df": ("manufacturers", default_manufacturers),
     "battery_materials_df": ("battery_materials", default_battery_materials),
     "battery_types_df": ("battery_types", default_battery_types),
     "special_rules_df": ("special_rules", default_special_character_rules),
-    "checklist_df": ("checklist", default_checklist),
     "warranty_df": ("warranty", default_warranty),
 }
 

@@ -1,30 +1,4 @@
 {
-  "manufacturers": [
-    {
-      "Manufacturer": "New Brand"
-    },
-    {
-      "Manufacturer": "ErgoLife"
-    },
-    {
-      "Manufacturer": "Leica"
-    },
-    {
-      "Manufacturer": "Sprolink"
-    },
-    {
-      "Manufacturer": "TAMRON"
-    },
-    {
-      "Manufacturer": "Sony"
-    },
-    {
-      "Manufacturer": "Canon"
-    },
-    {
-      "Manufacturer": "Nikon"
-    }
-  ],
   "battery_materials": [
     {
       "Battery Material": "-"
@@ -42,10 +16,28 @@
       "Battery Material": "lithium ion"
     },
     {
+      "Battery Material": "magnesium"
+    },
+    {
+      "Battery Material": "mercury"
+    },
+    {
+      "Battery Material": "nickel cadmium"
+    },
+    {
       "Battery Material": "nickel metal hydride"
     },
     {
+      "Battery Material": "silver oxide"
+    },
+    {
       "Battery Material": "zinc air"
+    },
+    {
+      "Battery Material": "zinc carbon"
+    },
+    {
+      "Battery Material": "zinc chloride"
     }
   ],
   "battery_types": [
@@ -53,7 +45,34 @@
       "Battery Type": "-"
     },
     {
+      "Battery Type": "1/3 N"
+    },
+    {
+      "Battery Type": "18350"
+    },
+    {
+      "Battery Type": "18650"
+    },
+    {
+      "Battery Type": "9-volt"
+    },
+    {
       "Battery Type": "A"
+    },
+    {
+      "Battery Type": "A10"
+    },
+    {
+      "Battery Type": "A13"
+    },
+    {
+      "Battery Type": "A23"
+    },
+    {
+      "Battery Type": "A312"
+    },
+    {
+      "Battery Type": "A675"
     },
     {
       "Battery Type": "AA"
@@ -62,33 +81,162 @@
       "Battery Type": "AAA"
     },
     {
-      "Battery Type": "9-volt"
+      "Battery Type": "AAAA"
     },
     {
-      "Battery Type": "18650"
+      "Battery Type": "AG3"
+    },
+    {
+      "Battery Type": "AG3/LR41"
+    },
+    {
+      "Battery Type": "AG5"
+    },
+    {
+      "Battery Type": "C"
+    },
+    {
+      "Battery Type": "CR1216"
+    },
+    {
+      "Battery Type": "CR1220"
+    },
+    {
+      "Battery Type": "CR123"
+    },
+    {
+      "Battery Type": "CR123A"
+    },
+    {
+      "Battery Type": "CR1616"
+    },
+    {
+      "Battery Type": "CR1620"
+    },
+    {
+      "Battery Type": "CR1623"
+    },
+    {
+      "Battery Type": "CR1632"
+    },
+    {
+      "Battery Type": "CR2"
+    },
+    {
+      "Battery Type": "CR2016"
+    },
+    {
+      "Battery Type": "CR2023"
+    },
+    {
+      "Battery Type": "CR2025"
+    },
+    {
+      "Battery Type": "CR2026"
+    },
+    {
+      "Battery Type": "CR2032"
+    },
+    {
+      "Battery Type": "CR2412"
+    },
+    {
+      "Battery Type": "CR2430"
+    },
+    {
+      "Battery Type": "CR2450"
+    },
+    {
+      "Battery Type": "CR927"
+    },
+    {
+      "Battery Type": "D"
+    },
+    {
+      "Battery Type": "DD"
+    },
+    {
+      "Battery Type": "LR1130"
+    },
+    {
+      "Battery Type": "LR41"
+    },
+    {
+      "Battery Type": "LR43"
+    },
+    {
+      "Battery Type": "LR44"
+    },
+    {
+      "Battery Type": "LR45"
+    },
+    {
+      "Battery Type": "LR48"
+    },
+    {
+      "Battery Type": "LR54"
+    },
+    {
+      "Battery Type": "LR60"
+    },
+    {
+      "Battery Type": "LR63"
+    },
+    {
+      "Battery Type": "LR66"
+    },
+    {
+      "Battery Type": "N"
     },
     {
       "Battery Type": "non-universal"
+    },
+    {
+      "Battery Type": "SR44W"
+    },
+    {
+      "Battery Type": "SR521SW"
+    },
+    {
+      "Battery Type": "SR616SW"
+    },
+    {
+      "Battery Type": "SR621SW"
+    },
+    {
+      "Battery Type": "SR626SW"
+    },
+    {
+      "Battery Type": "SR721SW"
+    },
+    {
+      "Battery Type": "SR916SW"
+    },
+    {
+      "Battery Type": "SR920SW"
+    },
+    {
+      "Battery Type": "SR927SW"
     }
   ],
   "special_rules": [
     {
-      "Symbol": "(c)",
+      "Symbol": "©",
       "Action required": "Delete",
       "Replace Value": "",
-      "Symbol Meaning": "Copyright shorthand"
+      "Symbol Meaning": "Copyright symbol"
     },
     {
-      "Symbol": "(r)",
+      "Symbol": "®",
       "Action required": "Delete",
       "Replace Value": "",
-      "Symbol Meaning": "Registered shorthand"
+      "Symbol Meaning": "Registered trademark"
     },
     {
-      "Symbol": "tm",
+      "Symbol": "™",
       "Action required": "Delete",
       "Replace Value": "",
-      "Symbol Meaning": "Trademark shorthand"
+      "Symbol Meaning": "Trademark"
     },
     {
       "Symbol": "°",
@@ -97,54 +245,460 @@
       "Symbol Meaning": "Degree symbol"
     },
     {
+      "Symbol": "º",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol"
+    },
+    {
       "Symbol": "±",
       "Action required": "Replace",
       "Replace Value": " +/-",
-      "Symbol Meaning": "Plus/minus"
+      "Symbol Meaning": "Plus-or-minus sign"
+    },
+    {
+      "Symbol": "¶",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Paragraph mark"
+    },
+    {
+      "Symbol": "¼",
+      "Action required": "Replace",
+      "Replace Value": " 1/4",
+      "Symbol Meaning": "Fraction, one-fourth"
+    },
+    {
+      "Symbol": "½",
+      "Action required": "Replace",
+      "Replace Value": " 1/2",
+      "Symbol Meaning": "Fraction, one-half"
+    },
+    {
+      "Symbol": "¾",
+      "Action required": "Replace",
+      "Replace Value": " 3/4",
+      "Symbol Meaning": "Fraction, three-fourths"
     },
     {
       "Symbol": "×",
       "Action required": "Replace",
       "Replace Value": " x",
       "Symbol Meaning": "Multiplication sign"
-    }
-  ],
-  "checklist": [
-    {
-      "Checklist Item": "Brand name is not in title and is present in short title",
-      "Active": true
     },
     {
-      "Checklist Item": "Character limits are within allowed ranges",
-      "Active": true
+      "Symbol": "Ω",
+      "Action required": "Replace",
+      "Replace Value": " Ohm",
+      "Symbol Meaning": "Ohm"
     },
     {
-      "Checklist Item": "Includes uses hyphen separators and no commas",
-      "Active": true
+      "Symbol": "²",
+      "Action required": "Replace",
+      "Replace Value": " 2",
+      "Symbol Meaning": "Superscript 2"
     },
     {
-      "Checklist Item": "Similar SKUs were checked",
-      "Active": true
+      "Symbol": "µ",
+      "Action required": "Replace",
+      "Replace Value": "micro",
+      "Symbol Meaning": "Mu or Micro"
     },
     {
-      "Checklist Item": "SKU item number has no spaces or copy/paste errors",
-      "Active": true
+      "Symbol": "μA",
+      "Action required": "Replace",
+      "Replace Value": "micro A",
+      "Symbol Meaning": ""
     },
     {
-      "Checklist Item": "Battery information is added where applicable",
-      "Active": true
+      "Symbol": "μV",
+      "Action required": "Replace",
+      "Replace Value": "micro V",
+      "Symbol Meaning": ""
     },
     {
-      "Checklist Item": "Special characters were reviewed",
-      "Active": true
+      "Symbol": "–",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
     },
     {
-      "Checklist Item": "Warranty months match includes/warranty copy",
-      "Active": true
+      "Symbol": "—",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
     },
     {
-      "Checklist Item": "Manufacturer filter is not added incorrectly",
-      "Active": true
+      "Symbol": "~",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "Tilde to -"
+    },
+    {
+      "Symbol": "’",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": "Single invert"
+    },
+    {
+      "Symbol": "“",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": "Invert. Open"
+    },
+    {
+      "Symbol": "”",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": "Invert. Close"
+    },
+    {
+      "Symbol": "α",
+      "Action required": "Replace",
+      "Replace Value": "a",
+      "Symbol Meaning": "Alpha"
+    },
+    {
+      "Symbol": "‘",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ø",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Â",
+      "Action required": "Replace",
+      "Replace Value": "A",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Phi"
+    },
+    {
+      "Symbol": "˚",
+      "Action required": "Replace",
+      "Replace Value": " Degree ",
+      "Symbol Meaning": "Degree symbol"
+    },
+    {
+      "Symbol": "≤",
+      "Action required": "Replace",
+      "Replace Value": "<=",
+      "Symbol Meaning": "Less than or equals to"
+    },
+    {
+      "Symbol": "～",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "Tilde to -"
+    },
+    {
+      "Symbol": "℃",
+      "Action required": "Replace",
+      "Replace Value": " Degree C",
+      "Symbol Meaning": "Degree symbol"
+    },
+    {
+      "Symbol": "≥",
+      "Action required": "Replace",
+      "Replace Value": ">=",
+      "Symbol Meaning": "Greater than or equals to"
+    },
+    {
+      "Symbol": "∞",
+      "Action required": "Replace",
+      "Replace Value": "Infinite",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "″",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ω",
+      "Action required": "Replace",
+      "Replace Value": "Ohm",
+      "Symbol Meaning": "Ohm"
+    },
+    {
+      "Symbol": "μ",
+      "Action required": "Replace",
+      "Replace Value": "micro",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "‑",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "′",
+      "Action required": "Replace",
+      "Replace Value": "'",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "„",
+      "Action required": "Replace",
+      "Replace Value": "\"",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ø",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ƫ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ʃ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "−",
+      "Action required": "Replace",
+      "Replace Value": "-",
+      "Symbol Meaning": "-"
+    },
+    {
+      "Symbol": "ﬁ",
+      "Action required": "Replace",
+      "Replace Value": "fi",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "：",
+      "Action required": "Replace",
+      "Replace Value": ":",
+      "Symbol Meaning": "colon"
+    },
+    {
+      "Symbol": "é",
+      "Action required": "Replace",
+      "Replace Value": "e",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Grey",
+      "Action required": "Replace",
+      "Replace Value": "Gray",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "grey",
+      "Action required": "Replace",
+      "Replace Value": "gray",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Colour",
+      "Action required": "Replace",
+      "Replace Value": "Color",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "colour",
+      "Action required": "Replace",
+      "Replace Value": "color",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Adaptor",
+      "Action required": "Replace",
+      "Replace Value": "Adapter",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "adaptor",
+      "Action required": "Replace",
+      "Replace Value": "adapter",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Velcro",
+      "Action required": "Replace",
+      "Replace Value": "Self-Securing Closure",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "velcro",
+      "Action required": "Replace",
+      "Replace Value": "self-securing closure",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "…",
+      "Action required": "Replace",
+      "Replace Value": "...",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Aluminium",
+      "Action required": "Replace",
+      "Replace Value": "Aluminum",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "⅜",
+      "Action required": "Replace",
+      "Replace Value": "3/8",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ü",
+      "Action required": "Replace",
+      "Replace Value": "U",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "△",
+      "Action required": "Replace",
+      "Replace Value": "Delta ",
+      "Symbol Meaning": "Delta"
+    },
+    {
+      "Symbol": "≦",
+      "Action required": "Replace",
+      "Replace Value": "<=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "≧",
+      "Action required": "Replace",
+      "Replace Value": ">=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "†",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "≈",
+      "Action required": "Replace",
+      "Replace Value": "=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "⎓",
+      "Action required": "Replace",
+      "Replace Value": "=",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "å",
+      "Action required": "Replace",
+      "Replace Value": "Angstrom",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ﬂ",
+      "Action required": "Replace",
+      "Replace Value": "fl",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "【",
+      "Action required": "Replace",
+      "Replace Value": "(",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "】",
+      "Action required": "Replace",
+      "Replace Value": ")",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "aluminium",
+      "Action required": "Replace",
+      "Replace Value": "aluminum",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "TÜV",
+      "Action required": "Replace",
+      "Replace Value": "TUV",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Xᵉ",
+      "Action required": "Replace",
+      "Replace Value": "Xe",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "·",
+      "Action required": "Replace",
+      "Replace Value": ".",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "ō",
+      "Action required": "Replace",
+      "Replace Value": "o",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "（",
+      "Action required": "Replace",
+      "Replace Value": "(",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "）",
+      "Action required": "Replace",
+      "Replace Value": ")",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ⅱ",
+      "Action required": "Replace",
+      "Replace Value": "II",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "Ⅰ",
+      "Action required": "Replace",
+      "Replace Value": "I",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "，",
+      "Action required": "Replace",
+      "Replace Value": ", ",
+      "Symbol Meaning": ""
+    },
+    {
+      "Symbol": "φ",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Phi"
+    },
+    {
+      "Symbol": "＜",
+      "Action required": "Replace",
+      "Replace Value": "<",
+      "Symbol Meaning": "Less than"
     }
   ],
   "warranty": [

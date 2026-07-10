@@ -3,24 +3,8 @@ from __future__ import annotations
 import pandas as pd
 
 
-def default_manufacturers() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "Manufacturer": [
-                "New Brand",
-                "ErgoLife",
-                "Leica",
-                "Sprolink",
-                "TAMRON",
-                "Sony",
-                "Canon",
-                "Nikon",
-            ]
-        }
-    )
-
-
 def default_battery_materials() -> pd.DataFrame:
+    # "-" stays first: it is the selectbox placeholder for "no material chosen".
     return pd.DataFrame(
         {
             "Battery Material": [
@@ -29,24 +13,83 @@ def default_battery_materials() -> pd.DataFrame:
                 "lead acid",
                 "lithium",
                 "lithium ion",
+                "magnesium",
+                "mercury",
+                "nickel cadmium",
                 "nickel metal hydride",
+                "silver oxide",
                 "zinc air",
+                "zinc carbon",
+                "zinc chloride",
             ]
         }
     )
 
 
 def default_battery_types() -> pd.DataFrame:
+    # "-" stays first: it is the selectbox placeholder for "no type chosen".
     return pd.DataFrame(
         {
             "Battery Type": [
                 "-",
+                "1/3 N",
+                "18350",
+                "18650",
+                "9-volt",
                 "A",
+                "A10",
+                "A13",
+                "A23",
+                "A312",
+                "A675",
                 "AA",
                 "AAA",
-                "9-volt",
-                "18650",
+                "AAAA",
+                "AG3",
+                "AG3/LR41",
+                "AG5",
+                "C",
+                "CR1216",
+                "CR1220",
+                "CR123",
+                "CR123A",
+                "CR1616",
+                "CR1620",
+                "CR1623",
+                "CR1632",
+                "CR2",
+                "CR2016",
+                "CR2023",
+                "CR2025",
+                "CR2026",
+                "CR2032",
+                "CR2412",
+                "CR2430",
+                "CR2450",
+                "CR927",
+                "D",
+                "DD",
+                "LR1130",
+                "LR41",
+                "LR43",
+                "LR44",
+                "LR45",
+                "LR48",
+                "LR54",
+                "LR60",
+                "LR63",
+                "LR66",
+                "N",
                 "non-universal",
+                "SR44W",
+                "SR521SW",
+                "SR616SW",
+                "SR621SW",
+                "SR626SW",
+                "SR721SW",
+                "SR916SW",
+                "SR920SW",
+                "SR927SW",
             ]
         }
     )
@@ -66,7 +109,7 @@ def default_special_character_rules() -> pd.DataFrame:
         ("\u00be", "Replace", " 3/4", "Fraction, three-fourths"),
         ("\u00d7", "Replace", " x", "Multiplication sign"),
         ("\u03a9", "Replace", " Ohm", "Ohm"),
-        ("\u00b2", "Replace", "2", "Superscript 2"),
+        ("\u00b2", "Replace", " 2", "Superscript 2"),
         ("\u00b5", "Replace", "micro", "Mu or Micro"),
         ("\u03bcA", "Replace", "micro A", ""),
         ("\u03bcV", "Replace", "micro V", ""),
@@ -191,22 +234,3 @@ def default_warranty() -> pd.DataFrame:
         "Brand Name", "Mfg Code", "Warranty Description", "Warranty URL",
         "Warranty Tel#", "Warranty Months", "Months for Parts", "Comments"
     ])
-
-
-def default_checklist() -> pd.DataFrame:
-    return pd.DataFrame(
-        {
-            "Checklist Item": [
-                "Brand name is not in title and is present in short title",
-                "Character limits are within allowed ranges",
-                "Includes uses hyphen separators and no commas",
-                "Similar SKUs were checked",
-                "SKU item number has no spaces or copy/paste errors",
-                "Battery information is added where applicable",
-                "Special characters were reviewed",
-                "Warranty months match includes/warranty copy",
-                "Manufacturer filter is not added incorrectly",
-            ],
-            "Active": [True] * 9,
-        }
-    )

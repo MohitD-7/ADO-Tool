@@ -7,6 +7,7 @@ from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
 
 
 def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
@@ -35,11 +36,12 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         reorder_slot = st.container()
 
         feature_df = pd.DataFrame({"Feature": features_list})
-        edited = st.data_editor(
+        editor_key = f"features_editor_{ino}"
+        edited = stable_data_editor(
             feature_df,
             num_rows="dynamic",
             width="stretch",
-            key=f"features_editor_{ino}",
+            key=editor_key,
         )
         item["features"] = [
             format_text(str(value), st.session_state["special_rules_df"])
@@ -53,7 +55,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 perm = reorder_editor([str(f) for f in current], key=f"reorder_features_{ino}")
                 if perm is not None:
                     item["features"] = [current[i] for i in perm]
-                    st.session_state.pop(f"features_editor_{ino}", None)
+                    reset_stable_data_editor(editor_key)
                     st.rerun()
 
         with st.expander("Add Feature", expanded=False):

@@ -10,6 +10,7 @@ from sku_manager.services.variants import (
     variant_completeness,
 )
 from sku_manager.state import current_item
+from sku_manager.ui.grid import stable_data_editor
 
 
 def _variants_state() -> dict:
@@ -116,9 +117,10 @@ def render() -> None:
         for attr in attributes:
             col_config[attr] = st.column_config.TextColumn(attr, width="medium")
 
-        edited = st.data_editor(
+        editor_key = f"varopts_editor_{psku}_{'|'.join(attributes)}"
+        edited = stable_data_editor(
             df,
-            key=f"varopts_editor_{psku}_{'|'.join(attributes)}",
+            key=editor_key,
             column_config=col_config,
             num_rows="fixed",
             width="stretch",

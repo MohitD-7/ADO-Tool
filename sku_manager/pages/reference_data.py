@@ -13,14 +13,13 @@ from sku_manager.services.reference_store import (
     save_reference_data,
 )
 from sku_manager.ui.components import page_header
+from sku_manager.ui.grid import stable_data_editor
 
 
 TABLES = [
-    ("Manufacturers", "manufacturers_df"),
     ("Battery Materials", "battery_materials_df"),
     ("Battery Types", "battery_types_df"),
     ("Special Characters", "special_rules_df"),
-    ("Checklist", "checklist_df"),
     ("Warranty Brands", "warranty_df"),
 ]
 
@@ -127,7 +126,7 @@ def _render_table(label: str, state_key: str, editable: bool) -> None:
                     st.success(f"Loaded {len(coerced_df):,} rows into {label} and saved to {REFERENCE_DATA_PATH.name}.")
                     st.rerun()
 
-        st.session_state[state_key] = st.data_editor(
+        st.session_state[state_key] = stable_data_editor(
             df,
             num_rows="dynamic",
             width="stretch",

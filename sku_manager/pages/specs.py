@@ -7,6 +7,7 @@ from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
 
 
 def render(show_header: bool = True, show_links: bool = True) -> None:
@@ -33,6 +34,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         # Reserve the reorder control's spot above the grid, but fill it after
         # the editor writes the updated list (see features.py).
         reorder_slot = st.container()
+        editor_key = f"specs_editor_{details['item_no']}"
 
         specs_df = pd.DataFrame(
             [
@@ -47,11 +49,11 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
             ],
             columns=["Value1 (Category)", "Value2 (Order)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)"],
         )
-        edited = st.data_editor(
+        edited = stable_data_editor(
             specs_df,
             num_rows="dynamic",
             width="stretch",
-            key=f"specs_editor_{details['item_no']}",
+            key=editor_key,
             column_config={
                 "Value1 (Category)": st.column_config.TextColumn("Value1 (Category)", width="medium"),
                 "Value2 (Order)":    st.column_config.NumberColumn("Value2 (Order)", disabled=True, width="small"),
@@ -82,7 +84,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
                 perm = reorder_editor(labels, key=f"reorder_specs_{details['item_no']}")
                 if perm is not None:
                     item["specs"] = [current[i] for i in perm]
-                    st.session_state.pop(f"specs_editor_{details['item_no']}", None)
+                    reset_stable_data_editor(editor_key)
                     st.rerun()
 
         st.markdown("### Add Specification")

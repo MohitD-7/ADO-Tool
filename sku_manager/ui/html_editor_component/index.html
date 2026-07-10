@@ -73,6 +73,7 @@ var dirty = false;
 var fullscreenActive = false;
 var preFullscreenHeight = null;
 var frameStyleBackup = null;
+var FULLSCREEN_INSET = 14;
 var auditMarkers = [];
 var auditTimer = null;
 var spellDictionary = null;
@@ -205,6 +206,8 @@ function backupFrameStyle(frame) {
     height: frame.style.height,
     zIndex: frame.style.zIndex,
     border: frame.style.border,
+    borderRadius: frame.style.borderRadius,
+    boxShadow: frame.style.boxShadow,
     background: frame.style.background,
     maxWidth: frame.style.maxWidth
   };
@@ -219,6 +222,8 @@ function restoreFrameStyle(frame) {
   frame.style.height = frameStyleBackup.height;
   frame.style.zIndex = frameStyleBackup.zIndex;
   frame.style.border = frameStyleBackup.border;
+  frame.style.borderRadius = frameStyleBackup.borderRadius;
+  frame.style.boxShadow = frameStyleBackup.boxShadow;
   frame.style.background = frameStyleBackup.background;
   frame.style.maxWidth = frameStyleBackup.maxWidth;
   frameStyleBackup = null;
@@ -231,13 +236,15 @@ function setFrameOverlay(on) {
     if (on) {
       backupFrameStyle(frame);
       frame.style.position = "fixed";
-      frame.style.top = "0";
-      frame.style.left = "0";
-      frame.style.width = "100vw";
-      frame.style.height = "100vh";
+      frame.style.top = FULLSCREEN_INSET + "px";
+      frame.style.left = FULLSCREEN_INSET + "px";
+      frame.style.width = "calc(100vw - " + (FULLSCREEN_INSET * 2) + "px)";
+      frame.style.height = "calc(100vh - " + (FULLSCREEN_INSET * 2) + "px)";
       frame.style.maxWidth = "none";
       frame.style.zIndex = "2147483647";
-      frame.style.border = "0";
+      frame.style.border = "1px solid #cbd5e1";
+      frame.style.borderRadius = "8px";
+      frame.style.boxShadow = "0 18px 48px rgba(15, 23, 42, .28)";
       frame.style.background = "#f7f9fb";
     } else {
       restoreFrameStyle(frame);
@@ -249,7 +256,7 @@ function updateFullscreenButton() {
   var btn = document.getElementById("fullscreen-btn");
   if (!btn) return;
   btn.textContent = fullscreenActive ? "Exit full screen" : "Full screen";
-  btn.title = fullscreenActive ? "Exit full screen editor" : "Open editor full screen";
+  btn.title = fullscreenActive ? "Exit expanded editor" : "Open expanded editor without browser fullscreen";
 }
 
 function adjustFullscreenHeight() {
@@ -285,31 +292,11 @@ function setFullscreenMode(on) {
 
 function toggleFullscreen() {
   commitValue({ reason: "fullscreen" });
-  if (fullscreenActive) {
-    if (document.fullscreenElement && document.exitFullscreen) {
-      document.exitFullscreen().catch(function() { setFullscreenMode(false); });
-    } else {
-      setFullscreenMode(false);
-    }
-    return;
-  }
-  var shell = document.getElementById("editor-shell") || document.documentElement;
-  if (shell.requestFullscreen) {
-    shell.requestFullscreen().then(function() {
-      setFullscreenMode(true);
-    }).catch(function() {
-      setFullscreenMode(true);
-    });
-  } else {
-    setFullscreenMode(true);
-  }
+  setFullscreenMode(!fullscreenActive);
 }
 
 function setupFullscreen() {
   updateFullscreenButton();
-  document.addEventListener("fullscreenchange", function() {
-    setFullscreenMode(Boolean(document.fullscreenElement));
-  });
   window.addEventListener("resize", function() {
     if (fullscreenActive) adjustFullscreenHeight();
   });

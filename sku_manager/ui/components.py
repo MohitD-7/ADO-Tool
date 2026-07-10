@@ -3,8 +3,13 @@ from __future__ import annotations
 import hashlib
 import html
 
+import pandas as pd
 import streamlit as st
-from streamlit_sortables import sort_items
+
+try:
+    from streamlit_sortables import sort_items
+except ImportError:
+    sort_items = None
 
 from sku_manager.services.validation import char_count_status
 
@@ -216,6 +221,9 @@ def reorder_editor(labels: list[str], key: str) -> list[int] | None:
         working = list(range(n))
         st.session_state[state_key] = working
 
+    if sort_items is None:
+        return _fallback_reorder_editor(labels, key, working, state_key)
+
     # Build one *stable* draggable token per original row. The token identity
     # must not change between reruns: the keyed component echoes back the token
     # strings from its own frontend state on a drop, so if we renumbered them we
@@ -261,6 +269,64 @@ def reorder_editor(labels: list[str], key: str) -> list[int] | None:
         "Reset", key=f"{key}_reset", disabled=not changed, use_container_width=True,
     ):
         st.session_state.pop(state_key, None)
+        st.rerun()
+    return None
+
+
+def _fallback_reorder_editor(
+    labels: list[str],
+    key: str,
+    working: list[int],
+    state_key: str,
+) -> list[int] | None:
+    """Fallback reorder control used when streamlit-sortables is unavailable."""
+    from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
+
+    rows = [
+        {
+            "Order": (position + 1) * 10,
+            "Item": labels[orig],
+        }
+        for position, orig in enumerate(working)
+    ]
+    editor_key = f"{key}_fallback_order"
+    edited = stable_data_editor(
+        pd.DataFrame(rows, columns=["Order", "Item"]),
+        key=editor_key,
+        num_rows="fixed",
+        width="stretch",
+        hide_index=True,
+        column_config={
+            "Order": st.column_config.NumberColumn("Order", width="small", step=10),
+            "Item": st.column_config.TextColumn("Item", disabled=True, width="large"),
+        },
+    )
+
+    sortable_rows = []
+    for position, row in edited.fillna("").iterrows():
+        if position >= len(working):
+            continue
+        try:
+            order_value = float(row.get("Order", (position + 1) * 10))
+        except (TypeError, ValueError):
+            order_value = float((position + 1) * 10)
+        sortable_rows.append((order_value, int(position), working[int(position)]))
+
+    proposed = [orig for _, _, orig in sorted(sortable_rows)]
+    changed = proposed != list(range(len(labels)))
+    save_col, reset_col = st.columns(2)
+    if save_col.button(
+        "Save order", key=f"{key}_save", type="primary",
+        disabled=not changed, use_container_width=True,
+    ):
+        st.session_state.pop(state_key, None)
+        reset_stable_data_editor(editor_key)
+        return proposed
+    if reset_col.button(
+        "Reset", key=f"{key}_reset", disabled=not changed, use_container_width=True,
+    ):
+        st.session_state.pop(state_key, None)
+        reset_stable_data_editor(editor_key)
         st.rerun()
     return None
 

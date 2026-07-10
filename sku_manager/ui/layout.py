@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import html
+from pathlib import Path
 
 import streamlit as st
 
 from sku_manager.state import current_item, has_batch, set_current_item, sync_description_state
+
+
+_LOGO_PATH = Path(__file__).resolve().parents[1] / "assets" / "VO-Logo.png"
 
 
 PAGE_LABELS = {
@@ -60,18 +64,9 @@ def _page_for_label(label: str) -> str:
 def sidebar_nav() -> str:
     """Render sidebar brand + page nav. Returns the active page key."""
     # ── Brand ─────────────────────────────────────────────────────────────
-    st.sidebar.markdown(
-        """
-        <div class="vo-brand-lockup">
-          <div class="vo-brand-mark">VO</div>
-          <div>
-            <div class="vo-brand">SKU Manager</div>
-            <div class="vo-subtle">VirtualOps v2.4.0</div>
-          </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    if _LOGO_PATH.exists():
+        st.sidebar.image(str(_LOGO_PATH), use_container_width=True)
+    st.sidebar.markdown('<div class="vo-brand">SKU Manager</div>', unsafe_allow_html=True)
     st.sidebar.markdown("---")
 
     # ── Resolve active page ───────────────────────────────────────────────

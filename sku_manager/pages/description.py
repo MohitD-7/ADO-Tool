@@ -9,6 +9,7 @@ from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, description_state_keys, set_description_state, sync_description_state
 from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, source_video_panel
 from sku_manager.ui.editor import html_editor
+from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
 
 
 def render(
@@ -122,6 +123,7 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
     # Reserve the reorder control's spot above the grid, but fill it after the
     # editor writes the updated list (see features.py).
     reorder_slot = st.container()
+    editor_key = f"includes_editor_{ino}"
     df = pd.DataFrame(
         [
             {
@@ -132,11 +134,11 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
         ],
         columns=["Value2 (Text)", "Value3 (SKU)"],
     )
-    edited = st.data_editor(
+    edited = stable_data_editor(
         df,
         num_rows="dynamic",
         width="stretch",
-        key=f"includes_editor_{ino}",
+        key=editor_key,
         column_config={
             "Value2 (Text)": st.column_config.TextColumn("Value2 (Text)", width="large"),
             "Value3 (SKU)":  st.column_config.TextColumn("Value3 (SKU)",  width="medium"),
@@ -164,7 +166,7 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
             perm = reorder_editor(labels, key=f"reorder_includes_{ino}")
             if perm is not None:
                 item["includes"] = [current[i] for i in perm]
-                st.session_state.pop(f"includes_editor_{ino}", None)
+                reset_stable_data_editor(editor_key)
                 st.rerun()
 
 

@@ -7,6 +7,7 @@ from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
 
 
 def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
@@ -39,11 +40,12 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             reorder_slot = st.container()
 
             highlight_df = pd.DataFrame({"Highlight": highlights_list})
-            edited = st.data_editor(
+            editor_key = f"highlights_editor_{ino}"
+            edited = stable_data_editor(
                 highlight_df,
                 num_rows="dynamic",
                 width="stretch",
-                key=f"highlights_editor_{ino}",
+                key=editor_key,
             )
             item["highlights"] = [
                 format_text(str(value), st.session_state["special_rules_df"])
@@ -57,7 +59,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                     perm = reorder_editor([str(h) for h in current], key=f"reorder_highlights_{ino}")
                     if perm is not None:
                         item["highlights"] = [current[i] for i in perm]
-                        st.session_state.pop(f"highlights_editor_{ino}", None)
+                        reset_stable_data_editor(editor_key)
                         st.rerun()
 
             st.markdown("### Add Highlights in Bulk")
