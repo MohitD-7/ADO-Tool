@@ -1041,3 +1041,29 @@ section[data-testid="stSidebar"] div[data-testid="stImage"] {
   text-align: center !important;
   margin: 0 4px 16px !important;
 }
+
+
+/* Sidebar credit: fixed at the bottom of the left panel, intentionally quiet. */
+section[data-testid="stSidebar"] > div:first-child {
+  padding-bottom: 54px !important;
+}
+
+.vo-sidebar-credit {
+  position: fixed !important;
+  left: 12px !important;
+  bottom: 12px !important;
+  width: 216px !important;
+  color: var(--vo-muted) !important;
+  font-size: 10.5px !important;
+  line-height: 14px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  opacity: 0.68 !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 900px) {
+  .vo-sidebar-credit {
+    width: 196px !important;
+  }
+}

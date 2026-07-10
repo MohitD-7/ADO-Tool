@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from sku_manager.services.text_rules import format_text, parse_lines
+from sku_manager.services.text_rules import format_text, parse_lines, split_cell_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
@@ -43,11 +43,20 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             width="stretch",
             key=editor_key,
         )
-        item["features"] = [
-            format_text(str(value), st.session_state["special_rules_df"])
-            for value in edited["Feature"].tolist()
-            if str(value).strip()
-        ]
+        rules_df = st.session_state["special_rules_df"]
+        pasted_lines = False
+        features: list[str] = []
+        for value in edited["Feature"].tolist():
+            lines = split_cell_lines(value)
+            pasted_lines = pasted_lines or len(lines) > 1
+            features.extend(format_text(line, rules_df) for line in lines)
+        item["features"] = features
+        if pasted_lines:
+            # A paste left embedded newlines in a cell (the grid's clipboard
+            # parser merges lines around unmatched " characters). The lines are
+            # now split into their own rows; remount so the grid shows them.
+            reset_stable_data_editor(editor_key)
+            st.rerun()
 
         with reorder_slot:
             current = item["features"]

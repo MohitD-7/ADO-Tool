@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from sku_manager.services.text_rules import format_text
+from sku_manager.services.text_rules import flatten_cell_text, format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
@@ -64,14 +64,25 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         )
         rules_df = st.session_state["special_rules_df"]
         cleaned = []
+        pasted_lines = False
         for _, row in edited.fillna("").iterrows():
-            category = format_text(str(row.get("Value1 (Category)", "")), rules_df)
-            group    = format_text(str(row.get("Value3 (Group)",    "")), rules_df)
-            key      = format_text(str(row.get("Value4 (Spec)",     "")), rules_df)
-            value    = format_text(str(row.get("Value5 (Value)",    "")), rules_df)
+            raw_cells = {
+                column: str(row.get(column, ""))
+                for column in ("Value1 (Category)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)")
+            }
+            pasted_lines = pasted_lines or any("\n" in cell or "\r" in cell for cell in raw_cells.values())
+            category = format_text(flatten_cell_text(raw_cells["Value1 (Category)"]), rules_df)
+            group    = format_text(flatten_cell_text(raw_cells["Value3 (Group)"]),    rules_df)
+            key      = format_text(flatten_cell_text(raw_cells["Value4 (Spec)"]),     rules_df)
+            value    = format_text(flatten_cell_text(raw_cells["Value5 (Value)"]),    rules_df)
             if key or value or category or group:
                 cleaned.append({"category": category, "group": group, "Spec": key, "Value": value})
         item["specs"] = cleaned
+        if pasted_lines:
+            # A quote-confused paste embedded newlines inside cells; the model
+            # is flattened back to single lines — remount so the grid matches.
+            reset_stable_data_editor(editor_key)
+            st.rerun()
 
         with reorder_slot:
             current = item["specs"]

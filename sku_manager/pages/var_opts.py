@@ -9,8 +9,9 @@ from sku_manager.services.variants import (
     parent_child_groups,
     variant_completeness,
 )
+from sku_manager.services.text_rules import flatten_cell_text
 from sku_manager.state import current_item
-from sku_manager.ui.grid import stable_data_editor
+from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
 
 
 def _variants_state() -> dict:
@@ -127,11 +128,18 @@ def render() -> None:
             hide_index=True,
         )
 
+        pasted_lines = False
         for _, row in edited.iterrows():
             csku = str(row["Child SKU"])
             store = values.setdefault(csku, {})
             for attr in attributes:
-                store[attr] = str(row.get(attr, "") or "").strip()
+                raw = str(row.get(attr, "") or "")
+                pasted_lines = pasted_lines or "\n" in raw or "\r" in raw
+                store[attr] = flatten_cell_text(raw)
+        if pasted_lines:
+            # Flatten newlines a quote-confused paste embedded (see specs.py).
+            reset_stable_data_editor(editor_key)
+            st.rerun()
 
     # ── Completeness status (the download itself lives in the Work Queue) ─
     st.markdown('<h2 class="dv2-section-title">Status</h2>', unsafe_allow_html=True)

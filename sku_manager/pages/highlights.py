@@ -3,7 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-from sku_manager.services.text_rules import format_text, parse_lines
+from sku_manager.services.text_rules import format_text, parse_lines, split_cell_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
 from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
@@ -47,11 +47,18 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 width="stretch",
                 key=editor_key,
             )
-            item["highlights"] = [
-                format_text(str(value), st.session_state["special_rules_df"])
-                for value in edited["Highlight"].tolist()
-                if str(value).strip()
-            ]
+            rules_df = st.session_state["special_rules_df"]
+            pasted_lines = False
+            highlights: list[str] = []
+            for value in edited["Highlight"].tolist():
+                lines = split_cell_lines(value)
+                pasted_lines = pasted_lines or len(lines) > 1
+                highlights.extend(format_text(line, rules_df) for line in lines)
+            item["highlights"] = highlights
+            if pasted_lines:
+                # Split rows a quote-confused paste merged (see features.py).
+                reset_stable_data_editor(editor_key)
+                st.rerun()
 
             with reorder_slot:
                 current = item["highlights"]

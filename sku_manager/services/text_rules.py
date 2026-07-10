@@ -160,6 +160,28 @@ def parse_lines(text: str) -> list[str]:
     return [line.strip() for line in str(text).replace("\r", "\n").split("\n") if line.strip()]
 
 
+def split_cell_lines(value) -> list[str]:
+    """Split a grid cell into its non-empty lines.
+
+    The data editor's clipboard parser treats " as a CSV quote character, so
+    pasting text with unmatched inch marks (1/4", 9.5") merges lines into one
+    cell with embedded newlines. Splitting the cell back out restores them.
+    """
+    if value is None:
+        return []
+    try:
+        if pd.isna(value):
+            return []
+    except (TypeError, ValueError):
+        pass
+    return [line.strip() for line in str(value).splitlines() if line.strip()]
+
+
+def flatten_cell_text(value) -> str:
+    """Collapse newlines a paste embedded in a grid cell back into spaces."""
+    return " ".join(split_cell_lines(value))
+
+
 def parse_tabbed_specs(text: str) -> list[dict[str, str]]:
     specs = []
     for line in parse_lines(text):

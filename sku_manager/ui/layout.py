@@ -99,6 +99,10 @@ def sidebar_nav() -> str:
     )
     page = _page_for_label(selected_label)
     st.session_state["active_page"] = page
+    st.sidebar.markdown(
+        '<div class="vo-sidebar-credit">&copy; 2026 Developed by Mohit Dhaker</div>',
+        unsafe_allow_html=True,
+    )
     return page
 
 

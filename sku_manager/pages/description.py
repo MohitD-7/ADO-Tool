@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-from sku_manager.services.text_rules import format_text, parse_lines
+from sku_manager.services.text_rules import format_text, parse_lines, split_cell_lines
 from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, description_state_keys, set_description_state, sync_description_state
 from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, source_video_panel
@@ -146,15 +146,21 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
     )
 
     new_list: list[dict] = []
+    pasted_lines = False
     for _, row in edited.iterrows():
-        text = str(row.get("Value2 (Text)", "") or "").strip()
-        sku = str(row.get("Value3 (SKU)", "") or "").strip()
-        if not text and not sku:
-            continue
-        if text and sku:
-            sku = ""
-        new_list.append({"text": text, "sku": sku})
+        text_lines = split_cell_lines(row.get("Value2 (Text)", ""))
+        sku_lines = split_cell_lines(row.get("Value3 (SKU)", ""))
+        pasted_lines = pasted_lines or len(text_lines) > 1 or len(sku_lines) > 1
+        if text_lines:
+            # Text wins over SKU (fill one per row, not both).
+            new_list.extend({"text": line, "sku": ""} for line in text_lines)
+        elif sku_lines:
+            new_list.extend({"text": "", "sku": line} for line in sku_lines)
     item["includes"] = new_list
+    if pasted_lines:
+        # Split rows a quote-confused paste merged (see features.py).
+        reset_stable_data_editor(editor_key)
+        st.rerun()
 
     with reorder_slot:
         current = item["includes"]
