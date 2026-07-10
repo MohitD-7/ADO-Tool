@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(python -c ' *)",
+      "Bash(git push *)",
+      "Bash(python -c \"from sku_manager.pages import review; print\\('review import OK'\\)\")"
+    ]
+  }
+}

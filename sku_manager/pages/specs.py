@@ -142,19 +142,26 @@ def _bump_specs_editor(item_no: str) -> None:
 
 
 def _specs_dataframe(specs_list: list[dict]) -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "Value1 (Category)": s.get("category", ""),
-                "Value2 (Order)": (idx + 1) * 10,
-                "Value3 (Group)": s.get("group", ""),
-                "Value4 (Spec)": s.get("Spec", ""),
-                "Value5 (Value)": s.get("Value", ""),
-            }
-            for idx, s in enumerate(specs_list)
-        ],
-        columns=_SPEC_COLUMNS,
-    )
+    rows = [
+        {
+            "Value1 (Category)": s.get("category", ""),
+            "Value2 (Order)": (idx + 1) * 10,
+            "Value3 (Group)": s.get("group", ""),
+            "Value4 (Spec)": s.get("Spec", ""),
+            "Value5 (Value)": s.get("Value", ""),
+        }
+        for idx, s in enumerate(specs_list)
+    ]
+    # Always show one empty trailing row so the user can type directly without
+    # having to click the '+' add-row button first.
+    rows.append({
+        "Value1 (Category)": "",
+        "Value2 (Order)": None,
+        "Value3 (Group)": "",
+        "Value4 (Spec)": "",
+        "Value5 (Value)": "",
+    })
+    return pd.DataFrame(rows, columns=_SPEC_COLUMNS)
 
 
 def _clean_cell(value: Any) -> str:

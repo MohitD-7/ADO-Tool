@@ -353,7 +353,7 @@ def inject_styles() -> None:
           font-size: 0.82rem;
         }
 
-        /* â”€â”€ Generic card â”€â”€ */
+        /* ── Generic card ── */
         .vo-card {
           background: #fff;
           border: 1px solid var(--vo-border);
@@ -362,15 +362,16 @@ def inject_styles() -> None:
           margin: 0.25rem 0 0.5rem 0;
         }
 
-        /* â”€â”€ Divider â”€â”€ */
+        /* ── Divider ── */
         .vo-divider {
           border: none;
           border-top: 1px solid #e2e8f0;
           margin: 0.5rem 0;
         }
 
-        /* â”€â”€ Buttons â”€â”€ */
-        .stButton button {
+        /* ── Buttons ── */
+        .stButton button,
+        .stFormSubmitButton button {
           border-radius: 6px;
           border: 1.5px solid #cbd5e1;
           font-weight: 700;
@@ -378,15 +379,18 @@ def inject_styles() -> None:
           padding: 0.25rem 0.7rem;
           transition: background 0.12s, border-color 0.12s;
         }
-        .stButton button:hover {
+        .stButton button:hover,
+        .stFormSubmitButton button:hover {
           border-color: var(--vo-input-focus);
           background: #f8fafc;
         }
-        .stButton button:focus {
+        .stButton button:focus,
+        .stFormSubmitButton button:focus {
           outline: none !important;
           box-shadow: none !important;
         }
-        .stButton button[kind="primary"] {
+        .stButton button[kind="primary"],
+        .stFormSubmitButton button[kind="primary"] {
           background: #ef8e0d !important;
           border-color: #ef8e0d !important;
           color: #fff !important;
@@ -691,12 +695,14 @@ def inject_styles() -> None:
           border-color: var(--dv2-neutral-400) !important;
         }
         /* Primary: solid orange with WHITE text */
-        .dv2 .stButton button[kind="primary"] {
+        .dv2 .stButton button[kind="primary"],
+        .dv2 .stFormSubmitButton button[kind="primary"] {
           background: var(--dv2-primary) !important;
           border: 1px solid var(--dv2-primary) !important;
           color: var(--dv2-on-primary) !important;
         }
-        .dv2 .stButton button[kind="primary"]:hover {
+        .dv2 .stButton button[kind="primary"]:hover,
+        .dv2 .stFormSubmitButton button[kind="primary"]:hover {
           background: var(--dv2-primary-hover) !important;
           border-color: var(--dv2-primary-hover) !important;
         }

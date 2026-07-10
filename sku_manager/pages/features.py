@@ -36,7 +36,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         # added in the grid wouldn't appear here until the next rerun.
         reorder_slot = st.container()
 
-        feature_df = pd.DataFrame({"Feature": features_list})
+        feature_df = pd.DataFrame({"Feature": features_list + [""]})
         editor_key = f"features_editor_{ino}"
         edited = stable_data_editor(
             feature_df,

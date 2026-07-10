@@ -428,8 +428,10 @@ div[data-baseweb="select"] > div:focus-within {
 
 div[data-testid="stButton"] > button,
 div[data-testid="stDownloadButton"] > button,
+div[data-testid="stFormSubmitButton"] > button,
 .stButton button,
-.stDownloadButton button {
+.stDownloadButton button,
+.stFormSubmitButton button {
   min-height: 32px !important;
   height: 32px !important;
   padding: 6px 12px !important;
@@ -446,8 +448,10 @@ div[data-testid="stDownloadButton"] > button,
 
 div[data-testid="stButton"] > button:hover,
 div[data-testid="stDownloadButton"] > button:hover,
+div[data-testid="stFormSubmitButton"] > button:hover,
 .stButton button:hover,
-.stDownloadButton button:hover {
+.stDownloadButton button:hover,
+.stFormSubmitButton button:hover {
   background: var(--vo-surface-muted) !important;
   border-color: #94a3b8 !important;
   color: var(--vo-text) !important;
@@ -455,8 +459,10 @@ div[data-testid="stDownloadButton"] > button:hover,
 
 div[data-testid="stButton"] > button[kind="primary"],
 div[data-testid="stDownloadButton"] > button[kind="primary"],
+div[data-testid="stFormSubmitButton"] > button[kind="primary"],
 .stButton button[kind="primary"],
-.stDownloadButton button[kind="primary"] {
+.stDownloadButton button[kind="primary"],
+.stFormSubmitButton button[kind="primary"] {
   background: var(--vo-orange) !important;
   border-color: var(--vo-orange) !important;
   color: var(--vo-text) !important;
@@ -464,8 +470,10 @@ div[data-testid="stDownloadButton"] > button[kind="primary"],
 
 div[data-testid="stButton"] > button[kind="primary"]:hover,
 div[data-testid="stDownloadButton"] > button[kind="primary"]:hover,
+div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
 .stButton button[kind="primary"]:hover,
-.stDownloadButton button[kind="primary"]:hover {
+.stDownloadButton button[kind="primary"]:hover,
+.stFormSubmitButton button[kind="primary"]:hover {
   background: var(--vo-orange-hover) !important;
   border-color: var(--vo-orange-hover) !important;
   color: var(--vo-text) !important;

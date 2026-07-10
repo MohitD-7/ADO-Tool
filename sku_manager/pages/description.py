@@ -124,16 +124,15 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
     # editor writes the updated list (see features.py).
     reorder_slot = st.container()
     editor_key = f"includes_editor_{ino}"
-    df = pd.DataFrame(
-        [
-            {
-                "Value2 (Text)": str(entry.get("text", "") or ""),
-                "Value3 (SKU)":  str(entry.get("sku", "") or ""),
-            }
-            for entry in includes_list
-        ],
-        columns=["Value2 (Text)", "Value3 (SKU)"],
-    )
+    rows = [
+        {
+            "Value2 (Text)": str(entry.get("text", "") or ""),
+            "Value3 (SKU)":  str(entry.get("sku", "") or ""),
+        }
+        for entry in includes_list
+    ]
+    rows.append({"Value2 (Text)": "", "Value3 (SKU)": ""})
+    df = pd.DataFrame(rows, columns=["Value2 (Text)", "Value3 (SKU)"])
     edited = stable_data_editor(
         df,
         num_rows="dynamic",

@@ -197,17 +197,39 @@ def workspace_topbar() -> str:
 
 
 def review_sku_bar() -> None:
-    """SKU switcher for the Review page — plain button row, no decorative pills."""
+    """SKU switcher for the Review page — plain button row, no decorative pills.
+    Child SKUs (ATR Type == '') are rendered disabled; they are never worked on
+    directly but instead via the parent's Var Opts tab.
+    """
     items = st.session_state.get("items", {})
     if not items:
         return
+
+    # Build a lookup of ATR Type from queue_df so we can identify children.
+    queue_df = st.session_state.get("queue_df")
+    atr_by_ino: dict[str, str] = {}
+    if queue_df is not None and not queue_df.empty and "Item No" in queue_df.columns:
+        for _, qrow in queue_df.iterrows():
+            qino = str(qrow["Item No"]).strip()
+            if qino:
+                atr_by_ino[qino] = str(qrow.get("ATR Type", "")).strip()
 
     current_ino = st.session_state.get("current_item_no", "")
     ino_list    = list(items.keys())
     cols        = st.columns(min(len(ino_list), 10))
     clicked_ino = None
     for i, ino in enumerate(ino_list):
-        if cols[i % len(cols)].button(ino, key=f"reviewbar_sku_{ino}", use_container_width=True):
+        atr = atr_by_ino.get(ino, "Standalone")
+        is_child = atr == ""
+        is_active = ino == current_ino
+        if cols[i % len(cols)].button(
+            ino,
+            key=f"reviewbar_sku_{ino}",
+            use_container_width=True,
+            type="primary" if is_active else "secondary",
+            disabled=is_child,
+            help="Child variants are configured under the parent's Var Opts tab." if is_child else None,
+        ):
             clicked_ino = ino
 
     if clicked_ino and clicked_ino != current_ino:

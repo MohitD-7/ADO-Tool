@@ -39,7 +39,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             # after the editor writes the updated list (see features.py).
             reorder_slot = st.container()
 
-            highlight_df = pd.DataFrame({"Highlight": highlights_list})
+            highlight_df = pd.DataFrame({"Highlight": highlights_list + [""]})
             editor_key = f"highlights_editor_{ino}"
             edited = stable_data_editor(
                 highlight_df,
