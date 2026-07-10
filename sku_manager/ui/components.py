@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import html
 
 import streamlit as st
+from streamlit_sortables import sort_items
 
 from sku_manager.services.validation import char_count_status
 
@@ -108,125 +110,159 @@ def hidden_notes(item: dict, field_key: str) -> None:
     field_notes_editor(item, field_key)
 
 
-def drag_reorder(labels: list[str]) -> list[int] | None:
+def _reorder_token(label: str, orig: int) -> str:
+    """A stable, unique token string for a reorder row.
+
+    The label stays visible; an index-derived marker of invisible characters is
+    appended so two rows with identical text remain distinct and — crucially —
+    the token never changes across reruns (position is shown via a CSS counter,
+    not baked into this string). U+2063 is an invisible separator; the marker
+    encodes ``orig`` in binary as zero-width space / zero-width non-joiner.
     """
-    Draggable list. Returns a permutation (list of original indices in new order)
-    when the user commits a reorder, otherwise None. Consumers should apply the
-    permutation to their data list and st.rerun().
-    """
-    import json
-    import streamlit.components.v1 as components
+    marker = "".join("‌" if bit == "1" else "​" for bit in format(orig, "b"))
+    return f"{label}⁣{marker}"
 
-    payload = json.dumps([{"i": idx, "label": (lbl or "").strip() or "(empty)"} for idx, lbl in enumerate(labels)])
-    height = max(60, 42 * len(labels) + 12)
 
-    html = """
-<!doctype html>
-<html><head><meta charset="utf-8">
-<style>
-  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 13px; color: #1a2330; background: transparent; }
-  ol { list-style: none; margin: 0; padding: 0; }
-  li {
-    display: flex; align-items: center; gap: 8px;
-    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px;
-    padding: 6px 10px; margin-bottom: 4px; cursor: grab;
-    transition: background .1s, box-shadow .1s;
-  }
-  li.dragging { opacity: 0.45; }
-  li.drag-over { border-color: #ef8e0d; box-shadow: 0 0 0 2px rgba(239,142,13,.24); }
-  .handle { color: #98a5b3; font-size: 14px; line-height: 1; user-select: none; }
-  .order  { font-weight: 700; color: #6f8090; min-width: 28px; text-align: right; }
-  .label  { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #1a2330; }
-</style></head><body>
-<ol id="list"></ol>
-<script>
-  const ITEMS = __PAYLOAD__;
-  const list = document.getElementById('list');
-  let order = ITEMS.map(x => x.i);
-
-  function labelOf(i) {
-    const item = ITEMS.find(x => x.i === i);
-    return item ? item.label : '';
-  }
-
-  function render() {
-    list.innerHTML = '';
-    order.forEach((origIdx, pos) => {
-      const li = document.createElement('li');
-      li.draggable = true;
-      li.dataset.pos = String(pos);
-      li.innerHTML = `<span class="handle">⋮⋮</span><span class="order">${(pos+1)*10}</span><span class="label"></span>`;
-      li.querySelector('.label').textContent = labelOf(origIdx);
-      li.addEventListener('dragstart', (e) => {
-        li.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', String(pos));
-      });
-      li.addEventListener('dragend', () => {
-        li.classList.remove('dragging');
-        document.querySelectorAll('li.drag-over').forEach(el => el.classList.remove('drag-over'));
-      });
-      li.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        li.classList.add('drag-over');
-      });
-      li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
-      li.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const from = Number(e.dataTransfer.getData('text/plain'));
-        const to = Number(li.dataset.pos);
-        if (Number.isNaN(from) || Number.isNaN(to) || from === to) return;
-        const moved = order.splice(from, 1)[0];
-        order.splice(to, 0, moved);
-        render();
-        commit();
-      });
-      list.appendChild(li);
-    });
-    resizeFrame();
-  }
-
-  function resizeFrame() {
-    const h = document.body.scrollHeight;
-    window.parent.postMessage({ isStreamlitMessage: true, type: 'streamlit:setFrameHeight', height: h }, '*');
-  }
-
-  let seq = 0;
-  function commit() {
-    window.parent.postMessage({
-      isStreamlitMessage: true,
-      type: 'streamlit:setComponentValue',
-      value: { order: order.slice(), rev: ++seq },
-      dataType: 'json'
-    }, '*');
-  }
-
-  window.addEventListener('message', (e) => {
-    if (e.data && e.data.type === 'streamlit:render') render();
-  });
-  window.parent.postMessage({ isStreamlitMessage: true, type: 'streamlit:componentReady', apiVersion: 1 }, '*');
-  render();
-</script></body></html>
+# Inlined palette values (the drag list is an iframe and can't read our CSS vars).
+_REORDER_STYLE = """
+.sortable-component {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+}
+.sortable-container,
+.sortable-container-body {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    counter-reset: reorder-weight 0;
+}
+.sortable-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #191c1e;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.35;
+    box-shadow: none;
+    cursor: grab;
+}
+.sortable-item::before {
+    counter-increment: reorder-weight 10;
+    content: counter(reorder-weight);
+    flex: 0 0 auto;
+    min-width: 2.75em;
+    margin-right: 12px;
+    color: #64748b;
+    font-weight: 600;
+    text-align: right;
+}
+.sortable-item.dragging::before {
+    counter-increment: none;
+}
+.sortable-item:hover {
+    border-color: #ef8e0d;
+    background-color: #fff7ed;
+}
+.sortable-item.dragging {
+    cursor: grabbing;
+    opacity: 0.9;
+    border-color: #ef8e0d;
+    box-shadow: 0 2px 10px rgba(25, 28, 30, 0.14);
+}
 """
-    html = html.replace("__PAYLOAD__", payload)
-    result = components.html(html, height=height, scrolling=False)
-    if not isinstance(result, dict):
+
+
+def reorder_editor(labels: list[str], key: str) -> list[int] | None:
+    """Drag-and-drop reorder control with an explicit Save.
+
+    Rows are dragged into a *pending* working order held in session state;
+    nothing commits until the user clicks "Save order", at which point the
+    permutation (original indices in their new order) is returned. Every other
+    run returns None.
+
+    The caller should apply the permutation to its list, reset any data editor
+    that renders that list (pop the editor's widget-state key so it re-initialises
+    from the new order), and st.rerun().
+
+    The reorder UI is revealed by a toggle rather than an expander: the drag
+    list is an iframe component, and iframe components render blank inside a
+    collapsed expander (they measure their height while hidden and never
+    re-measure when it opens).
+    """
+    n = len(labels)
+    show_key = f"{key}__show"
+    st.toggle(f"Reorder ({n} rows)", key=show_key)
+    if not st.session_state.get(show_key):
         return None
-    order = result.get("order")
-    if not isinstance(order, list) or len(order) != len(labels):
-        return None
-    coerced: list[int] = []
-    for v in order:
-        try:
-            coerced.append(int(v))
-        except (TypeError, ValueError):
-            return None
-    if sorted(coerced) != list(range(len(labels))):
-        return None
-    if coerced == list(range(len(labels))):
-        return None
-    return coerced
+
+    state_key = f"{key}__working"
+    working = st.session_state.get(state_key)
+    if not isinstance(working, list) or sorted(working) != list(range(n)):
+        working = list(range(n))
+        st.session_state[state_key] = working
+
+    # Build one *stable* draggable token per original row. The token identity
+    # must not change between reruns: the keyed component echoes back the token
+    # strings from its own frontend state on a drop, so if we renumbered them we
+    # would fail to map the result back (KeyError). Each token is therefore the
+    # label plus an invisible, index-derived marker — that keeps tokens unique
+    # even when two rows share the same label, without showing anything extra.
+    # The visible weight (10, 20, 30…) is drawn by a CSS counter on the row's
+    # position instead (see _REORDER_STYLE), so it always tracks the live order.
+    tokens_by_orig = [_reorder_token(labels[i], i) for i in range(n)]
+    token_to_orig = {token: i for i, token in enumerate(tokens_by_orig)}
+    display_tokens = [tokens_by_orig[orig] for orig in working]
+
+    # Remount the component whenever the underlying *text* changes. The caller's
+    # data editor reformats and rewrites the list on every rerun, which would
+    # otherwise leave the component echoing back tokens built from stale label
+    # text (→ KeyError below). The signature is over the label multiset, so it
+    # is unchanged by reordering — dragging still persists — and only flips when
+    # a row's text is edited, added, or removed.
+    sig = hashlib.md5("\x00".join(sorted(labels)).encode("utf-8")).hexdigest()[:8]
+    ordered = sort_items(
+        display_tokens, direction="vertical", custom_style=_REORDER_STYLE,
+        key=f"{key}_sortable_{sig}",
+    )
+    # Guard: if the component is momentarily out of sync (its cached tokens
+    # predate a text change), ignore its output this run rather than crashing.
+    if set(ordered) == set(display_tokens):
+        new_working = [token_to_orig[token] for token in ordered]
+        if new_working != working:
+            # Drop happened: persist the pending order. Still not committed.
+            st.session_state[state_key] = new_working
+            st.rerun()
+
+    changed = working != list(range(n))
+    save_col, reset_col = st.columns(2)
+    if save_col.button(
+        "Save order", key=f"{key}_save", type="primary",
+        disabled=not changed, use_container_width=True,
+    ):
+        order = list(working)
+        st.session_state.pop(state_key, None)
+        return order
+    if reset_col.button(
+        "Reset", key=f"{key}_reset", disabled=not changed, use_container_width=True,
+    ):
+        st.session_state.pop(state_key, None)
+        st.rerun()
+    return None
 
 
 def _line_list(value) -> list[str]:

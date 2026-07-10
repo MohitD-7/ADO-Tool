@@ -6,7 +6,7 @@ import streamlit as st
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import character_counter, drag_reorder, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
 
 
 def render(show_header: bool = True, show_links: bool = True) -> None:
@@ -30,17 +30,9 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         specs_list = item.setdefault("specs", [])
         _normalize_specs(specs_list)
 
-        if specs_list:
-            with st.expander(f"Reorder ({len(specs_list)} rows)", expanded=False):
-                labels = [
-                    f"{s.get('Spec', '') or '—'}: {s.get('Value', '') or ''}".strip(": ").strip()
-                    or "(empty)"
-                    for s in specs_list
-                ]
-                perm = drag_reorder(labels)
-                if perm is not None:
-                    item["specs"] = [specs_list[i] for i in perm]
-                    st.rerun()
+        # Reserve the reorder control's spot above the grid, but fill it after
+        # the editor writes the updated list (see features.py).
+        reorder_slot = st.container()
 
         specs_df = pd.DataFrame(
             [
@@ -78,6 +70,21 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
             if key or value or category or group:
                 cleaned.append({"category": category, "group": group, "Spec": key, "Value": value})
         item["specs"] = cleaned
+
+        with reorder_slot:
+            current = item["specs"]
+            if current:
+                labels = [
+                    f"{s.get('Spec', '') or '—'}: {s.get('Value', '') or ''}".strip(": ").strip()
+                    or "(empty)"
+                    for s in current
+                ]
+                perm = reorder_editor(labels, key=f"reorder_specs_{details['item_no']}")
+                if perm is not None:
+                    item["specs"] = [current[i] for i in perm]
+                    st.session_state.pop(f"specs_editor_{details['item_no']}", None)
+                    st.rerun()
+
         st.markdown("### Add Specification")
         c1, c2, c3, c4 = st.columns(4)
         new_category = c1.text_input("V1 Category", key=f"new_spec_cat_{details['item_no']}", placeholder="optional")

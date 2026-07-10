@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import item_warnings
 from sku_manager.state import current_item, description_state_keys, set_description_state, sync_description_state
-from sku_manager.ui.components import drag_reorder, field_notes_editor, page_header, source_video_panel
+from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, source_video_panel
 from sku_manager.ui.editor import html_editor
 
 
@@ -119,16 +119,9 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
         "Edit include rows below. Rows export with Value1 = 10, 20, 30… "
         "Fill **Value2 (Text)** OR **Value3 (SKU)** per row, not both."
     )
-    if includes_list:
-        with st.expander(f"Reorder ({len(includes_list)} rows)", expanded=False):
-            labels = [
-                (str(e.get("text", "") or "").strip() or f"SKU {str(e.get('sku', '') or '').strip()}")
-                for e in includes_list
-            ]
-            perm = drag_reorder(labels)
-            if perm is not None:
-                item["includes"] = [includes_list[i] for i in perm]
-                st.rerun()
+    # Reserve the reorder control's spot above the grid, but fill it after the
+    # editor writes the updated list (see features.py).
+    reorder_slot = st.container()
     df = pd.DataFrame(
         [
             {
@@ -160,6 +153,19 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
             sku = ""
         new_list.append({"text": text, "sku": sku})
     item["includes"] = new_list
+
+    with reorder_slot:
+        current = item["includes"]
+        if current:
+            labels = [
+                (str(e.get("text", "") or "").strip() or f"SKU {str(e.get('sku', '') or '').strip()}")
+                for e in current
+            ]
+            perm = reorder_editor(labels, key=f"reorder_includes_{ino}")
+            if perm is not None:
+                item["includes"] = [current[i] for i in perm]
+                st.session_state.pop(f"includes_editor_{ino}", None)
+                st.rerun()
 
 
 def _render_includes_bulk(item: dict, ino: str) -> None:

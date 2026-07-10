@@ -6,7 +6,7 @@ import streamlit as st
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import character_counter, drag_reorder, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.components import character_counter, reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
 
 
 def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
@@ -29,12 +29,10 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
         st.caption("Edit feature text directly in the table below. Rows export with Value1 = 10, 20, 30... and Value2 = feature text.")
 
         features_list = item.setdefault("features", [])
-        if features_list:
-            with st.expander(f"Reorder ({len(features_list)} rows)", expanded=False):
-                perm = drag_reorder([str(f) for f in features_list])
-                if perm is not None:
-                    item["features"] = [features_list[i] for i in perm]
-                    st.rerun()
+        # Reserve the reorder control's spot above the grid, but fill it *after*
+        # the editor below has written the updated list — otherwise a row just
+        # added in the grid wouldn't appear here until the next rerun.
+        reorder_slot = st.container()
 
         feature_df = pd.DataFrame({"Feature": features_list})
         edited = st.data_editor(
@@ -48,6 +46,15 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             for value in edited["Feature"].tolist()
             if str(value).strip()
         ]
+
+        with reorder_slot:
+            current = item["features"]
+            if current:
+                perm = reorder_editor([str(f) for f in current], key=f"reorder_features_{ino}")
+                if perm is not None:
+                    item["features"] = [current[i] for i in perm]
+                    st.session_state.pop(f"features_editor_{ino}", None)
+                    st.rerun()
 
         with st.expander("Add Feature", expanded=False):
             st.markdown("#### Single feature")

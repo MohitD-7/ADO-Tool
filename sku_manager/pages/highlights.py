@@ -6,7 +6,7 @@ import streamlit as st
 from sku_manager.services.text_rules import format_text, parse_lines
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
-from sku_manager.ui.components import drag_reorder, field_notes_editor, page_header, right_feedback_panel, source_video_panel
+from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, right_feedback_panel, source_video_panel
 
 
 def render(show_header: bool = True, embedded: bool = False, show_links: bool = True, show_feedback: bool = True) -> None:
@@ -34,12 +34,9 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             st.caption("Max 8 highlights. Rows export with Value1 = 10, 20, 30..., Value2 = highlight text, Value3 = PDP.")
 
             highlights_list = item.setdefault("highlights", [])
-            if highlights_list:
-                st.caption(f"Reorder ({len(highlights_list)} rows)")
-                perm = drag_reorder([str(h) for h in highlights_list])
-                if perm is not None:
-                    item["highlights"] = [highlights_list[i] for i in perm]
-                    st.rerun()
+            # Reserve the reorder control's spot above the grid, but fill it
+            # after the editor writes the updated list (see features.py).
+            reorder_slot = st.container()
 
             highlight_df = pd.DataFrame({"Highlight": highlights_list})
             edited = st.data_editor(
@@ -53,6 +50,15 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                 for value in edited["Highlight"].tolist()
                 if str(value).strip()
             ]
+
+            with reorder_slot:
+                current = item["highlights"]
+                if current:
+                    perm = reorder_editor([str(h) for h in current], key=f"reorder_highlights_{ino}")
+                    if perm is not None:
+                        item["highlights"] = [current[i] for i in perm]
+                        st.session_state.pop(f"highlights_editor_{ino}", None)
+                        st.rerun()
 
             st.markdown("### Add Highlights in Bulk")
             bulk = st.text_area(
