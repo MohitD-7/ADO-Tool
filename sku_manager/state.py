@@ -7,7 +7,7 @@ import streamlit as st
 
 from sku_manager.config import QUEUE_COLUMNS
 from sku_manager.models import DETAIL_DEFAULTS, new_item_record
-from sku_manager.services.reference_store import load_reference_data
+from sku_manager.services.reference_store import TABLE_DEFINITIONS, get_reference_data
 
 
 DESCRIPTION_PREFIX = "_desc_"
@@ -27,7 +27,6 @@ _CLONE_PRESERVED_DETAIL_FIELDS = {
 
 
 def init_state() -> None:
-    reference_data = load_reference_data()
     defaults = {
         "queue_df": pd.DataFrame(columns=QUEUE_COLUMNS),
         "items": {},
@@ -35,11 +34,16 @@ def init_state() -> None:
         "current_item_no": "",
         "active_page": "Upload",
         "reference_data_admin": False,
-        **reference_data,
     }
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
+
+    reference_keys = (*TABLE_DEFINITIONS.keys(), "html_template")
+    if any(key not in st.session_state for key in reference_keys):
+        for key, value in get_reference_data().items():
+            if key not in st.session_state:
+                st.session_state[key] = value
 
 
 def has_batch() -> bool:

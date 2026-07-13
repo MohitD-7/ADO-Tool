@@ -1,14 +1,22 @@
 from __future__ import annotations
 
 import html
+from datetime import datetime
 from pathlib import Path
 
 import streamlit as st
 
+from sku_manager.config import SAVE_USERS
+from sku_manager.services import worksave
 from sku_manager.state import current_item, has_batch, set_current_item, sync_description_state
 
 
 _LOGO_PATH = Path(__file__).resolve().parents[1] / "assets" / "VO-Logo.png"
+
+
+@st.cache_data(show_spinner=False)
+def _logo_bytes(path: str, mtime: float) -> bytes:
+    return Path(path).read_bytes()
 
 
 PAGE_LABELS = {
@@ -65,7 +73,7 @@ def sidebar_nav() -> str:
     """Render sidebar brand + page nav. Returns the active page key."""
     # ── Brand ─────────────────────────────────────────────────────────────
     if _LOGO_PATH.exists():
-        st.sidebar.image(str(_LOGO_PATH), use_container_width=True)
+        st.sidebar.image(_logo_bytes(str(_LOGO_PATH), _LOGO_PATH.stat().st_mtime), use_container_width=True)
     st.sidebar.markdown('<div class="vo-brand">SKU Manager</div>', unsafe_allow_html=True)
     st.sidebar.markdown("---")
 
@@ -99,11 +107,81 @@ def sidebar_nav() -> str:
     )
     page = _page_for_label(selected_label)
     st.session_state["active_page"] = page
+    _sidebar_save_controls()
     st.sidebar.markdown(
         '<div class="vo-sidebar-credit">&copy; 2026 Developed by Mohit Dhaker</div>',
         unsafe_allow_html=True,
     )
     return page
+
+
+_USER_PLACEHOLDER = "— select user —"
+
+
+def _save_users() -> list[str]:
+    try:
+        users = st.secrets.get("save_users")
+    except Exception:
+        users = None
+    if users:
+        return [str(user) for user in users]
+    return SAVE_USERS
+
+
+def _on_user_change() -> None:
+    selection = st.session_state.get("worksave_user_selector", _USER_PLACEHOLDER)
+    st.session_state["save_user"] = "" if selection == _USER_PLACEHOLDER else str(selection)
+    # New user context: forget save bookkeeping so their file is offered for restore.
+    st.session_state.pop("_worksave_digest", None)
+    st.session_state.pop("_worksave_saved_at", None)
+    st.session_state.pop("_worksave_restore_handled", None)
+
+
+def _last_saved_caption() -> str:
+    saved_at = st.session_state.get("_worksave_saved_at")
+    if not saved_at:
+        if not st.session_state.get("save_user"):
+            return "Select your name to enable auto-save."
+        return "Not saved yet — auto-saves as you work."
+    try:
+        stamp = datetime.fromisoformat(saved_at).astimezone().strftime("%H:%M:%S")
+    except ValueError:
+        stamp = str(saved_at)
+    return f"Last saved {stamp}"
+
+
+def _sidebar_save_controls() -> None:
+    st.sidebar.markdown("---")
+    users = _save_users()
+    current = st.session_state.get("save_user", "")
+    options = [_USER_PLACEHOLDER, *users]
+    if current and current not in users:
+        options.append(current)
+    locked = bool(current)
+    st.sidebar.selectbox(
+        "User",
+        options,
+        index=options.index(current) if current in options else 0,
+        key="worksave_user_selector",
+        on_change=_on_user_change,
+        disabled=locked,
+        help=(
+            "User is locked for this session — refresh the page to switch."
+            if locked
+            else "Pick your name so your work is auto-saved to your own file."
+        ),
+    )
+    user = st.session_state.get("save_user", "")
+    if st.sidebar.button(
+        "💾 Save now",
+        use_container_width=True,
+        disabled=not user or not st.session_state.get("items"),
+    ):
+        saved_at = worksave.save_workspace(user)
+        if saved_at:
+            st.session_state["_worksave_saved_at"] = saved_at
+            st.session_state["_worksave_digest"] = worksave.workspace_digest()
+    st.sidebar.caption(_last_saved_caption())
 
 
 _DV2_TAB_LABELS = {

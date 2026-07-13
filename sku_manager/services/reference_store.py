@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import streamlit as st
 
 from sku_manager.data.defaults import (
     default_battery_materials,
@@ -89,6 +90,20 @@ def load_reference_data() -> dict[str, Any]:
     return data
 
 
+@st.cache_data(show_spinner=False)
+def _load_reference_cached(mtime: float) -> dict[str, Any]:
+    return load_reference_data()
+
+
+def get_reference_data() -> dict[str, Any]:
+    """Cached reference data, invalidated when reference_data.json changes on disk."""
+    try:
+        mtime = REFERENCE_DATA_PATH.stat().st_mtime
+    except OSError:
+        mtime = 0.0
+    return _load_reference_cached(mtime)
+
+
 def save_reference_data(state: Mapping[str, Any]) -> None:
     payload: dict[str, Any] = {}
     for state_key, (payload_key, default_factory) in TABLE_DEFINITIONS.items():
@@ -98,3 +113,4 @@ def save_reference_data(state: Mapping[str, Any]) -> None:
 
     REFERENCE_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
     REFERENCE_DATA_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    _load_reference_cached.clear()

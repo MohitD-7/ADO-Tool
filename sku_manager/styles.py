@@ -5,6 +5,11 @@ from pathlib import Path
 import streamlit as st
 
 
+@st.cache_data(show_spinner=False)
+def _read_overrides_css(path: str, mtime: float) -> str:
+    return Path(path).read_text(encoding="utf-8")
+
+
 def inject_styles() -> None:
     st.markdown(
         """
@@ -758,13 +763,16 @@ def inject_styles() -> None:
           outline: none !important;
           border-bottom-color: var(--dv2-primary) !important;
         }
+        /* Hide "Press Enter to apply" hints — values also commit on click-away */
+        [data-testid="InputInstructions"] { display: none !important; }
+        /* Hide the chain-link anchor icon next to headings */
+        [data-testid="stHeaderActionElements"] { display: none !important; }
+        h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a { display: none !important; }
         </style>
         """,
         unsafe_allow_html=True,
     )
     overrides_path = Path(__file__).with_name("design_overrides.css")
     if overrides_path.exists():
-        st.markdown(
-            f"<style>{overrides_path.read_text(encoding='utf-8')}</style>",
-            unsafe_allow_html=True,
-        )
+        overrides_css = _read_overrides_css(str(overrides_path), overrides_path.stat().st_mtime)
+        st.markdown(f"<style>{overrides_css}</style>", unsafe_allow_html=True)

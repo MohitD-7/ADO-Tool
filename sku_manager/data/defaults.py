@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pandas as pd
+import streamlit as st
 
 
 def default_battery_materials() -> pd.DataFrame:
@@ -216,18 +217,23 @@ def default_html_template() -> str:
 </html>"""
 
 
+@st.cache_data(show_spinner=False)
+def _read_warranty_tsv(path: str, mtime: float) -> pd.DataFrame:
+    df = pd.read_csv(path, sep="\t", dtype=str)
+    # Convert warranty months to numeric
+    numeric_cols = ["Warranty Months", "Months for Parts"]
+    for col in numeric_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    return df.fillna("")
+
+
 def default_warranty() -> pd.DataFrame:
     from pathlib import Path
     warranty_file = Path(__file__).parent / "warranty_master.tsv"
     if warranty_file.exists():
         try:
-            df = pd.read_csv(warranty_file, sep="\t", dtype=str)
-            # Convert warranty months to numeric
-            numeric_cols = ["Warranty Months", "Months for Parts"]
-            for col in numeric_cols:
-                if col in df.columns:
-                    df[col] = pd.to_numeric(df[col], errors="coerce")
-            return df.fillna("")
+            return _read_warranty_tsv(str(warranty_file), warranty_file.stat().st_mtime)
         except Exception:
             pass
     return pd.DataFrame(columns=[

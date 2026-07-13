@@ -1,5 +1,25 @@
 APP_TITLE = "VirtualOps SKU Manager"
 
+# Names shown in the sidebar "User" picker; each name keys a private autosave
+# file under sku_manager/data/saves/. Can be overridden without a code change
+# by adding `save_users = ["Name 1", "Name 2", ...]` to Streamlit secrets.
+SAVE_USERS = [
+    "Aniruddha",
+    "Neeraj",
+    "Divya",
+    "Nazmeen",
+    "Shraddha",
+    "Sagar",
+    "Hitesh",
+    "Digpal",
+    "Hetvi",
+    "Harsh",
+    "Kunjan",
+    "Vidhi",
+    "Mittal",
+    "Trainee",
+]
+
 QUEUE_COLUMNS = ["ATR Type", "JIRA", "Item No", "Title", "Mfg Item", "Status"]
 
 INPUT_SHEET_COLUMNS = ["ATR Type", "JIRA", "Item No", "Title", "Mfg Item"]
