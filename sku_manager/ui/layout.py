@@ -128,18 +128,45 @@ def _save_users() -> list[str]:
     return SAVE_USERS
 
 
-def _on_user_change() -> None:
-    selection = st.session_state.get("worksave_user_selector", _USER_PLACEHOLDER)
-    st.session_state["save_user"] = "" if selection == _USER_PLACEHOLDER else str(selection)
-    # New user context: forget save bookkeeping so their file is offered for restore.
+def _clear_save_context() -> None:
+    st.session_state["save_user"] = ""
     st.session_state.pop("_worksave_digest", None)
     st.session_state.pop("_worksave_saved_at", None)
     st.session_state.pop("_worksave_restore_handled", None)
 
 
+def _user_selector_key() -> str:
+    rev = int(st.session_state.get("_worksave_user_selector_rev", 0) or 0)
+    return f"worksave_user_selector_{rev}"
+
+
+def _reset_user_selector() -> None:
+    rev = int(st.session_state.get("_worksave_user_selector_rev", 0) or 0)
+    st.session_state["_worksave_user_selector_rev"] = rev + 1
+
+
+def _on_user_change(selector_key: str) -> None:
+    selection = st.session_state.get(selector_key, _USER_PLACEHOLDER)
+    _clear_save_context()
+    if selection == _USER_PLACEHOLDER:
+        st.session_state.pop("_worksave_lease_conflict", None)
+        return
+
+    selected_user = str(selection)
+    ok, info = worksave.acquire_user_lease(selected_user)
+    if ok:
+        st.session_state["save_user"] = selected_user
+        st.session_state.pop("_worksave_lease_conflict", None)
+    else:
+        st.session_state["_worksave_lease_conflict"] = info
+        _reset_user_selector()
+
+
 def _last_saved_caption() -> str:
     saved_at = st.session_state.get("_worksave_saved_at")
     if not saved_at:
+        if st.session_state.get("_worksave_lease_conflict"):
+            return "Auto-save is blocked until that user is free."
         if not st.session_state.get("save_user"):
             return "Select your name to enable auto-save."
         return "Not saved yet — auto-saves as you work."
@@ -150,39 +177,70 @@ def _last_saved_caption() -> str:
     return f"Last saved {stamp}"
 
 
+def _lease_conflict_message() -> str:
+    conflict = st.session_state.get("_worksave_lease_conflict") or {}
+    expires_at = conflict.get("expires_at", "")
+    try:
+        expires = datetime.fromisoformat(str(expires_at)).astimezone().strftime("%H:%M:%S")
+    except ValueError:
+        expires = "soon"
+    return f"That user is already active in another session. Try again after {expires}, or ask them to end their autosave session."
+
+
+def _release_current_save_user() -> None:
+    user = st.session_state.get("save_user", "")
+    if user:
+        worksave.release_user_lease(user)
+    _clear_save_context()
+    st.session_state.pop("_worksave_lease_conflict", None)
+    _reset_user_selector()
+    st.rerun()
+
+
 def _sidebar_save_controls() -> None:
     st.sidebar.markdown("---")
     users = _save_users()
     current = st.session_state.get("save_user", "")
+    if current and not worksave.refresh_user_lease(current):
+        _clear_save_context()
+        _reset_user_selector()
+        current = ""
     options = [_USER_PLACEHOLDER, *users]
     if current and current not in users:
         options.append(current)
     locked = bool(current)
+    selector_key = _user_selector_key()
     st.sidebar.selectbox(
         "User",
         options,
         index=options.index(current) if current in options else 0,
-        key="worksave_user_selector",
+        key=selector_key,
         on_change=_on_user_change,
+        args=(selector_key,),
         disabled=locked,
         help=(
-            "User is locked for this session — refresh the page to switch."
+            "User is locked for this session. Use End autosave session to switch."
             if locked
             else "Pick your name so your work is auto-saved to your own file."
         ),
     )
+    if st.session_state.get("_worksave_lease_conflict"):
+        st.sidebar.error(_lease_conflict_message())
+
     user = st.session_state.get("save_user", "")
+    blocked = bool(st.session_state.get("_worksave_lease_conflict"))
     if st.sidebar.button(
         "💾 Save now",
         use_container_width=True,
-        disabled=not user or not st.session_state.get("items"),
+        disabled=not user or blocked or not st.session_state.get("items"),
     ):
         saved_at = worksave.save_workspace(user)
         if saved_at:
             st.session_state["_worksave_saved_at"] = saved_at
             st.session_state["_worksave_digest"] = worksave.workspace_digest()
+    if locked and st.sidebar.button("End autosave session", use_container_width=True):
+        _release_current_save_user()
     st.sidebar.caption(_last_saved_caption())
-
 
 _DV2_TAB_LABELS = {
     "Content": "General Description",
