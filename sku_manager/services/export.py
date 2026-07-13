@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from html import escape
+from html.parser import HTMLParser
 from io import BytesIO
 
 import pandas as pd
@@ -661,6 +663,98 @@ def battery_excel_bytes(battery_df: pd.DataFrame) -> bytes:
     return buffer.getvalue()
 
 
+_DESCRIPTION_ALLOWED_TAGS = {
+    "b",
+    "br",
+    "em",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "strong",
+    "table",
+    "tbody",
+    "td",
+    "th",
+    "thead",
+    "tr",
+    "u",
+    "ul",
+}
+_DESCRIPTION_DROP_CONTENT_TAGS = {
+    "script",
+    "style",
+    "iframe",
+    "object",
+    "embed",
+    "svg",
+    "math",
+    "meta",
+    "link",
+}
+_VOID_TAGS = {"br"}
+
+
+class _DescriptionSanitizer(HTMLParser):
+    """Allow only simple formatting/table tags and text in product descriptions."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.parts: list[str] = []
+        self._drop_depth = 0
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        tag = tag.lower()
+        if self._drop_depth:
+            if tag in _DESCRIPTION_DROP_CONTENT_TAGS:
+                self._drop_depth += 1
+            return
+        if tag in _DESCRIPTION_DROP_CONTENT_TAGS:
+            self._drop_depth = 1
+            return
+        if tag in _DESCRIPTION_ALLOWED_TAGS:
+            self.parts.append(f"<{tag}>")
+
+    def handle_startendtag(self, tag: str, attrs) -> None:
+        tag = tag.lower()
+        if self._drop_depth:
+            return
+        if tag in _DESCRIPTION_ALLOWED_TAGS:
+            self.parts.append(f"<{tag}>")
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if self._drop_depth:
+            if tag in _DESCRIPTION_DROP_CONTENT_TAGS:
+                self._drop_depth -= 1
+            return
+        if tag in _DESCRIPTION_ALLOWED_TAGS and tag not in _VOID_TAGS:
+            self.parts.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        if not self._drop_depth:
+            self.parts.append(escape(data, quote=True))
+
+    def handle_entityref(self, name: str) -> None:
+        if not self._drop_depth:
+            self.parts.append(f"&{name};")
+
+    def handle_charref(self, name: str) -> None:
+        if not self._drop_depth:
+            self.parts.append(f"&#{name};")
+
+
+def sanitize_description_html(value) -> str:
+    sanitizer = _DescriptionSanitizer()
+    sanitizer.feed(str(value or ""))
+    sanitizer.close()
+    return "".join(sanitizer.parts)
+
+
+def _safe_text(value) -> str:
+    return escape(str(value or ""), quote=True)
+
+
 def render_html(item: dict, template: str) -> str:
     details = item["details"]
     include_rows = []
@@ -672,40 +766,43 @@ def render_html(item: dict, template: str) -> str:
             continue
         order += 10
         value = text if text else f"SKU {sku}"
-        include_rows.append(f"<tr><td>{order}</td><td>{value}</td></tr>")
+        include_rows.append(f"<tr><td>{order}</td><td>{_safe_text(value)}</td></tr>")
     includes = "".join(include_rows)
-    features = "".join(f"<tr><td>{idx * 10}</td><td>{feature}</td></tr>" for idx, feature in enumerate(item.get("features", []), start=1))
+    features = "".join(
+        f"<tr><td>{idx * 10}</td><td>{_safe_text(feature)}</td></tr>"
+        for idx, feature in enumerate(item.get("features", []), start=1)
+    )
     specs = "".join(
         "<tr>"
-        f"<td>{str(spec.get('category', '') or '')}</td>"
+        f"<td>{_safe_text(spec.get('category', ''))}</td>"
         f"<td>{idx * 10}</td>"
-        f"<td>{str(spec.get('group', '') or '')}</td>"
-        f"<td>{spec.get('Spec', '')}</td>"
-        f"<td>{spec.get('Value', '')}</td>"
+        f"<td>{_safe_text(spec.get('group', ''))}</td>"
+        f"<td>{_safe_text(spec.get('Spec', ''))}</td>"
+        f"<td>{_safe_text(spec.get('Value', ''))}</td>"
         "</tr>"
         for idx, spec in enumerate(item.get("specs", []), start=1)
     )
-    highlights = "".join(f"<li>{highlight}</li>" for highlight in item.get("highlights", []))
+    highlights = "".join(f"<li>{_safe_text(highlight)}</li>" for highlight in item.get("highlights", []))
     battery = "".join(
         [
-            f"<tr><td>Battery Info</td><td>{details.get('battery_info', '')}</td></tr>",
-            f"<tr><td>Battery Material</td><td>{details.get('battery_material', '')}</td></tr>",
-            f"<tr><td>Battery Type</td><td>{details.get('battery_type', '')}</td></tr>",
-            f"<tr><td>Battery Quantity</td><td>{details.get('battery_quantity', '')}</td></tr>",
+            f"<tr><td>Battery Info</td><td>{_safe_text(details.get('battery_info', ''))}</td></tr>",
+            f"<tr><td>Battery Material</td><td>{_safe_text(details.get('battery_material', ''))}</td></tr>",
+            f"<tr><td>Battery Type</td><td>{_safe_text(details.get('battery_type', ''))}</td></tr>",
+            f"<tr><td>Battery Quantity</td><td>{_safe_text(details.get('battery_quantity', ''))}</td></tr>",
         ]
     )
     replacements = {
-        "--Title--": details.get("title", ""),
-        "--ShortTitle--": details.get("short_title", ""),
-        "--ItemNo--": details.get("item_no", ""),
-        "--MfgItem--": details.get("mfg_item", ""),
-        "--MfgModel--": details.get("mfg_model", ""),
-        "--Description--": details.get("description", ""),
+        "--Title--": _safe_text(details.get("title", "")),
+        "--ShortTitle--": _safe_text(details.get("short_title", "")),
+        "--ItemNo--": _safe_text(details.get("item_no", "")),
+        "--MfgItem--": _safe_text(details.get("mfg_item", "")),
+        "--MfgModel--": _safe_text(details.get("mfg_model", "")),
+        "--Description--": sanitize_description_html(details.get("description", "")),
         "--Includes--": includes,
         "--Features--": features,
         "--Specifications--": specs,
         "--Highlights--": highlights,
-        "--Warranty Months--": details.get("warranty_months", ""),
+        "--Warranty Months--": _safe_text(details.get("warranty_months", "")),
         "--Battery Info--": battery,
     }
     html = template

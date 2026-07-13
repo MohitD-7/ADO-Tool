@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from html import escape
+
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -137,13 +139,14 @@ def _confirm_submit_dialog(ino: str, blockers: list[str]) -> None:
 
 
 def _render_submit_success(ino: str) -> None:
+    safe_ino = escape(str(ino), quote=True)
     st.markdown(
         f"""
         <div style="background:#f0faf3;border:2px solid #7cba8c;border-left:6px solid #2e8b57;
              border-radius:10px;padding:1.4rem 1.6rem;margin:1rem 0;text-align:center;">
           <div style="font-size:2rem;">✓</div>
           <div style="font-weight:800;font-size:1.15rem;color:#1b5e30;margin-top:.3rem;">
-            SKU {ino} submitted successfully
+            SKU {safe_ino} submitted successfully
           </div>
           <div style="color:#396b48;font-size:.9rem;margin-top:.35rem;">
             Status set to <strong>Completed</strong>. Click Continue to pick the next SKU from the work queue.

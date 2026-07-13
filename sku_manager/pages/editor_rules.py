@@ -6,8 +6,11 @@ apply automatically on paste, and be triggered by a keyboard shortcut.
 """
 from __future__ import annotations
 
+from html import escape
+
 import streamlit as st
 
+from sku_manager.pages.reference_data import admin_password
 from sku_manager.services import html_rules as logic
 from sku_manager.services import rules_store
 from sku_manager.ui.components import is_reserved_chord, page_header, shortcut_capture, suggested_chords
@@ -17,39 +20,42 @@ def render() -> None:
     page_header("Description Editor", "Custom Rules")
 
     rules = rules_store.load_rules()
+    editable = _render_auth_controls()
 
     left, right = st.columns([1.1, 1.9])
 
-    # ── Left: rule list ───────────────────────────────────────────────
     with left:
         st.markdown("### Rules")
         if not rules:
             st.caption("No rules yet. Create one on the right.")
         else:
-            for rule in rules:
-                sc = rule.get("shortcut", "") or "no shortcut"
+            for index, rule in enumerate(rules):
+                rule_name = str(rule.get("name", ""))
+                sc = str(rule.get("shortcut", "") or "no shortcut")
                 paste_tag = " | on-paste" if rule.get("apply_on_paste") else ""
                 col_name, col_edit, col_del = st.columns([3, 1, 1])
                 col_name.markdown(
-                    f"**{rule['name']}**  \n"
-                    f"<span style='font-size:.8rem;color:#6f8090'>{sc}{paste_tag}</span>",
+                    f"**{escape(rule_name, quote=True)}**  \n"
+                    f"<span style='font-size:.8rem;color:#6f8090'>{escape(sc + paste_tag, quote=True)}</span>",
                     unsafe_allow_html=True,
                 )
-                if col_edit.button("Edit", key=f"edit_{rule['name']}"):
-                    st.session_state["_editing_rule"] = rule["name"]
+                if col_edit.button("Edit", key=f"edit_{index}", disabled=not editable):
+                    st.session_state["_editing_rule"] = rule_name
                     st.session_state["_rule_form"] = dict(rule)
                     st.rerun()
-                if col_del.button("Del", key=f"del_{rule['name']}"):
-                    rules_store.delete_rule(rule["name"])
-                    st.success(f"Deleted '{rule['name']}'.")
+                if col_del.button("Del", key=f"del_{index}", disabled=not editable):
+                    rules_store.delete_rule(rule_name)
+                    st.success(f"Deleted '{rule_name}'.")
                     st.rerun()
-        if st.button("+ New Rule", type="primary", use_container_width=True):
+        if st.button("+ New Rule", type="primary", use_container_width=True, disabled=not editable):
             st.session_state["_editing_rule"] = None
             st.session_state["_rule_form"] = _blank_rule()
             st.rerun()
 
-    # ── Right: create / edit form ─────────────────────────────────────
     with right:
+        if not editable:
+            st.info("Viewing is open. Editing requires admin unlock.")
+            return
         if "_rule_form" not in st.session_state:
             st.info("Select a rule to edit, or click + New Rule.")
             return
@@ -76,7 +82,7 @@ def render() -> None:
                 st.caption(
                     "These combos are not intercepted by Chrome or the OS. "
                     "Any Ctrl-only or Ctrl+Shift-only combo with a plain letter/digit "
-                    "usually clashes with a browser shortcut — the widget will warn you."
+                    "usually clashes with a browser shortcut - the widget will warn you."
                 )
                 for chord in suggested_chords():
                     st.markdown(f"- `{chord}`")
@@ -87,8 +93,8 @@ def render() -> None:
             if is_reserved_chord(form["shortcut"]):
                 st.warning(
                     f"**{form['shortcut']}** is reserved by the browser or OS and may be "
-                    "intercepted before the editor sees it. Pick a different combo — "
-                    "try adding Alt (e.g. `Ctrl+Alt+…`)."
+                    "intercepted before the editor sees it. Pick a different combo - "
+                    "try adding Alt (e.g. `Ctrl+Alt+...`)."
                 )
             else:
                 st.caption(f"Current shortcut: **{form['shortcut']}**")
@@ -136,17 +142,12 @@ def render() -> None:
         else:
             form["tag"] = form.get("tag", "")
 
-        # Preview
         st.markdown('<div style="border-top:1px solid #e2e8f0;margin:10px 0"></div>', unsafe_allow_html=True)
         preview_text = st.text_input("Preview input text", value="Sample text", key="_rule_preview_input")
         if preview_text:
             preview_out = logic.apply_rule(preview_text, form)
-            st.markdown(
-                f'<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;'
-                f'padding:.6rem .9rem;font-family:monospace;font-size:.88rem;color:#1a2330;">'
-                f'{preview_out}</div>',
-                unsafe_allow_html=True,
-            )
+            st.code(preview_out, language="html")
+
         sa, sb, sc_ = st.columns([2, 1, 1])
         if sa.button("Save Rule", type="primary", use_container_width=True):
             errors = logic.validate_rule(
@@ -172,6 +173,39 @@ def render() -> None:
             del st.session_state["_rule_form"]
             st.session_state.pop("_editing_rule", None)
             st.rerun()
+
+
+def _render_auth_controls() -> bool:
+    is_admin = bool(st.session_state.get("editor_rules_admin", False))
+    password = admin_password()
+
+    if is_admin:
+        c1, _ = st.columns([1, 4])
+        if c1.button("Lock Editing", width="stretch"):
+            st.session_state["editor_rules_admin"] = False
+            st.session_state.pop("_rule_form", None)
+            st.session_state.pop("_editing_rule", None)
+            st.rerun()
+        return True
+
+    c1, c2, c3 = st.columns([1.5, 1, 2.5])
+    with c1:
+        entered = st.text_input("Admin password", type="password", disabled=not bool(password), key="editor_rules_password")
+    with c2:
+        st.write("")
+        if st.button("Unlock Editing", width="stretch", disabled=not bool(password)):
+            if entered and entered == password:
+                st.session_state["editor_rules_admin"] = True
+                st.rerun()
+            st.error("Incorrect admin password.")
+    with c3:
+        if password:
+            st.info("Viewing is open. Editing requires admin unlock.")
+        else:
+            st.info("Viewing is open. Set SKU_REFERENCE_DATA_PASSWORD or st.secrets['reference_data_password'] to enable editing.")
+    return False
+
+
 def _blank_rule() -> dict:
     return {
         "name": "", "shortcut": "",
