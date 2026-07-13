@@ -3,6 +3,7 @@ from __future__ import annotations
 from html import escape
 from html.parser import HTMLParser
 from io import BytesIO
+import re
 
 import pandas as pd
 
@@ -754,6 +755,20 @@ def sanitize_description_html(value) -> str:
 def _safe_text(value) -> str:
     return escape(str(value or ""), quote=True)
 
+_BR_TAG_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
+
+
+def _safe_text_with_breaks(value) -> str:
+    text = str(value or "")
+    parts = _BR_TAG_RE.split(text)
+    breaks = _BR_TAG_RE.findall(text)
+    rendered: list[str] = []
+    for index, part in enumerate(parts):
+        rendered.append(_safe_text(part))
+        if index < len(breaks):
+            rendered.append("<br>")
+    return "".join(rendered)
+
 
 def render_html(item: dict, template: str) -> str:
     details = item["details"]
@@ -774,11 +789,11 @@ def render_html(item: dict, template: str) -> str:
     )
     specs = "".join(
         "<tr>"
-        f"<td>{_safe_text(spec.get('category', ''))}</td>"
+        f"<td>{_safe_text_with_breaks(spec.get('category', ''))}</td>"
         f"<td>{idx * 10}</td>"
-        f"<td>{_safe_text(spec.get('group', ''))}</td>"
-        f"<td>{_safe_text(spec.get('Spec', ''))}</td>"
-        f"<td>{_safe_text(spec.get('Value', ''))}</td>"
+        f"<td>{_safe_text_with_breaks(spec.get('group', ''))}</td>"
+        f"<td>{_safe_text_with_breaks(spec.get('Spec', ''))}</td>"
+        f"<td>{_safe_text_with_breaks(spec.get('Value', ''))}</td>"
         "</tr>"
         for idx, spec in enumerate(item.get("specs", []), start=1)
     )

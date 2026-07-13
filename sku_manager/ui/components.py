@@ -183,11 +183,22 @@ _REORDER_STYLE = """
     border-color: #ef8e0d;
     background-color: #fff7ed;
 }
-.sortable-item.dragging {
+.sortable-item.dragging,
+.sortable-item.sortable-chosen,
+.sortable-item.sortable-ghost,
+.sortable-item.sortable-drag {
     cursor: grabbing;
     opacity: 0.9;
+    color: #191c1e !important;
+    background-color: #ffffff !important;
     border-color: #ef8e0d;
     box-shadow: 0 2px 10px rgba(25, 28, 30, 0.14);
+}
+.sortable-item.dragging *,
+.sortable-item.sortable-chosen *,
+.sortable-item.sortable-ghost *,
+.sortable-item.sortable-drag * {
+    color: #191c1e !important;
 }
 """
 
