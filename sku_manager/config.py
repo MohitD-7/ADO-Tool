@@ -5,18 +5,18 @@ APP_TITLE = "VirtualOps SKU Manager"
 # by adding `save_users = ["Name 1", "Name 2", ...]` to Streamlit secrets.
 SAVE_USERS = [
     "Aniruddha",
-    "Neeraj",
-    "Divya",
-    "Nazmeen",
-    "Shraddha",
-    "Sagar",
-    "Hitesh",
     "Digpal",
-    "Hetvi",
+    "Divya",
     "Harsh",
+    "Hetvi",
+    "Hitesh",
     "Kunjan",
-    "Vidhi",
     "Mittal",
+    "Nazmeen",
+    "Neeraj",
+    "Sagar",
+    "Shraddha",
+    "Vidhi",
     "Trainee",
 ]
 
