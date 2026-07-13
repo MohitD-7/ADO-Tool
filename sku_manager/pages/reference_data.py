@@ -51,7 +51,8 @@ def _read_uploaded_table(uploaded_file) -> pd.DataFrame:
     raise ValueError("Unsupported file type. Use .tsv, .csv, .txt, or .xlsx.")
 
 
-def _configured_password() -> str:
+def admin_password() -> str:
+    """The shared admin password (env var wins over Streamlit secrets)."""
     env_password = os.getenv("SKU_REFERENCE_DATA_PASSWORD", "")
     if env_password:
         return env_password
@@ -59,6 +60,10 @@ def _configured_password() -> str:
         return str(st.secrets.get("reference_data_password", ""))
     except Exception:
         return ""
+
+
+def _configured_password() -> str:
+    return admin_password()
 
 
 def _reload_reference_data() -> None:

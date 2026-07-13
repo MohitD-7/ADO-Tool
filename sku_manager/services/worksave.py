@@ -205,11 +205,71 @@ def autosave_tick() -> None:
         return
     try:
         saved_at = save_workspace(user)
-    except Exception:
+    except Exception as exc:
+        from sku_manager.services import metrics
+        metrics.record_error(user, exc)
         return
     if saved_at:
         st.session_state["_worksave_digest"] = digest
         st.session_state["_worksave_saved_at"] = saved_at
+
+
+def all_saves_summary() -> list[dict[str, Any]]:
+    """Live per-user rollup of the saved batches, for the admin dashboard.
+
+    Each malformed file is skipped rather than raising.
+    """
+    summary: list[dict[str, Any]] = []
+    if not SAVE_DIR.exists():
+        return summary
+
+    for path in sorted(SAVE_DIR.glob("*.json")):
+        data = _read_file(path)
+        if not data or not isinstance(data.get("items"), dict):
+            continue
+
+        queue = data.get("queue") or []
+        completed = sum(
+            1 for row in queue if str(row.get("Status", "")).strip().lower() == "completed"
+        )
+        sku_count = len(data["items"])
+
+        batch = ""
+        for row in queue:
+            jira = str(row.get("JIRA", "")).strip()
+            if jira:
+                batch = jira
+                break
+        if not batch and queue:
+            batch = str(queue[0].get("Item No", "")).strip()
+
+        stamps = [_parse_ts(v) for v in (data.get("item_saved_at") or {}).values()]
+        stamps = [ts for ts in stamps if ts]
+        if stamps:
+            oldest_age_h = (_now() - min(stamps)).total_seconds() / 3600
+            hours_to_expiry = round(EXPIRY_HOURS - oldest_age_h, 1)
+        else:
+            hours_to_expiry = None
+
+        summary.append({
+            "user": str(data.get("user", path.stem)),
+            "batch": batch,
+            "sku_count": sku_count,
+            "completed": completed,
+            "in_progress": max(0, sku_count - completed),
+            "saved_at": str(data.get("saved_at", "")),
+            "hours_to_expiry": hours_to_expiry,
+        })
+    return summary
+
+
+def save_dir_stats() -> dict[str, Any]:
+    """File count and total size (KB) of the save folder."""
+    if not SAVE_DIR.exists():
+        return {"files": 0, "kb": 0.0}
+    files = list(SAVE_DIR.glob("*.json"))
+    total = sum(f.stat().st_size for f in files if f.exists())
+    return {"files": len(files), "kb": round(total / 1024, 1)}
 
 
 def purge_expired_files() -> None:

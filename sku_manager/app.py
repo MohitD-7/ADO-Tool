@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import time
+
 import streamlit as st
 
 from sku_manager.config import APP_TITLE
@@ -17,7 +19,7 @@ from sku_manager.pages import (
     upload,
     workspace,
 )
-from sku_manager.services import worksave
+from sku_manager.services import metrics, worksave
 from sku_manager.state import init_state, sync_description_state
 from sku_manager.styles import inject_styles
 from sku_manager.ui.components import enable_global_spellcheck
@@ -76,12 +78,17 @@ def main() -> None:
         layout="wide",
         initial_sidebar_state="expanded",
     )
-    init_state()
+    t0 = time.perf_counter()
+    with metrics.timer("init_state"):
+        init_state()
     worksave.purge_expired_files_once()
-    inject_styles()
-    enable_global_spellcheck()
+    with metrics.timer("styles"):
+        inject_styles()
+        enable_global_spellcheck()
     sync_description_state()
     page = sidebar_nav()
     _maybe_offer_restore()
-    PAGE_RENDERERS[page]()
+    with metrics.timer("page_render"):
+        PAGE_RENDERERS[page]()
     worksave.autosave_tick()
+    metrics.record_render((time.perf_counter() - t0) * 1000)

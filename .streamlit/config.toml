@@ -1,0 +1,5 @@
+[client]
+# Hide Streamlit's automatic multipage navigation so the /admin page is not
+# listed anywhere. The app's own custom sidebar nav is unaffected; /admin is
+# still reachable by typing the URL and is password-gated.
+showSidebarNavigation = false
