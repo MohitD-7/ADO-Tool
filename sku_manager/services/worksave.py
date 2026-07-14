@@ -24,6 +24,7 @@ import pandas as pd
 import streamlit as st
 
 from sku_manager.config import QUEUE_COLUMNS
+from sku_manager.services import metrics
 
 
 SAVE_DIR = Path(__file__).resolve().parents[1] / "data" / "saves"
@@ -32,6 +33,17 @@ SAVE_VERSION = 1
 EXPIRY_HOURS = 72
 LEASE_SECONDS = 20 * 60
 LOCK_STALE_SECONDS = 30
+LEASE_REFRESH_SECONDS = 5 * 60
+FULL_SWEEP_SECONDS = 30
+
+# Session-state keys for the per-session save cache. Everything here is a
+# cache over the user's save file; reset_session_cache() must drop all of it
+# whenever the save user changes or their lease is released.
+_FPS_KEY = "_worksave_saved_fps"        # dict[item_no, fingerprint] at last save
+_META_KEY = "_worksave_saved_meta"      # fingerprint of queue/variants/current at last save
+_STAMPS_KEY = "_worksave_item_stamps"   # dict[item_no, iso timestamp] at last save
+_LEASE_TS_KEY = "_worksave_lease_ts"    # monotonic time of last on-disk lease refresh
+_SWEEP_TS_KEY = "_worksave_sweep_ts"    # monotonic time of last full change sweep
 
 
 def _now() -> datetime:
@@ -180,10 +192,32 @@ def acquire_user_lease(user: str) -> tuple[bool, dict[str, Any]]:
 def refresh_user_lease(user: str) -> bool:
     ok, info = acquire_user_lease(user)
     if ok:
+        st.session_state[_LEASE_TS_KEY] = time.monotonic()
         st.session_state.pop("_worksave_lease_conflict", None)
         return True
+    st.session_state.pop(_LEASE_TS_KEY, None)
     st.session_state["_worksave_lease_conflict"] = info
     return False
+
+
+def ensure_user_lease(user: str) -> bool:
+    """Keep the lease alive without touching disk on every rerun.
+
+    A lease refreshed less than LEASE_REFRESH_SECONDS ago is trusted as-is:
+    while it is fresh no other session can take it over, so re-checking the
+    file would only confirm what we already know.
+    """
+    if not st.session_state.get("_worksave_lease_conflict"):
+        last = st.session_state.get(_LEASE_TS_KEY)
+        if last is not None and time.monotonic() - float(last) < LEASE_REFRESH_SECONDS:
+            return True
+    return refresh_user_lease(user)
+
+
+def reset_session_cache() -> None:
+    """Drop every per-session save cache (call when the save user changes)."""
+    for key in (_FPS_KEY, _META_KEY, _STAMPS_KEY, _LEASE_TS_KEY, _SWEEP_TS_KEY):
+        st.session_state.pop(key, None)
 
 
 def release_user_lease(user: str) -> None:
@@ -217,10 +251,61 @@ def _workspace_payload() -> dict[str, Any]:
     }
 
 
-def workspace_digest() -> str:
-    payload = _workspace_payload()
-    raw = json.dumps(payload, sort_keys=True, default=str)
+def _meta_fingerprint(payload: dict[str, Any]) -> str:
+    """Fingerprint of everything in the payload except item content."""
+    raw = json.dumps(
+        {
+            "current_item_no": payload["current_item_no"],
+            "queue": payload["queue"],
+            "variants": payload["variants"],
+        },
+        sort_keys=True,
+        default=str,
+    )
     return hashlib.md5(raw.encode("utf-8")).hexdigest()
+
+
+def _workspace_changed(payload: dict[str, Any]) -> bool:
+    """True when the workspace differs from the last saved state.
+
+    Stays O(current item) on a normal rerun: only the current item is
+    fingerprinted, plus the small queue/variants meta blob. Item add/remove
+    is caught by the key-set comparison. As insurance against a flow that
+    mutates a non-current item, every item is swept at most once per
+    FULL_SWEEP_SECONDS (a save always fingerprints everything anyway).
+    """
+    saved_fps = st.session_state.get(_FPS_KEY)
+    if saved_fps is None:
+        return True
+    if st.session_state.get(_META_KEY) != _meta_fingerprint(payload):
+        return True
+    items = payload["items"]
+    if items.keys() != saved_fps.keys():
+        return True
+    ino = payload["current_item_no"]
+    if ino in items and _item_fingerprint(items[ino]) != saved_fps.get(ino):
+        return True
+
+    now = time.monotonic()
+    last_sweep = float(st.session_state.get(_SWEEP_TS_KEY) or 0.0)
+    if now - last_sweep >= FULL_SWEEP_SECONDS:
+        st.session_state[_SWEEP_TS_KEY] = now
+        return any(_item_fingerprint(item) != saved_fps.get(key) for key, item in items.items())
+    return False
+
+
+def mark_workspace_clean() -> None:
+    """Record the current workspace as already saved (e.g. right after a restore).
+
+    Item timestamps are left unset so the next real save re-seeds them from
+    the file on disk, preserving each item's rolling expiry.
+    """
+    payload = _workspace_payload()
+    st.session_state[_FPS_KEY] = {
+        ino: _item_fingerprint(item) for ino, item in payload["items"].items()
+    }
+    st.session_state[_META_KEY] = _meta_fingerprint(payload)
+    st.session_state.pop(_STAMPS_KEY, None)
 
 
 def save_workspace(user: str) -> str | None:
@@ -228,7 +313,10 @@ def save_workspace(user: str) -> str | None:
 
     Returns the ISO save timestamp, or None when there is nothing to save.
     Per-item timestamps only advance for items whose content changed, which
-    gives each item its own rolling EXPIRY_HOURS lifetime.
+    gives each item its own rolling EXPIRY_HOURS lifetime. The previous
+    save's fingerprints and timestamps are cached in session state (the
+    lease guarantees no other session writes this file), so the old file is
+    read back at most once per session.
     """
     user = str(user or "").strip()
     payload = _workspace_payload()
@@ -239,16 +327,26 @@ def save_workspace(user: str) -> str | None:
 
     path = save_path(user)
     with _exclusive_lock(_write_lock_path(user)):
-        previous = _read_file(path) or _read_file(_legacy_save_path(user)) or {}
-        prev_items = previous.get("items") or {}
-        prev_stamps = previous.get("item_saved_at") or {}
+        prev_fps = st.session_state.get(_FPS_KEY)
+        prev_stamps = st.session_state.get(_STAMPS_KEY)
+        if prev_fps is None or prev_stamps is None:
+            previous = _read_file(path) or _read_file(_legacy_save_path(user)) or {}
+            prev_items = previous.get("items") or {}
+            prev_fps = {ino: _item_fingerprint(item) for ino, item in prev_items.items()}
+            prev_stamps = {
+                str(ino): str(stamp)
+                for ino, stamp in (previous.get("item_saved_at") or {}).items()
+            }
 
         now_iso = _now().isoformat(timespec="seconds")
+        new_fps: dict[str, str] = {}
         item_saved_at: dict[str, str] = {}
         for ino, item in payload["items"].items():
+            fp = _item_fingerprint(item)
+            new_fps[ino] = fp
             prev_stamp = prev_stamps.get(ino)
-            unchanged = ino in prev_items and _item_fingerprint(item) == _item_fingerprint(prev_items[ino])
-            item_saved_at[ino] = prev_stamp if prev_stamp and unchanged else now_iso
+            unchanged = bool(prev_stamp) and prev_fps.get(ino) == fp
+            item_saved_at[ino] = prev_stamp if unchanged else now_iso
 
         data = {
             "version": SAVE_VERSION,
@@ -259,6 +357,10 @@ def save_workspace(user: str) -> str | None:
             "item_saved_at": item_saved_at,
         }
         _write_json_atomic(path, data)
+
+    st.session_state[_FPS_KEY] = new_fps
+    st.session_state[_STAMPS_KEY] = item_saved_at
+    st.session_state[_META_KEY] = _meta_fingerprint(payload)
     return now_iso
 
 
@@ -340,24 +442,23 @@ def autosave_tick() -> None:
     """Save the workspace whenever its content changed since the last save.
 
     Called at the end of every rerun; a local write costs milliseconds, so
-    every edit is on disk by the end of the rerun that produced it.
+    every edit is on disk by the end of the rerun that produced it. An
+    unchanged rerun costs one current-item fingerprint and no disk I/O.
     """
     user = str(st.session_state.get("save_user", "") or "")
     if not user or not st.session_state.get("items"):
         return
-    if not refresh_user_lease(user):
+    if not ensure_user_lease(user):
         return
-    digest = workspace_digest()
-    if digest == st.session_state.get("_worksave_digest"):
+    if not _workspace_changed(_workspace_payload()):
         return
     try:
-        saved_at = save_workspace(user)
+        with metrics.timer("worksave_save"):
+            saved_at = save_workspace(user)
     except Exception as exc:
-        from sku_manager.services import metrics
         metrics.record_error(user, exc)
         return
     if saved_at:
-        st.session_state["_worksave_digest"] = digest
         st.session_state["_worksave_saved_at"] = saved_at
 
 

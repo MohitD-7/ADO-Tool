@@ -65,7 +65,7 @@ def _maybe_offer_restore() -> None:
     if restore_col.button("Restore saved work", type="primary", use_container_width=True):
         worksave.restore_workspace(payload)
         st.session_state["_worksave_restore_handled"] = True
-        st.session_state["_worksave_digest"] = worksave.workspace_digest()
+        worksave.mark_workspace_clean()
         st.rerun()
     if fresh_col.button("Start fresh", use_container_width=True):
         st.session_state["_worksave_restore_handled"] = True
@@ -86,9 +86,11 @@ def main() -> None:
         inject_styles()
         enable_global_spellcheck()
     sync_description_state()
-    page = sidebar_nav()
+    with metrics.timer("sidebar_nav"):
+        page = sidebar_nav()
     _maybe_offer_restore()
     with metrics.timer("page_render"):
         PAGE_RENDERERS[page]()
-    worksave.autosave_tick()
+    with metrics.timer("autosave_tick"):
+        worksave.autosave_tick()
     metrics.record_render((time.perf_counter() - t0) * 1000)

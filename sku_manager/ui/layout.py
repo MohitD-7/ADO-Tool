@@ -130,7 +130,7 @@ def _save_users() -> list[str]:
 
 def _clear_save_context() -> None:
     st.session_state["save_user"] = ""
-    st.session_state.pop("_worksave_digest", None)
+    worksave.reset_session_cache()
     st.session_state.pop("_worksave_saved_at", None)
     st.session_state.pop("_worksave_restore_handled", None)
 
@@ -201,7 +201,7 @@ def _sidebar_save_controls() -> None:
     st.sidebar.markdown("---")
     users = _save_users()
     current = st.session_state.get("save_user", "")
-    if current and not worksave.refresh_user_lease(current):
+    if current and not worksave.ensure_user_lease(current):
         _clear_save_context()
         _reset_user_selector()
         current = ""
@@ -237,7 +237,6 @@ def _sidebar_save_controls() -> None:
         saved_at = worksave.save_workspace(user)
         if saved_at:
             st.session_state["_worksave_saved_at"] = saved_at
-            st.session_state["_worksave_digest"] = worksave.workspace_digest()
     if locked and st.sidebar.button("End autosave session", use_container_width=True):
         _release_current_save_user()
     st.sidebar.caption(_last_saved_caption())
