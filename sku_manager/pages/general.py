@@ -5,6 +5,14 @@ import html
 import streamlit as st
 
 from sku_manager.config import BATTERY_INFO_OPTIONS
+from sku_manager.services.category_mapping import (
+    category_labels,
+    category_paths,
+    display_path,
+    leaf_name,
+    merge_template_into_specs,
+)
+from sku_manager.pages.specs import bump_specs_editor
 from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
 from sku_manager.state import clone_item_from_similar, current_item, set_description_state
@@ -126,6 +134,51 @@ def _render_similar_to_control(item: dict) -> None:
     st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
 
 
+def _render_category_control(item: dict) -> None:
+    details = item["details"]
+    details.setdefault("category", "")
+    item_no = str(details.get("item_no", "")).strip()
+    current = str(details.get("category", "") or "")
+    paths = category_paths()
+    if not paths and not current:
+        return
+
+    options = ["", *paths]
+    if current and current not in options:
+        # Keep a previously saved category selectable even if its mapping rows were removed.
+        options.append(current)
+    labels = category_labels(paths)
+
+    _dv2_label("Product Category (optional)")
+    selected = st.selectbox(
+        "Product Category",
+        options,
+        index=options.index(current),
+        key=f"category_select_{item_no}",
+        format_func=lambda value: "No category selected" if not value else labels.get(value, leaf_name(value)),
+        label_visibility="collapsed",
+    )
+
+    if selected != current:
+        details["category"] = selected
+        if selected:
+            added = merge_template_into_specs(item.setdefault("specs", []), selected)
+            bump_specs_editor(item_no)
+            if added:
+                st.success(
+                    f"Added {added} predefined spec row(s) for {leaf_name(selected)}. "
+                    "Fill in the values on the Specs tab."
+                )
+
+    if selected:
+        st.markdown(
+            f'<div style="font-size:12px;color:#666;margin-top:2px;">'
+            f'Taxonomy: <strong>{html.escape(display_path(selected))}</strong></div>',
+            unsafe_allow_html=True,
+        )
+    st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
+
+
 def _dv2_label(text: str, value: str | None = None, limit: int | None = None) -> None:
     """Render the mockup's label row: LABEL on the left, `47/150` counter on the right."""
     if value is not None and limit is not None:
@@ -166,6 +219,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
 
     with main:
         _render_similar_to_control(item)
+        _render_category_control(item)
         st.markdown('<h2 class="dv2-section-title">Basic Information</h2>', unsafe_allow_html=True)
 
         c_title, c_mpn = st.columns([2, 1])

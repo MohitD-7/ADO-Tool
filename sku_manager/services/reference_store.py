@@ -11,6 +11,7 @@ import streamlit as st
 from sku_manager.data.defaults import (
     default_battery_materials,
     default_battery_types,
+    default_category_mapping,
     default_html_template,
     default_special_character_rules,
     default_warranty,
@@ -24,6 +25,7 @@ TABLE_DEFINITIONS = {
     "battery_types_df": ("battery_types", default_battery_types),
     "special_rules_df": ("special_rules", default_special_character_rules),
     "warranty_df": ("warranty", default_warranty),
+    "category_mapping_df": ("category_mapping", default_category_mapping),
 }
 
 

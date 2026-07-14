@@ -218,6 +218,22 @@ def default_html_template() -> str:
 
 
 @st.cache_data(show_spinner=False)
+def _read_category_mapping_tsv(path: str, mtime: float) -> pd.DataFrame:
+    return pd.read_csv(path, sep="\t", dtype=str).fillna("")
+
+
+def default_category_mapping() -> pd.DataFrame:
+    from pathlib import Path
+    mapping_file = Path(__file__).parent / "category_mapping.tsv"
+    if mapping_file.exists():
+        try:
+            return _read_category_mapping_tsv(str(mapping_file), mapping_file.stat().st_mtime)
+        except Exception:
+            pass
+    return pd.DataFrame(columns=["Taxonomy Path", "Value1 (Category)", "Value3 (Group)", "Value4 (Spec)"])
+
+
+@st.cache_data(show_spinner=False)
 def _read_warranty_tsv(path: str, mtime: float) -> pd.DataFrame:
     df = pd.read_csv(path, sep="\t", dtype=str)
     # Convert warranty months to numeric

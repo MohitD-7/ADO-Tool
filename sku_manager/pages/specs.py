@@ -5,6 +5,7 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
+from sku_manager.services.category_mapping import display_path
 from sku_manager.services.text_rules import flatten_cell_text, format_text
 from sku_manager.services.validation import LIMITS, item_warnings
 from sku_manager.state import current_item
@@ -28,6 +29,9 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
 
     with main:
         st.markdown("### Current Specifications")
+        category_path = str(details.get("category", "") or "")
+        if category_path:
+            st.caption(f"Category: {display_path(category_path)}")
         st.caption(
             "Edit specs in the table, use Value2 (Order) to reorder rows, then click Save Specs. "
             "Rows export with Value1 = category, Value2 = order (10/20/30..., auto), "
@@ -70,7 +74,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         if save_specs:
             item["specs"] = _clean_specs_from_editor(edited, st.session_state["special_rules_df"])
             st.session_state[message_key] = f"Saved {len(item['specs'])} specification row(s)."
-            _bump_specs_editor(ino)
+            bump_specs_editor(ino)
             st.rerun()
 
         st.markdown("### Add Specification")
@@ -96,11 +100,11 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
                         "Value": format_text(new_value, rules_df),
                     }
                 )
-                _bump_specs_editor(ino)
+                bump_specs_editor(ino)
                 st.rerun()
         if b.button("Clear Specifications", width="stretch"):
             item["specs"] = []
-            _bump_specs_editor(ino)
+            bump_specs_editor(ino)
             st.rerun()
         bulk = st.text_area(
             "Paste multiple specs here (tab-separated per line: spec name -> tab -> value). "
@@ -111,7 +115,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         if st.button("Add Multiple Specifications", width="stretch"):
             rules_df = st.session_state["special_rules_df"]
             item["specs"].extend(_format_specs(_parse_bulk_specs(bulk), rules_df))
-            _bump_specs_editor(ino)
+            bump_specs_editor(ino)
             st.rerun()
     with pane:
         if show_links:
@@ -136,7 +140,7 @@ def _specs_editor_key(item_no: str) -> str:
     return f"specs_editor_{item_no}_{revision}"
 
 
-def _bump_specs_editor(item_no: str) -> None:
+def bump_specs_editor(item_no: str) -> None:
     rev_key = f"specs_editor_rev_{item_no}"
     st.session_state[rev_key] = int(st.session_state.get(rev_key, 0)) + 1
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 
+import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -17,6 +18,12 @@ from sku_manager.services.export import (
     render_html,
     text_bytes,
     warranty_excel_bytes,
+)
+from sku_manager.services.relationships import (
+    ROLE_CHILD,
+    ROLE_OPTIONS,
+    apply_relationships,
+    current_relationships,
 )
 from sku_manager.services.variants import (
     build_variant_df,
@@ -53,6 +60,8 @@ def render() -> None:
     m4.metric("Pending", max(pending, 0))
 
     _render_downloads()
+    _render_relationship_editor()
+    queue_df = st.session_state["queue_df"].copy()
 
     st.subheader("Item Processing List")
 
@@ -312,6 +321,80 @@ def _render_downloads() -> None:
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 use_container_width=True,
             )
+
+
+def _render_relationship_editor() -> None:
+    queue_df = st.session_state["queue_df"]
+    if queue_df.empty:
+        return
+
+    with st.expander("Edit Relationships (Parent / Child / Standalone)", expanded=False):
+        message = st.session_state.pop("relationship_message", "")
+        if message:
+            st.success(message)
+        for warning in st.session_state.pop("relationship_warnings", []):
+            st.warning(warning)
+
+        st.caption(
+            "Change any SKU's role, pick the parent for each child, then click Apply. "
+            "The queue reorders itself (children under their parent) and the Input sheet "
+            "of the output Excel follows automatically."
+        )
+
+        records = current_relationships(queue_df)
+        skus = [entry["item_no"] for entry in records]
+        editor_df = pd.DataFrame(
+            [
+                {
+                    "Item No": entry["item_no"],
+                    "Title": entry["title"][:70],
+                    "Role": entry["role"],
+                    "Parent SKU": entry["parent_sku"],
+                }
+                for entry in records
+            ]
+        )
+
+        rev = int(st.session_state.get("relationship_editor_rev", 0))
+        with st.form(f"relationship_form_{rev}", clear_on_submit=False):
+            edited = st.data_editor(
+                editor_df,
+                hide_index=True,
+                width="stretch",
+                key=f"relationship_editor_{rev}",
+                disabled=["Item No", "Title"],
+                column_config={
+                    "Item No": st.column_config.TextColumn("Item No", width="small"),
+                    "Title": st.column_config.TextColumn("Title", width="large"),
+                    "Role": st.column_config.SelectboxColumn("Role", options=ROLE_OPTIONS, required=True, width="small"),
+                    "Parent SKU": st.column_config.SelectboxColumn(
+                        "Parent SKU (for Child rows)",
+                        options=["", *skus],
+                        width="medium",
+                    ),
+                },
+            )
+            applied = st.form_submit_button("Apply Relationship Changes", type="primary", use_container_width=True)
+
+        if applied:
+            assignments = {
+                str(row["Item No"]): (
+                    str(row.get("Role", "") or ""),
+                    str(row.get("Parent SKU", "") or "") if str(row.get("Role", "")) == ROLE_CHILD else "",
+                )
+                for _, row in edited.iterrows()
+            }
+            new_queue, warnings = apply_relationships(queue_df, assignments)
+            st.session_state["queue_df"] = new_queue
+            items = st.session_state.get("items", {})
+            for _, row in new_queue.iterrows():
+                item = items.get(str(row["Item No"]).strip())
+                if item:
+                    item["details"]["atr_type"] = str(row["ATR Type"])
+            st.session_state["relationship_message"] = "Relationships updated and queue reordered."
+            st.session_state["relationship_warnings"] = warnings
+            st.session_state["relationship_editor_rev"] = rev + 1
+            st.rerun()
 
 
 def _queue_atr_label(value) -> str:

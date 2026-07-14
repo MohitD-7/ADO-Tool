@@ -6,6 +6,7 @@ from typing import Any
 
 DETAIL_DEFAULTS: dict[str, Any] = {
     "item_no": "",
+    "category": "",
     "title": "",
     "short_title": "",
     "description": "",
