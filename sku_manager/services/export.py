@@ -9,6 +9,17 @@ import pandas as pd
 
 from sku_manager.config import INPUT_SHEET_COLUMNS, OUTPUT_COLUMNS, QUEUE_COLUMNS
 from sku_manager.models import new_item_record
+from sku_manager.services.relationships import ROLE_CHILD, current_relationships
+
+
+def _child_item_nos(queue_df: pd.DataFrame) -> set[str]:
+    """Item numbers of child SKUs, which never carry exported content of their
+    own (they are configured through the parent's Var Opts)."""
+    return {
+        entry["item_no"]
+        for entry in current_relationships(queue_df)
+        if entry["role"] == ROLE_CHILD
+    }
 
 
 def _row(field: str, item_no: str, value1="", value2="", value3="", value4="", value5="", comments: str = "", source: str = "") -> dict:
@@ -145,11 +156,12 @@ def build_item_rows(item: dict) -> list[dict]:
 
 def build_video_links_df(queue_df: pd.DataFrame, items: dict) -> pd.DataFrame:
     columns = ["Item Number", "Links", "Source", "Video Links"]
+    children = _child_item_nos(queue_df)
     rows = []
     for _, queue_row in queue_df.iterrows():
         item_no = str(queue_row["Item No"])
         item = items.get(item_no)
-        if not item:
+        if not item or item_no in children:
             continue
         for video_link in _video_links(item):
             rows.append({
@@ -166,11 +178,12 @@ def first_link(item: dict, group: str) -> str:
 
 
 def build_output_df(queue_df: pd.DataFrame, items: dict) -> pd.DataFrame:
+    children = _child_item_nos(queue_df)
     rows = []
     for _, queue_row in queue_df.iterrows():
         item_no = str(queue_row["Item No"])
         item = items.get(item_no)
-        if item:
+        if item and item_no not in children:
             rows.extend(build_item_rows(item))
     return pd.DataFrame(rows, columns=OUTPUT_COLUMNS)
 
@@ -577,10 +590,11 @@ def build_warranty_export_df(queue_df: pd.DataFrame, items: dict, warranty_maste
     if warranty_master is None:
         warranty_master = load_warranty_data()
 
+    children = _child_item_nos(queue_df)
     warranty_rows = []
     for _, queue_row in queue_df.iterrows():
         item_no = str(queue_row.get("Item No", "")).strip()
-        if not item_no or item_no not in items:
+        if not item_no or item_no not in items or item_no in children:
             continue
         item = items[item_no]
         brand = item["details"].get("warranty_brand", "").strip()
@@ -634,11 +648,12 @@ BATTERY_COLUMNS = ["SKU", "SEQUENCE", "INFO", "MATERIAL", "QUANTITY", "TYPE", "D
 def build_battery_df(queue_df: pd.DataFrame, items: dict) -> pd.DataFrame:
     """One row per SKU that actually carries a battery (Battery Info set and not
     'no battery used'), in queue order. SEQUENCE is 10 and DISCONT stays blank."""
+    children = _child_item_nos(queue_df)
     rows: list[dict] = []
     for _, queue_row in queue_df.iterrows():
         item_no = str(queue_row["Item No"]).strip()
         item = items.get(item_no)
-        if not item:
+        if not item or item_no in children:
             continue
         details = item["details"]
         info = str(details.get("battery_info", "") or "").strip()
