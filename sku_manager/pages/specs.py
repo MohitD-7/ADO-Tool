@@ -5,6 +5,7 @@ from typing import Any
 import pandas as pd
 import streamlit as st
 
+from sku_manager.services import ai_specs
 from sku_manager.services.category_mapping import display_path
 from sku_manager.services.text_rules import flatten_cell_text, format_text
 from sku_manager.services.validation import LIMITS, item_warnings
@@ -45,6 +46,8 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         message = st.session_state.pop(message_key, "")
         if message:
             st.success(message)
+
+        _render_ai_fill_panel(item, specs_list, category_path)
 
         editor_key = _specs_editor_key(ino)
         specs_df = _specs_dataframe(specs_list)
@@ -125,6 +128,180 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         st.markdown('<div class="vo-panel-gap">&#8203;</div>', unsafe_allow_html=True)
         right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="specs_feedback")
 
+
+def _render_ai_fill_panel(item: dict, specs_list: list[dict], category_path: str) -> None:
+    details = item["details"]
+    ino = str(details.get("item_no", "") or "")
+    rows = ai_specs.build_prompt_rows(specs_list)
+    disabled_reason = ""
+    if not category_path:
+        disabled_reason = "Select a Product Category on the General Description tab first."
+    elif not specs_list:
+        disabled_reason = "Add category template rows before using AI fill."
+    elif not rows:
+        disabled_reason = "There are no blank V5 values to fill."
+
+    with st.expander("AI Fill V5 Values", expanded=False):
+        st.caption(
+            "Uses V3 group and V4 spec names to fill blank V5 values only. "
+            "Existing V5 values are preserved."
+        )
+        if disabled_reason:
+            st.info(disabled_reason)
+            return
+        if not ai_specs.is_configured():
+            st.warning(
+                "AI is disabled because no OpenAI API key is configured. "
+                "Set OPENAI_API_KEY or st.secrets['openai_api_key']."
+            )
+            return
+
+        st.caption(f"Model: {ai_specs.configured_model()} | Blank V5 rows: {len(rows)}")
+        source_text = st.text_area(
+            "Paste product/spec source text",
+            key=f"ai_specs_blob_{ino}",
+            height=180,
+            placeholder="Paste manufacturer specifications, product detail text, or copied spec table here.",
+        )
+
+        message_slot = st.empty()
+        progress_slot = st.empty()
+        if not st.button("Fill blank V5 values", type="primary", use_container_width=True, key=f"ai_specs_fill_{ino}"):
+            return
+
+        message_slot.empty()
+        try:
+            _render_ai_processing_animation(progress_slot, "Matching specs", "O3 is comparing source text against V3 and V4 rows.")
+            suggestions = ai_specs.fill_v5_values(
+                details=details,
+                rows=rows,
+                source_text=source_text,
+            )
+            _render_ai_processing_animation(progress_slot, "Applying clean values", "Formatting output and preserving existing V5 entries.")
+        except ai_specs.AISpecsError as exc:
+            progress_slot.empty()
+            message_slot.error(str(exc))
+            return
+
+        filled, skipped, unresolved = _apply_ai_suggestions(specs_list, suggestions, st.session_state["special_rules_df"])
+        progress_slot.empty()
+        st.session_state[f"specs_save_message_{ino}"] = (
+            f"AI filled {filled} V5 value(s), skipped {skipped}, unresolved {unresolved}."
+        )
+        bump_specs_editor(ino)
+        st.rerun()
+
+
+def _render_ai_processing_animation(slot, title: str, detail: str) -> None:
+    slot.markdown(
+        f"""
+        <style>
+          .ai-spec-loader {{
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #f2c078;
+            border-left: 5px solid #ef8e0d;
+            border-radius: 8px;
+            padding: 18px 18px 16px 18px;
+            margin: 10px 0 14px 0;
+            background:
+              linear-gradient(90deg, rgba(255,247,237,.96), rgba(255,255,255,.98));
+            box-shadow: 0 10px 28px rgba(25, 28, 30, 0.08);
+          }}
+          .ai-spec-loader::before {{
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 0%, rgba(239,142,13,.18) 42%, transparent 72%);
+            transform: translateX(-100%);
+            animation: aiSpecSweep 1.65s infinite;
+          }}
+          .ai-spec-title {{
+            position: relative;
+            z-index: 1;
+            color: #1f2937;
+            font-weight: 800;
+            font-size: .98rem;
+            margin-bottom: 6px;
+          }}
+          .ai-spec-detail {{
+            position: relative;
+            z-index: 1;
+            color: #5f6673;
+            font-size: .86rem;
+            margin-bottom: 12px;
+          }}
+          .ai-spec-track {{
+            position: relative;
+            z-index: 1;
+            height: 7px;
+            border-radius: 999px;
+            background: #fde7c7;
+            overflow: hidden;
+          }}
+          .ai-spec-bar {{
+            height: 100%;
+            width: 42%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ef8e0d, #7cba8c);
+            animation: aiSpecBar 1.2s ease-in-out infinite alternate;
+          }}
+          .ai-spec-steps {{
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            color: #7a5220;
+            font-size: .75rem;
+            font-weight: 700;
+          }}
+          .ai-spec-steps span {{
+            border: 1px solid #f4c98f;
+            background: rgba(255,255,255,.76);
+            border-radius: 999px;
+            padding: 4px 9px;
+          }}
+          @keyframes aiSpecSweep {{
+            0% {{ transform: translateX(-100%); }}
+            100% {{ transform: translateX(100%); }}
+          }}
+          @keyframes aiSpecBar {{
+            0% {{ transform: translateX(0); width: 32%; }}
+            100% {{ transform: translateX(145%); width: 48%; }}
+          }}
+        </style>
+        <div class="ai-spec-loader" role="status" aria-live="polite">
+          <div class="ai-spec-title">{title}</div>
+          <div class="ai-spec-detail">{detail}</div>
+          <div class="ai-spec-track"><div class="ai-spec-bar"></div></div>
+          <div class="ai-spec-steps"><span>Source</span><span>Match</span><span>Clean</span><span>Apply</span></div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+def _apply_ai_suggestions(specs_list: list[dict], suggestions: list[ai_specs.SpecSuggestion], rules_df) -> tuple[int, int, int]:
+    suggestion_by_index = {suggestion.i: suggestion.value for suggestion in suggestions}
+    blank_indexes = [
+        index
+        for index, entry in enumerate(specs_list)
+        if str(entry.get("Spec", "") or "").strip() and not str(entry.get("Value", "") or "").strip()
+    ]
+    filled = 0
+    skipped = 0
+    unresolved = 0
+    for index in blank_indexes:
+        raw_value = str(suggestion_by_index.get(index, "") or "").strip()
+        if not raw_value:
+            unresolved += 1
+            continue
+        if str(specs_list[index].get("Value", "") or "").strip():
+            skipped += 1
+            continue
+        specs_list[index]["Value"] = format_text(raw_value, rules_df)
+        filled += 1
+    skipped += sum(1 for suggestion in suggestions if suggestion.i not in blank_indexes)
+    return filled, skipped, unresolved
 
 def _normalize_specs(specs: list) -> None:
     for entry in specs:
