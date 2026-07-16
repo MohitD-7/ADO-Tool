@@ -31,9 +31,9 @@ SAVE_DIR = Path(__file__).resolve().parents[1] / "data" / "saves"
 LOCK_DIR = SAVE_DIR / ".locks"
 SAVE_VERSION = 1
 EXPIRY_HOURS = 72
-LEASE_SECONDS = 20 * 60
+LEASE_SECONDS = 5 * 60
 LOCK_STALE_SECONDS = 30
-LEASE_REFRESH_SECONDS = 5 * 60
+LEASE_REFRESH_SECONDS = 2 * 60
 FULL_SWEEP_SECONDS = 30
 
 # Session-state keys for the per-session save cache. Everything here is a
@@ -187,6 +187,24 @@ def acquire_user_lease(user: str) -> tuple[bool, dict[str, Any]]:
         with os.fdopen(fd, "w", encoding="utf-8") as lease_file:
             json.dump(lease, lease_file, ensure_ascii=False, default=str)
         return True, lease
+
+
+def force_acquire_user_lease(user: str) -> tuple[bool, dict[str, Any]]:
+    """Overwrite any existing lease for this user.
+
+    For when the lease holder is a dead session (closed tab, crashed browser,
+    server restart) and the real person is locked out. If the old session is
+    in fact still alive, it loses the lease on its next refresh (at most
+    LEASE_REFRESH_SECONDS later) and its autosave stops cleanly.
+    """
+    user = str(user or "").strip()
+    if not user:
+        return False, {"reason": "missing_user"}
+    lease = _lease_payload(user)
+    _write_json_atomic(_lease_path(user), lease)
+    st.session_state[_LEASE_TS_KEY] = time.monotonic()
+    st.session_state.pop("_worksave_lease_conflict", None)
+    return True, lease
 
 
 def refresh_user_lease(user: str) -> bool:

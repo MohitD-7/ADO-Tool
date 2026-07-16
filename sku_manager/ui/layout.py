@@ -184,7 +184,11 @@ def _lease_conflict_message() -> str:
         expires = datetime.fromisoformat(str(expires_at)).astimezone().strftime("%H:%M:%S")
     except ValueError:
         expires = "soon"
-    return f"That user is already active in another session. Try again after {expires}, or ask them to end their autosave session."
+    return (
+        f"That user is already active in another session (until {expires}). "
+        "If that session is really open somewhere, ask them to end it — "
+        "otherwise use Take over below."
+    )
 
 
 def _release_current_save_user() -> None:
@@ -224,8 +228,22 @@ def _sidebar_save_controls() -> None:
             else "Pick your name so your work is auto-saved to your own file."
         ),
     )
-    if st.session_state.get("_worksave_lease_conflict"):
+    conflict = st.session_state.get("_worksave_lease_conflict") or {}
+    if conflict:
         st.sidebar.error(_lease_conflict_message())
+        conflict_user = str(conflict.get("user", "")).strip()
+        if conflict_user and st.sidebar.button(
+            f"🔓 Take over as {conflict_user}",
+            use_container_width=True,
+            help=(
+                "Frees the account immediately. Use this when the blocking "
+                "session is a closed tab or crashed browser."
+            ),
+        ):
+            worksave.force_acquire_user_lease(conflict_user)
+            st.session_state["save_user"] = conflict_user
+            _reset_user_selector()
+            st.rerun()
 
     user = st.session_state.get("save_user", "")
     blocked = bool(st.session_state.get("_worksave_lease_conflict"))
