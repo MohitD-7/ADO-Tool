@@ -47,7 +47,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         if message:
             st.success(message)
 
-        _render_ai_fill_panel(item, specs_list, category_path)
+        _render_ai_fill_panel(item, specs_list)
 
         editor_key = _specs_editor_key(ino)
         specs_df = _specs_dataframe(specs_list)
@@ -129,21 +129,20 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         right_feedback_panel(item, item_warnings(details, item["features"], item["specs"], item["highlights"]), key_prefix="specs_feedback")
 
 
-def _render_ai_fill_panel(item: dict, specs_list: list[dict], category_path: str) -> None:
+def _render_ai_fill_panel(item: dict, specs_list: list[dict]) -> None:
     details = item["details"]
     ino = str(details.get("item_no", "") or "")
     rows = ai_specs.build_prompt_rows(specs_list)
     disabled_reason = ""
-    if not category_path:
-        disabled_reason = "Select a Product Category on the General Description tab first."
-    elif not specs_list:
-        disabled_reason = "Add category template rows before using AI fill."
+    if not specs_list:
+        disabled_reason = "Add spec rows with a V4 spec name before using AI fill."
     elif not rows:
         disabled_reason = "There are no blank V5 values to fill."
 
     with st.expander("AI Fill V5 Values", expanded=False):
         st.caption(
-            "Uses V3 group and V4 spec names to fill blank V5 values only. "
+            "Fills blank V5 values for any row that has a V4 spec name — "
+            "category template rows or manually added ones. "
             "Existing V5 values are preserved."
         )
         if disabled_reason:

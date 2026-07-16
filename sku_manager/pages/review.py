@@ -7,6 +7,7 @@ edit everything, and download a corrected Excel when done.
 """
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 from sku_manager.pages import workspace
@@ -37,34 +38,56 @@ def render() -> None:
 def _render_upload() -> None:
     st.markdown("### Upload a Batch for Review")
     st.caption(
-        "Upload an Excel file exported from this app (Download Excel). "
-        "All SKUs will load into the workspace exactly as the creator left them."
+        "Upload one or more Excel files exported from this app (Download Excel). "
+        "Multiple files are appended into a single review batch, in upload order, "
+        "and export as one Excel/Text file."
     )
 
-    uploaded = st.file_uploader(
-        "Output Excel file (.xlsx)",
+    uploaded_files = st.file_uploader(
+        "Output Excel file(s) (.xlsx)",
         type=["xlsx", "xls"],
-        accept_multiple_files=False,
+        accept_multiple_files=True,
         key="_review_upload",
     )
-    if uploaded is None:
+    if not uploaded_files:
         return
 
-    try:
-        queue_df, items = parse_output_excel(uploaded)
-    except ValueError as exc:
-        st.error(str(exc))
-        return
+    queue_frames: list[pd.DataFrame] = []
+    merged_items: dict = {}
+    duplicates: list[str] = []
+    for uploaded in uploaded_files:
+        try:
+            queue_df, items = parse_output_excel(uploaded)
+        except ValueError as exc:
+            st.error(f"{uploaded.name}: {exc}")
+            return
+        fresh_mask = ~queue_df["Item No"].astype(str).isin(merged_items.keys())
+        queue_frames.append(queue_df[fresh_mask])
+        for ino, item in items.items():
+            if ino in merged_items:
+                duplicates.append(ino)
+                continue
+            merged_items[ino] = item
+        st.caption(f"{uploaded.name}: {len(items)} SKU(s)")
 
-    st.success(f"Loaded {len(items)} SKU(s) from '{uploaded.name}'.")
+    combined_queue = pd.concat(queue_frames, ignore_index=True)
+
+    if duplicates:
+        st.warning(
+            f"Skipped {len(duplicates)} duplicate SKU(s) found in more than one file "
+            f"(kept the first occurrence): {', '.join(dict.fromkeys(duplicates))}"
+        )
+    names = [uploaded.name for uploaded in uploaded_files]
+    source_label = names[0] if len(names) == 1 else f"{names[0]} (+{len(names) - 1} more)"
+    st.success(f"Loaded {len(merged_items)} SKU(s) from {len(names)} file(s).")
 
     if st.button("Open for Review", type="primary"):
-        set_batch(queue_df)
-        st.session_state["items"] = items
-        st.session_state["current_item_no"] = next(iter(items), "")
+        set_batch(combined_queue)
+        st.session_state["items"] = merged_items
+        st.session_state["current_item_no"] = next(iter(merged_items), "")
         st.session_state["_review_loaded"] = True
-        st.session_state["_review_source_name"] = uploaded.name
-        for ino, item in items.items():
+        st.session_state["_review_source_name"] = source_label
+        for ino, item in merged_items.items():
             set_description_state(ino, item["details"].get("description", ""))
         st.rerun()
 

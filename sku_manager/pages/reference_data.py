@@ -84,20 +84,23 @@ def _reload_reference_data() -> None:
         st.session_state[key] = value
 
 
-def _render_auth_controls() -> bool:
+def _render_auth_controls() -> tuple[bool, bool]:
+    """Returns (editable, save_requested).
+
+    The actual save must happen at the END of render(): the table editors below
+    only write their pending edits into session state when they render, so
+    saving here would persist the previous state and silently drop the edits.
+    """
     is_admin = bool(st.session_state.get("reference_data_admin", False))
     password = _configured_password()
 
     if is_admin:
         c1, c2, c3 = st.columns([1, 1, 3])
-        if c1.button("Save Changes", type="primary", width="stretch"):
-            save_reference_data(st.session_state)
-            _sync_source_files(st.session_state)
-            st.success(f"Reference data saved to {REFERENCE_DATA_PATH.name}.")
+        save_requested = c1.button("Save Changes", type="primary", width="stretch")
         if c2.button("Lock Editing", width="stretch"):
             st.session_state["reference_data_admin"] = False
             st.rerun()
-        return True
+        return True, save_requested
 
     c1, c2, c3 = st.columns([1.5, 1, 2.5])
     with c1:
@@ -114,7 +117,7 @@ def _render_auth_controls() -> bool:
             st.info("Viewing is open. Editing requires admin unlock.")
         else:
             st.info("Viewing is open. Set SKU_REFERENCE_DATA_PASSWORD or st.secrets['reference_data_password'] to enable editing.")
-    return False
+    return False, False
 
 
 def _render_table(label: str, state_key: str, editable: bool) -> None:
@@ -291,7 +294,10 @@ def render() -> None:
     page_header("Admin", "Reference Data")
     st.caption("These tables replace the validation/configuration sheets from the legacy workbook.")
 
-    editable = _render_auth_controls()
+    editable, save_requested = _render_auth_controls()
+    saved_message = st.session_state.pop("reference_data_saved_message", "")
+    if saved_message:
+        st.success(saved_message)
     if st.button("Reload From Backend", width="stretch"):
         _reload_reference_data()
         st.rerun()
@@ -314,3 +320,13 @@ def render() -> None:
             )
         else:
             st.code(st.session_state["html_template"], language="html")
+
+    # Save only after every editor above has written its pending edits into
+    # session state — saving earlier would persist the pre-edit tables.
+    if save_requested:
+        save_reference_data(st.session_state)
+        _sync_source_files(st.session_state)
+        st.session_state["reference_data_saved_message"] = (
+            f"Reference data saved to {REFERENCE_DATA_PATH.name}."
+        )
+        st.rerun()
