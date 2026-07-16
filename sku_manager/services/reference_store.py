@@ -74,6 +74,9 @@ def _coerce_frame(raw_rows: Any, default_factory) -> pd.DataFrame:
 
     if default_factory is default_special_character_rules:
         df = _append_missing_default_rows(df, default_df)
+    if default_factory is default_category_mapping:
+        from sku_manager.services.category_mapping import normalize_mapping_frame
+        df = normalize_mapping_frame(df)
     return df
 
 

@@ -45,7 +45,13 @@ def _mapping_df() -> pd.DataFrame:
 
 
 def taxonomy_parts(path: str) -> list[str]:
-    return [part.strip() for part in str(path or "").split(TAXONOMY_SEPARATOR) if part.strip()]
+    # Users type both 'A>>B' and 'A > B'; treat any run of '>' as a level separator.
+    normalized = str(path or "").replace(TAXONOMY_SEPARATOR, ">")
+    return [part.strip() for part in normalized.split(">") if part.strip()]
+
+
+def canonical_path(path: str) -> str:
+    return TAXONOMY_SEPARATOR.join(taxonomy_parts(path))
 
 
 def leaf_name(path: str) -> str:
@@ -85,12 +91,12 @@ def category_labels(paths: list[str]) -> dict[str, str]:
 
 def template_rows(path: str) -> list[dict]:
     """Predefined spec rows for a category, in mapping-table order, with Value5 empty."""
-    target = str(path or "").strip()
+    target = canonical_path(path)
     if not target:
         return []
     rows: list[dict] = []
     for _, row in _mapping_df().iterrows():
-        if str(row.get(_COL_PATH, "") or "").strip() != target:
+        if canonical_path(row.get(_COL_PATH, "")) != target:
             continue
         group = str(row.get(_COL_V3, "") or "").strip()
         spec = str(row.get(_COL_V4, "") or "").strip()
@@ -136,6 +142,15 @@ def normalize_mapping_frame(df: pd.DataFrame) -> pd.DataFrame:
     out = out[MAPPING_COLUMNS].fillna("").astype(str)
     for column in MAPPING_COLUMNS:
         out[column] = out[column].str.strip()
+    # Store paths in canonical 'A>>B>>C' form regardless of how they were typed.
+    out[_COL_PATH] = out[_COL_PATH].map(canonical_path)
+    # Self-heal rows where Value1 was defaulted to the whole path instead of the leaf
+    # (happens when a path was typed with '>' before mixed separators were supported).
+    v1_is_path = out[_COL_V1].map(canonical_path) == out[_COL_PATH]
+    multi_level = out[_COL_PATH].str.contains(TAXONOMY_SEPARATOR, regex=False)
+    heal = v1_is_path & multi_level
+    if heal.any():
+        out.loc[heal, _COL_V1] = out.loc[heal, _COL_PATH].map(leaf_name)
     # A row is meaningful only with a taxonomy and at least a group or spec.
     keep = (out[_COL_PATH] != "") & ((out[_COL_V3] != "") | (out[_COL_V4] != ""))
     return out[keep].reset_index(drop=True)

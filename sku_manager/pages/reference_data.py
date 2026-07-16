@@ -254,9 +254,9 @@ def _render_category_mapping(editable: bool) -> None:
     st.markdown("---")
     st.markdown("#### Add New Category")
     new_path = st.text_input(
-        "Taxonomy path (levels separated by >>)",
+        "Taxonomy path (levels separated by > or >>)",
         key="category_mapping_new_path",
-        placeholder="e.g. Photography>>Cameras>>DSLR Cameras",
+        placeholder="e.g. Photography > Cameras > DSLR Cameras",
     )
     new_v1 = st.text_input(
         "Value1 (Category) for its spec rows",

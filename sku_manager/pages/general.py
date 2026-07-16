@@ -6,6 +6,7 @@ import streamlit as st
 
 from sku_manager.config import BATTERY_INFO_OPTIONS
 from sku_manager.services.category_mapping import (
+    canonical_path,
     category_labels,
     category_paths,
     display_path,
@@ -138,7 +139,7 @@ def _render_category_control(item: dict) -> None:
     details = item["details"]
     details.setdefault("category", "")
     item_no = str(details.get("item_no", "")).strip()
-    current = str(details.get("category", "") or "")
+    current = canonical_path(details.get("category", ""))
     paths = category_paths()
     if not paths and not current:
         return
