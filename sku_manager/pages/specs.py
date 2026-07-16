@@ -15,6 +15,8 @@ from sku_manager.ui.grid import select_first_data_editor_cell
 
 
 _SPEC_COLUMNS = ["Value1 (Category)", "Value2 (Order)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)"]
+_TEXT_COLUMNS = ("Value1 (Category)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)")
+_AI_FILL_MIN_BLANK_ROWS = 10
 
 
 def render(show_header: bool = True, show_links: bool = True) -> None:
@@ -138,6 +140,11 @@ def _render_ai_fill_panel(item: dict, specs_list: list[dict]) -> None:
         disabled_reason = "Add spec rows with a V4 spec name before using AI fill."
     elif not rows:
         disabled_reason = "There are no blank V5 values to fill."
+    elif len(rows) < _AI_FILL_MIN_BLANK_ROWS:
+        disabled_reason = (
+            f"AI fill activates at {_AI_FILL_MIN_BLANK_ROWS}+ blank V5 values. "
+            f"This item has {len(rows)} — fill them manually instead."
+        )
 
     with st.expander("AI Fill V5 Values", expanded=False):
         st.caption(
@@ -365,23 +372,56 @@ def _order_value(value: Any, fallback_index: int) -> float:
         return float((fallback_index + 1) * 10)
 
 
+def _recover_swallowed_rows(raw_cells: dict[str, str]) -> list[dict[str, str]]:
+    """Split rows that a plain-text paste swallowed into a single cell.
+
+    The grid parses text/plain pastes as quoted TSV, so a bare double quote
+    (an inch mark in a dimension, say) makes it treat every following
+    ``label<TAB>value`` line as part of the current cell instead of new rows.
+    Keep each such cell's first line and rebuild the trailing lines as their
+    own rows, right-aligning each line's tab-separated parts to the column
+    the swallow happened in (the value column of the pasted pair).
+
+    Multi-line cell text without tabs is left alone for flatten_cell_text.
+    Mutates raw_cells; returns the recovered rows in paste order.
+    """
+    recovered: list[dict[str, str]] = []
+    for column_index, column in enumerate(_TEXT_COLUMNS):
+        lines = raw_cells[column].replace("\r\n", "\n").replace("\r", "\n").split("\n")
+        trailing = [line for line in lines[1:] if line.strip()]
+        if not trailing or not any("\t" in line for line in trailing):
+            continue
+        raw_cells[column] = lines[0]
+        for line in trailing:
+            parts = [part.strip() for part in line.split("\t")]
+            start = max(column_index - (len(parts) - 1), 0)
+            cells = {name: "" for name in _TEXT_COLUMNS}
+            for offset, part in enumerate(parts):
+                target = _TEXT_COLUMNS[min(start + offset, len(_TEXT_COLUMNS) - 1)]
+                cells[target] = f"{cells[target]} {part}".strip()
+            recovered.append(cells)
+    return recovered
+
+
 def _clean_specs_from_editor(edited: pd.DataFrame, rules_df) -> list[dict]:
-    ordered: list[tuple[float, int, dict]] = []
+    ordered: list[tuple[float, float, dict]] = []
     for position, (_, row) in enumerate(edited.iterrows()):
-        raw_cells = {
-            column: _clean_cell(row.get(column, ""))
-            for column in ("Value1 (Category)", "Value3 (Group)", "Value4 (Spec)", "Value5 (Value)")
-        }
-        category = format_text(flatten_cell_text(raw_cells["Value1 (Category)"]), rules_df)
-        group = format_text(flatten_cell_text(raw_cells["Value3 (Group)"]), rules_df)
-        key = format_text(flatten_cell_text(raw_cells["Value4 (Spec)"]), rules_df)
-        value = format_text(flatten_cell_text(raw_cells["Value5 (Value)"]), rules_df)
-        if key or value or category or group:
-            ordered.append((
-                _order_value(row.get("Value2 (Order)", ""), position),
-                position,
-                {"category": category, "group": group, "Spec": key, "Value": value},
-            ))
+        raw_cells = {column: _clean_cell(row.get(column, "")) for column in _TEXT_COLUMNS}
+        recovered = _recover_swallowed_rows(raw_cells)
+        order = _order_value(row.get("Value2 (Order)", ""), position)
+        for sub_index, cells in enumerate([raw_cells, *recovered]):
+            category = format_text(flatten_cell_text(cells["Value1 (Category)"]), rules_df)
+            group = format_text(flatten_cell_text(cells["Value3 (Group)"]), rules_df)
+            key = format_text(flatten_cell_text(cells["Value4 (Spec)"]), rules_df)
+            value = format_text(flatten_cell_text(cells["Value5 (Value)"]), rules_df)
+            if key or value or category or group:
+                # Recovered rows share the parent's order and slot in right
+                # after it via the fractional position tiebreaker.
+                ordered.append((
+                    order,
+                    position + sub_index / 1000,
+                    {"category": category, "group": group, "Spec": key, "Value": value},
+                ))
     return [record for _, _, record in sorted(ordered, key=lambda entry: (entry[0], entry[1]))]
 
 
