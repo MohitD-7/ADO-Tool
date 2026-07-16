@@ -5,6 +5,7 @@ import time
 import streamlit as st
 
 from sku_manager.config import APP_TITLE
+from sku_manager.frontend_patch import ensure_visible_row_checkboxes
 from sku_manager.pages import (
     description,
     editor_rules,
@@ -73,6 +74,7 @@ def _maybe_offer_restore() -> None:
 
 
 def main() -> None:
+    ensure_visible_row_checkboxes()
     st.set_page_config(
         page_title=APP_TITLE,
         layout="wide",
