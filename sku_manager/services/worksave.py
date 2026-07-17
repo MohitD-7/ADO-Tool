@@ -466,6 +466,10 @@ def autosave_tick() -> None:
     user = str(st.session_state.get("save_user", "") or "")
     if not user or not st.session_state.get("items"):
         return
+    if not st.session_state.get("_worksave_restore_handled"):
+        # A restore decision is still pending for this user; saving now would
+        # overwrite the very file the user may be about to load.
+        return
     if not ensure_user_lease(user):
         return
     if not _workspace_changed(_workspace_payload()):

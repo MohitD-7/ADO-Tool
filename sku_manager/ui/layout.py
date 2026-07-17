@@ -179,15 +179,11 @@ def _last_saved_caption() -> str:
 
 def _lease_conflict_message() -> str:
     conflict = st.session_state.get("_worksave_lease_conflict") or {}
-    expires_at = conflict.get("expires_at", "")
-    try:
-        expires = datetime.fromisoformat(str(expires_at)).astimezone().strftime("%H:%M:%S")
-    except ValueError:
-        expires = "soon"
+    who = str(conflict.get("user", "")).strip() or "That user"
     return (
-        f"That user is already active in another session (until {expires}). "
-        "If that session is really open somewhere, ask them to end it — "
-        "otherwise use Take over below."
+        f"{who} looks signed in somewhere else — usually just a refreshed or "
+        "closed tab. Continue below to move the session here; saved work "
+        "loads automatically."
     )
 
 
@@ -230,16 +226,14 @@ def _sidebar_save_controls() -> None:
     )
     conflict = st.session_state.get("_worksave_lease_conflict") or {}
     if conflict:
-        st.sidebar.error(_lease_conflict_message())
+        st.sidebar.warning(_lease_conflict_message())
         conflict_user = str(conflict.get("user", "")).strip()
         if conflict_user and st.sidebar.button(
-            f"🔓 Take over as {conflict_user}",
+            f"Continue as {conflict_user} here",
+            type="primary",
             use_container_width=True,
-            help=(
-                "Frees the account immediately. Use this when the blocking "
-                "session is a closed tab or crashed browser."
-            ),
         ):
+            _clear_save_context()
             worksave.force_acquire_user_lease(conflict_user)
             st.session_state["save_user"] = conflict_user
             _reset_user_selector()
@@ -247,10 +241,11 @@ def _sidebar_save_controls() -> None:
 
     user = st.session_state.get("save_user", "")
     blocked = bool(st.session_state.get("_worksave_lease_conflict"))
+    restore_pending = bool(user) and not st.session_state.get("_worksave_restore_handled")
     if st.sidebar.button(
         "💾 Save now",
         use_container_width=True,
-        disabled=not user or blocked or not st.session_state.get("items"),
+        disabled=not user or blocked or restore_pending or not st.session_state.get("items"),
     ):
         saved_at = worksave.save_workspace(user)
         if saved_at:

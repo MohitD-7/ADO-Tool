@@ -43,32 +43,58 @@ PAGE_RENDERERS = {
 }
 
 
-def _maybe_offer_restore() -> None:
-    """Offer to restore the picked user's saved work when the session is empty."""
+def _maybe_restore_saved_work() -> None:
+    """Bring back the picked user's saved work without making them ask for it.
+
+    An empty session restores the save automatically (uploading a new batch
+    replaces it anyway, so this is always safe). Only when the session already
+    holds work AND a save exists does the user get an explicit choice; until
+    they choose, auto-save stays off so the saved file cannot be clobbered.
+    """
+    notice = st.session_state.pop("_worksave_restore_notice", None)
+    if notice:
+        st.toast(notice, icon="✅")
+
     user = st.session_state.get("save_user", "")
     if not user or st.session_state.get("_worksave_restore_handled"):
-        return
-    if st.session_state.get("items"):
-        st.session_state["_worksave_restore_handled"] = True
         return
     payload = worksave.load_workspace(user)
     if not payload:
         st.session_state["_worksave_restore_handled"] = True
         return
 
-    saved_at = payload.get("saved_at", "")
-    item_count = len(payload.get("items") or {})
-    st.info(
-        f"Found saved work for **{user}** from {saved_at} — {item_count} SKU(s). "
-        f"Items expire {worksave.EXPIRY_HOURS // 24} days after their last edit."
-    )
-    restore_col, fresh_col, _ = st.columns([1, 1, 3])
-    if restore_col.button("Restore saved work", type="primary", use_container_width=True):
+    saved_items = len(payload.get("items") or {})
+    if not st.session_state.get("items"):
         worksave.restore_workspace(payload)
-        st.session_state["_worksave_restore_handled"] = True
         worksave.mark_workspace_clean()
+        st.session_state["_worksave_restore_handled"] = True
+        st.session_state["_worksave_restore_notice"] = (
+            f"Restored {saved_items} saved SKU(s) for {user}."
+        )
         st.rerun()
-    if fresh_col.button("Start fresh", use_container_width=True):
+
+    loaded_items = len(st.session_state.get("items") or {})
+    st.warning(
+        f"**{user}** has saved work from {payload.get('saved_at', '')} "
+        f"({saved_items} SKU(s)), but this session already has {loaded_items} "
+        "SKU(s) loaded. Pick which one to keep — auto-save is paused until you do."
+    )
+    load_col, keep_col, _ = st.columns([1, 1, 2])
+    if load_col.button(
+        "Load saved work",
+        type="primary",
+        use_container_width=True,
+        help="Replaces what is currently loaded in this session.",
+    ):
+        worksave.restore_workspace(payload)
+        worksave.mark_workspace_clean()
+        st.session_state["_worksave_restore_handled"] = True
+        st.rerun()
+    if keep_col.button(
+        "Keep what's loaded here",
+        use_container_width=True,
+        help="Auto-save resumes and replaces the old save as you work.",
+    ):
         st.session_state["_worksave_restore_handled"] = True
         st.rerun()
 
@@ -90,7 +116,7 @@ def main() -> None:
     sync_description_state()
     with metrics.timer("sidebar_nav"):
         page = sidebar_nav()
-    _maybe_offer_restore()
+    _maybe_restore_saved_work()
     with metrics.timer("page_render"):
         PAGE_RENDERERS[page]()
     with metrics.timer("autosave_tick"):

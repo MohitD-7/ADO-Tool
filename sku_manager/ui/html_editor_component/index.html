@@ -102,26 +102,40 @@ function renderComponent(event) {
   currentArgs = args;
   RULES = Array.isArray(args.rules) ? args.rules : [];
 
-  document.getElementById("dynamic-css").textContent = args.css || "";
+  var css = String(args.css || "");
+  var cssEl = document.getElementById("dynamic-css");
+  if (cssEl.textContent !== css) cssEl.textContent = css;
 
+  // A rerun echoes back the value this editor just committed. Repainting in
+  // that case makes the whole editor (and its full-screen overlay) flash on
+  // every pause in typing, so only repaint when the document actually changed.
+  var valueChanged = true;
   if (!cm) {
     mountEditor(args);
   } else {
+    var before = cm.getValue();
     applyIncomingValue(args);
+    valueChanged = cm.getValue() !== before;
   }
 
   installParentNavigationSync();
   renderRulesBar();
-  updateCounter();
-  updatePreview();
-  ensureSpellDictionary();
-  scheduleTextAudit(120);
-  scheduleRepaint();
+  if (valueChanged) {
+    updateCounter();
+    updatePreview();
+    ensureSpellDictionary();
+    scheduleTextAudit(120);
+    scheduleRepaint();
+  }
 }
 
+var lastRulesBarJson = null;
 function renderRulesBar() {
   var bar = document.getElementById("rules-bar");
   if (!bar) return;
+  var rulesJson = JSON.stringify(RULES);
+  if (rulesJson === lastRulesBarJson) return;
+  lastRulesBarJson = rulesJson;
   if (!RULES.length) {
     bar.innerHTML = '<span class="rules-empty">No custom rules. Add some on the Editor Rules page.</span>';
     return;
@@ -193,7 +207,7 @@ function applyEditorHeight() {
   var preview = document.getElementById("preview-panel");
   if (preview) preview.style.height = editorHeight + "px";
   if (cm) cm.refresh();
-  Streamlit.setFrameHeight(document.body.scrollHeight);
+  if (!fullscreenActive) Streamlit.setFrameHeight(document.body.scrollHeight);
 }
 
 function backupFrameStyle(frame) {
@@ -278,6 +292,7 @@ function setFullscreenMode(on) {
   document.body.classList.toggle("fullscreen-mode", on);
   setFrameOverlay(on);
   if (on) {
+    if (commitTimer) { clearTimeout(commitTimer); commitTimer = null; }
     preFullscreenHeight = editorHeight;
     adjustFullscreenHeight();
   } else {
@@ -285,13 +300,13 @@ function setFullscreenMode(on) {
     preFullscreenHeight = null;
     applyEditorHeight();
     Streamlit.setFrameHeight(document.body.scrollHeight);
+    commitValue({ reason: "fullscreen_exit" });
   }
   updateFullscreenButton();
   setTimeout(function() { if (cm) cm.refresh(); }, 50);
 }
 
 function toggleFullscreen() {
-  commitValue({ reason: "fullscreen" });
   setFullscreenMode(!fullscreenActive);
 }
 
@@ -309,7 +324,7 @@ function setupFullscreen() {
 function scheduleRepaint() {
   requestAnimationFrame(function() {
     if (cm) cm.refresh();
-    Streamlit.setFrameHeight(document.body.scrollHeight);
+    Streamlit.setFrameHeight(fullscreenActive ? window.innerHeight : document.body.scrollHeight);
     requestAnimationFrame(function() {
       if (cm) cm.refresh();
       setTimeout(function() { if (cm) cm.refresh(); }, 50);
@@ -369,8 +384,8 @@ function mountEditor(args) {
     scheduleCommit();
   });
   cm.on("blur", function() { scheduleCommit(150); });
-  window.addEventListener("pagehide", function() { commitValue({ reason: "pagehide" }); });
-  window.addEventListener("beforeunload", function() { commitValue({ reason: "beforeunload" }); });
+  window.addEventListener("pagehide", function() { commitValue({ reason: "pagehide", flush: true }); });
+  window.addEventListener("beforeunload", function() { commitValue({ reason: "beforeunload", flush: true }); });
 
   setupLinkBar();
   setupFindBar();
@@ -429,6 +444,11 @@ function commitValue(extra) {
     clearTimeout(commitTimer);
     commitTimer = null;
   }
+  // Any commit triggers a Streamlit rerun, and a rerun re-renders the parent
+  // page around the full-screen overlay, which makes it flicker. While full
+  // screen is open, edits stay local; setFullscreenMode flushes them on exit
+  // and page close still forces a commit via flush.
+  if (fullscreenActive && !(extra && extra.flush)) return;
   var currentValue = cm.getValue();
   var force = extra && (extra.navigateTo || extra.switchItem);
   if (!force && currentValue === lastSentValue) return;
@@ -491,9 +511,12 @@ function installParentNavigationSync() {
   } catch (e) {}
 }
 
+var lastPreviewHtml = null;
 function updatePreview() {
   if (!previewContent || !cm) return;
   var html = cm.getValue();
+  if (html === lastPreviewHtml) return;
+  lastPreviewHtml = html;
   previewContent.innerHTML = html.trim()
     ? html
     : '<div id="preview-placeholder">HTML preview appears here as you type.</div>';
