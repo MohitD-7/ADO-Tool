@@ -31207,60 +31207,6 @@
       "Value1 (Category)": "Mirrorless Lenses",
       "Value3 (Group)": "Physical Details",
       "Value4 (Spec)": "Dimensions"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "General",
-      "Value4 (Spec)": "Color"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "General",
-      "Value4 (Spec)": "Shoe Mount"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "General",
-      "Value4 (Spec)": "Tripod Mounting Thread"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "General",
-      "Value4 (Spec)": "Operating Conditions"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "General",
-      "Value4 (Spec)": "Image Processor"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "Imaging",
-      "Value4 (Spec)": "Lens Mount"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "Imaging",
-      "Value4 (Spec)": "Sensor Resolution"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "Imaging",
-      "Value4 (Spec)": "Image Sensor"
-    },
-    {
-      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
-      "Value1 (Category)": "Mirrorless Cameras",
-      "Value3 (Group)": "Imaging",
-      "Value4 (Spec)": "Image Stabilization"
     }
   ],
   "html_template": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Product Sample Page</title>\n    <style>\n      body {font-family:Calibri;font-size: 15px;}\n      table, th, td {\n        border: 1px solid #ccc;\n        border-collapse: collapse;\n      }\n      td {\n        padding-left: 7px;\n        padding-right: 7px;\n        padding-top: 5px;\n        padding-bottom: 5px;\n      }\n\n      /* Style the tab */\n      div.tab {\n        overflow: hidden;\n        border: 1px solid #ccc;\n        background-color: #f1f1f1;\n      }\n\n      /* Style the buttons inside the tab */\n      div.tab button {\n        background-color: inherit;\n        float: left;\n        border: none;\n        outline: none;\n        cursor: pointer;\n        padding: 5px 15px;\n        transition: 0.3s;\n        height:30px;\n      }\n\n      /* Change background color of buttons on hover */\n      div.tab button:hover {\n        background-color: #ddd;\n      }\n\n      /* Create an active/current tablink class */\n      div.tab button.active {\n        background-color: #ccc;\n      }\n\n      /* Style the tab content */\n      .tabcontent {\n        display: none;\n        padding: 6px 12px;\n        border: 1px solid #ccc;\n        height:450px;\n        border-top: none;\n      }\n      .tabcontent {\n        -webkit-animation: fadeEffect 1s;\n        animation: fadeEffect 1s; /* Fading effect takes 1 second */\n      }\n\n      @-webkit-keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n\n      @keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n    </style>\n  </head>\n\n  <body>\n    <table style=\"height: 500px;\" border=\"0\" width=100% cellspacing=\"0\" align=\"center\">\n      <tbody>\n        <tr>\n          <td rowspan=\"3\" width=125 align=\"center\"><img src=\"https://virtualops.net/wp-content/uploads/2022/12/logo-dark.png\" alt=\"\"/></td>\n          <td colspan=\"4\" width=\"675\" height=\"50\" style=\"font-size:19px;\">\n            <strong>--Title--</strong>\n            <br><font size=\"3\">--ShortTitle--</font>\n          </td>\n        </tr>\n        <tr>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Item No</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Item</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Model</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Warranty Months</strong></td>\n        </tr>\n        <tr>\n          <td height=\"30\">--ItemNo--</td>\n          <td height=\"30\">--MfgItem--</td>\n          <td height=\"30\">--MfgModel--</td>\n          <td height=\"30\">--Warranty Months--</td>\n        </tr>\n        <tr>\n          <td colspan=\"5\" rowspan=\"4\" valign=\"top\">\n            <div class=\"tab\">\n              <button class=\"tablinks\" accesskey=\"d\" onclick=\"openCity(event, 'Description')\" id=\"defaultOpen\"><strong><u>D</u>escription</strong></button>\n              <button class=\"tablinks\" accesskey=\"f\" onclick=\"openCity(event, 'Features')\"><strong><u>F</u>eatures</strong></button>\n              <button class=\"tablinks\" accesskey=\"s\" onclick=\"openCity(event, 'Specifications')\"><strong><u>S</u>pecifications</strong></button>\n              <button class=\"tablinks\" accesskey=\"h\" onclick=\"openCity(event, 'Highlights')\"><strong><u>H</u>ighlights</strong></button>\n              <button class=\"tablinks\" accesskey=\"l\" onclick=\"openCity(event, 'Includes')\"><strong>Inc<u>l</u>udes</strong></button>\n              <button class=\"tablinks\" accesskey=\"r\" onclick=\"openCity(event, 'Battery Info')\"><strong>Batte<u>r</u>y Info</strong></button>\n            </div>\n\n            <div id=\"Description\" class=\"tabcontent\" style=\"overflow:auto;\">\n              --Description--\n            </div>\n\n            <div id=\"Features\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Features--\n              </table>\n            </div>\n\n            <div id=\"Specifications\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Specifications--\n              </table>\n            </div>\n\n            <div id=\"Highlights\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Highlights--\n              </table>\n            </div>\n\n            <div id=\"Includes\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Includes--\n              </table>\n            </div>\n\n            <div id=\"Battery Info\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Battery Info--\n              </table>\n            </div>\n            <script>\n              function openCity(evt, cityName) {\n                // Declare all variables\n                var i, tabcontent, tablinks;\n\n                // Get all elements with class=\"tabcontent\" and hide them\n                tabcontent = document.getElementsByClassName(\"tabcontent\");\n                for (i = 0; i < tabcontent.length; i++) {\n                  tabcontent[i].style.display = \"none\";\n                }\n\n                // Get all elements with class=\"tablinks\" and remove the class \"active\"\n                tablinks = document.getElementsByClassName(\"tablinks\");\n                for (i = 0; i < tablinks.length; i++) {\n                  tablinks[i].className = tablinks[i].className.replace(\" active\", \"\");\n                }\n\n                // Show the current tab, and add an \"active\" class to the button that opened the tab\n                document.getElementById(cityName).style.display = \"block\";\n                evt.currentTarget.className += \" active\";\n              }\n              document.getElementById(\"defaultOpen\").click();\n            </script>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n\n  </body>\n</html>"
