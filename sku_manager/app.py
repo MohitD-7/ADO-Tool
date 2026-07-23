@@ -77,7 +77,7 @@ def _maybe_restore_saved_work() -> None:
     st.warning(
         f"**{user}** has saved work from {payload.get('saved_at', '')} "
         f"({saved_items} SKU(s)), but this session already has {loaded_items} "
-        "SKU(s) loaded. Pick which one to keep — auto-save is paused until you do."
+        "SKU(s) loaded. Pick which one to keep - auto-save is paused until you do."
     )
     load_col, keep_col, _ = st.columns([1, 1, 2])
     if load_col.button(

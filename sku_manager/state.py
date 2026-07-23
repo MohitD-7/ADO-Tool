@@ -213,9 +213,16 @@ def sync_description_state(item: dict | None = None) -> str:
     if not item_no:
         return str(details.get("description", "") or "")
 
-    sync_key, widget_key, _ = description_state_keys(item_no)
-    if widget_key in st.session_state:
-        value = st.session_state[widget_key]
+    sync_key, _, _ = description_state_keys(item_no)
+    component_key = f"{sync_key}{DESCRIPTION_COMPONENT_SUFFIX}"
+    component_result = st.session_state.get(component_key)
+    if isinstance(component_result, dict) and component_result.get("value") is not None:
+        # The CodeMirror component's own key - restored by Streamlit before any
+        # on_click callback runs, so this reflects what's actually typed right
+        # now. `sync_key` is a plain dict entry only refreshed by html_editor()'s
+        # own script-body code, which hasn't run yet at callback time - reading
+        # it here would silently reformat (or overwrite) stale, pre-edit text.
+        value = component_result["value"]
     elif sync_key in st.session_state:
         value = st.session_state[sync_key]
     else:

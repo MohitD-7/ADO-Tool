@@ -34,6 +34,12 @@ def _token() -> str:
         return ""
 
 
+def is_configured() -> bool:
+    """Whether a push would actually do anything - lets callers skip showing
+    a "confirm before redeploy" gate when there's no token to push with."""
+    return bool(_token())
+
+
 def _run(args: list[str]) -> subprocess.CompletedProcess:
     return subprocess.run(
         args, cwd=_REPO_ROOT, capture_output=True, text=True, timeout=_TIMEOUT, check=True,
@@ -51,13 +57,19 @@ def _push_url(token: str) -> str | None:
 
 
 def commit_and_push(paths: list[Path], message: str) -> bool:
-    """Stage, commit, and push the given paths. Returns True if a push happened."""
+    """Stage, commit, and push the given paths. Returns True if a push happened.
+
+    Deliberately catches Exception broadly (not just subprocess errors): this
+    is called from inside UI save handlers, and any escape here - a missing
+    git binary, a bad path, a network hiccup - would otherwise crash the
+    admin's save with a raw traceback instead of just skipping the push.
+    """
     token = _token()
     if not token:
         return False
 
-    rel_paths = [str(p.resolve().relative_to(_REPO_ROOT)) for p in paths]
     try:
+        rel_paths = [str(p.resolve().relative_to(_REPO_ROOT)) for p in paths]
         _run(["git", "add", *rel_paths])
         staged = subprocess.run(
             ["git", "diff", "--cached", "--quiet"],
@@ -78,5 +90,5 @@ def commit_and_push(paths: list[Path], message: str) -> bool:
         else:
             _run(["git", "push"])
         return True
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+    except Exception:
         return False

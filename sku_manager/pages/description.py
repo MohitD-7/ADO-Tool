@@ -4,9 +4,9 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
-from sku_manager.services.text_rules import format_text, parse_lines, split_cell_lines
+from sku_manager.services.text_rules import parse_lines, split_cell_lines
 from sku_manager.services.validation import item_warnings
-from sku_manager.state import current_item, description_state_keys, set_description_state, sync_description_state
+from sku_manager.state import current_item, description_state_keys, sync_description_state
 from sku_manager.ui.components import reorder_editor, field_notes_editor, page_header, source_video_panel
 from sku_manager.ui.editor import html_editor
 from sku_manager.ui.grid import reset_stable_data_editor, stable_data_editor
@@ -43,35 +43,13 @@ def render(
 
     with main:
         if show_description:
-            th1, th2 = st.columns([5, 1])
-            with th1:
-                st.markdown("### Product Description")
-            with th2:
-                st.markdown('<div class="vo-spacer-btn">&#8203;</div>', unsafe_allow_html=True)
-                fmt_click = st.button("Format Visible Text", use_container_width=True, key=f"fmt_all_{ino}")
+            st.markdown("### Product Description")
 
             details["description"] = html_editor(
                 value=details.get("description", ""),
                 sync_key=sync_key,
                 height=320,
             )
-
-            if fmt_click:
-                current = sync_description_state(item)
-                rules_df = st.session_state["special_rules_df"]
-                for key in ["title", "short_title", "mfg_model"]:
-                    details[key] = format_text(details.get(key, ""), rules_df)
-                details["description"] = format_text(current, rules_df)
-                set_description_state(ino, details["description"])
-                for entry in item.setdefault("includes", []):
-                    if entry.get("text"):
-                        entry["text"] = format_text(entry["text"], rules_df)
-                item["features"] = [format_text(str(f), rules_df) for f in item.get("features", [])]
-                item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
-                for spec in item.get("specs", []):
-                    spec["Spec"] = format_text(str(spec.get("Spec", "") or ""), rules_df)
-                    spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
-                st.rerun()
 
         if show_includes:
             st.markdown("### Includes / Box Contents")
@@ -178,7 +156,7 @@ def _render_includes_editor(item: dict, ino: str, includes_list: list[dict]) -> 
 def _render_includes_bulk(item: dict, ino: str) -> None:
     with st.expander("Add includes in bulk", expanded=False):
         st.caption(
-            "One include per line. Use **Tab** to separate text from SKU — "
+            "One include per line. Use **Tab** to separate text from SKU - "
             "leave one side blank. Copy two columns from Excel and paste here to fill both."
         )
         bulk_label = "Paste includes"

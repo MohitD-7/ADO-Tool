@@ -161,7 +161,7 @@ def render() -> None:
             type="primary",
             use_container_width=True,
             disabled=is_child,
-            help="Child variants are never worked on directly — use the parent's Var Opts tab." if is_child else None,
+            help="Child variants are never worked on directly - use the parent's Var Opts tab." if is_child else None,
         ):
             set_current_item(item_no)
             mark_status(item_no, "In Progress")
@@ -290,7 +290,7 @@ def _render_downloads() -> None:
             complete, problems = variant_completeness(queue_df, variants)
             if not complete:
                 st.caption(
-                    f"{len(problems)} attribute value(s) still empty — complete them in the "
+                    f"{len(problems)} attribute value(s) still empty - complete them in the "
                     "Var Opts tab to enable this download."
                 )
             st.download_button(

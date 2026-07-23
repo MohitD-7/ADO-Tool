@@ -17,7 +17,7 @@ from sku_manager.services.category_mapping import (
     replace_taxonomy_rows,
     split_by_taxonomy,
 )
-from sku_manager.services.git_sync import commit_and_push
+from sku_manager.services.git_sync import commit_and_push, is_configured
 from sku_manager.services.reference_store import (
     REFERENCE_DATA_PATH,
     coerce_uploaded_frame,
@@ -105,14 +105,16 @@ def _render_auth_controls() -> tuple[bool, bool, bool]:
     password = _configured_password()
 
     if is_admin:
-        st.warning(
-            "Saving here pushes to GitHub and **redeploys the live app for every user**. "
-            "Confirm everyone else has saved or exported their in-progress work before you continue."
-        )
-        push_ack = st.checkbox(
-            "I've confirmed it's safe to push and redeploy now",
-            key="reference_data_push_ack",
-        )
+        push_ack = True
+        if is_configured():
+            st.warning(
+                "Saving here pushes to GitHub and **redeploys the live app for every user**. "
+                "Confirm everyone else has saved or exported their in-progress work before you continue."
+            )
+            push_ack = st.checkbox(
+                "I've confirmed it's safe to push and redeploy now",
+                key="reference_data_push_ack",
+            )
         c1, c2, c3 = st.columns([1, 1, 3])
         save_requested = c1.button("Save Changes", type="primary", width="stretch", disabled=not push_ack)
         if c2.button("Lock Editing", width="stretch"):
@@ -241,7 +243,7 @@ def _render_category_mapping(editable: bool, push_ack: bool) -> None:
 
     for path, template_df in sections:
         section_key = _mapping_section_key(path)
-        with st.expander(f"{leaf_name(path)} — {len(template_df)} specs ({display_path(path)})", expanded=False):
+        with st.expander(f"{leaf_name(path)} - {len(template_df)} specs ({display_path(path)})", expanded=False):
             if not editable:
                 st.dataframe(template_df, width="stretch", hide_index=True)
                 continue
@@ -302,7 +304,7 @@ def _render_category_mapping(editable: bool, push_ack: bool) -> None:
         elif template_df.empty:
             st.error("Paste at least one Group/Spec line.")
         elif any(existing == path for existing, _ in sections):
-            st.error("That taxonomy already exists below — edit it in its own section instead.")
+            st.error("That taxonomy already exists below - edit it in its own section instead.")
         else:
             v1 = new_v1.strip() or leaf_name(path)
             template_df["Value1 (Category)"] = template_df["Value1 (Category)"].replace("", v1)

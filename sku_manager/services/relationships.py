@@ -78,13 +78,13 @@ def apply_relationships(queue_df: pd.DataFrame, assignments: dict[str, tuple[str
         parent_sku = _clean(parent_sku)
         if role == ROLE_CHILD:
             if not parent_sku:
-                warnings.append(f"{sku}: marked Child without a parent SKU — kept as Standalone.")
+                warnings.append(f"{sku}: marked Child without a parent SKU - kept as Standalone.")
                 role, parent_sku = ROLE_STANDALONE, ""
             elif parent_sku == sku:
-                warnings.append(f"{sku}: cannot be its own parent — kept as Standalone.")
+                warnings.append(f"{sku}: cannot be its own parent - kept as Standalone.")
                 role, parent_sku = ROLE_STANDALONE, ""
             elif parent_sku not in known:
-                warnings.append(f"{sku}: parent {parent_sku} is not in this batch — kept as Standalone.")
+                warnings.append(f"{sku}: parent {parent_sku} is not in this batch - kept as Standalone.")
                 role, parent_sku = ROLE_STANDALONE, ""
         roles[sku] = role
         parents_of[sku] = parent_sku if role == ROLE_CHILD else ""
@@ -97,14 +97,14 @@ def apply_relationships(queue_df: pd.DataFrame, assignments: dict[str, tuple[str
             continue
         if roles.get(parent_sku) == ROLE_STANDALONE:
             if parent_sku in changed:
-                warnings.append(f"{sku}: its parent {parent_sku} was changed to Standalone — {sku} is now Standalone too.")
+                warnings.append(f"{sku}: its parent {parent_sku} was changed to Standalone - {sku} is now Standalone too.")
                 roles[sku] = ROLE_STANDALONE
                 parents_of[sku] = ""
             else:
                 roles[parent_sku] = ROLE_PARENT
                 warnings.append(f"{parent_sku}: promoted to Parent because {sku} was assigned under it.")
         elif roles.get(parent_sku) == ROLE_CHILD:
-            warnings.append(f"{sku}: parent {parent_sku} is itself a child — {sku} kept as Standalone.")
+            warnings.append(f"{sku}: parent {parent_sku} is itself a child - {sku} kept as Standalone.")
             roles[sku] = ROLE_STANDALONE
             parents_of[sku] = ""
 

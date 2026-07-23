@@ -13,7 +13,7 @@ import streamlit as st
 from sku_manager.pages.reference_data import admin_password
 from sku_manager.services import html_rules as logic
 from sku_manager.services import rules_store
-from sku_manager.services.git_sync import commit_and_push
+from sku_manager.services.git_sync import commit_and_push, is_configured
 from sku_manager.ui.components import is_reserved_chord, page_header, shortcut_capture, suggested_chords
 
 
@@ -189,15 +189,17 @@ def _render_auth_controls() -> tuple[bool, bool]:
     password = admin_password()
 
     if is_admin:
-        st.warning(
-            "Saving or deleting a rule here pushes to GitHub and **redeploys the live app "
-            "for every user**. Confirm everyone else has saved or exported their in-progress "
-            "work before you continue."
-        )
-        push_ack = st.checkbox(
-            "I've confirmed it's safe to push and redeploy now",
-            key="editor_rules_push_ack",
-        )
+        push_ack = True
+        if is_configured():
+            st.warning(
+                "Saving or deleting a rule here pushes to GitHub and **redeploys the live app "
+                "for every user**. Confirm everyone else has saved or exported their in-progress "
+                "work before you continue."
+            )
+            push_ack = st.checkbox(
+                "I've confirmed it's safe to push and redeploy now",
+                key="editor_rules_push_ack",
+            )
         c1, _ = st.columns([1, 4])
         if c1.button("Lock Editing", width="stretch"):
             st.session_state["editor_rules_admin"] = False

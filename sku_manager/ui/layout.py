@@ -115,7 +115,7 @@ def sidebar_nav() -> str:
     return page
 
 
-_USER_PLACEHOLDER = "— select user —"
+_USER_PLACEHOLDER = "- select user -"
 
 
 def _save_users() -> list[str]:
@@ -169,7 +169,7 @@ def _last_saved_caption() -> str:
             return "Auto-save is blocked until that user is free."
         if not st.session_state.get("save_user"):
             return "Select your name to enable auto-save."
-        return "Not saved yet — auto-saves as you work."
+        return "Not saved yet - auto-saves as you work."
     try:
         stamp = datetime.fromisoformat(saved_at).astimezone().strftime("%H:%M:%S")
     except ValueError:
@@ -181,7 +181,7 @@ def _lease_conflict_message() -> str:
     conflict = st.session_state.get("_worksave_lease_conflict") or {}
     who = str(conflict.get("user", "")).strip() or "That user"
     return (
-        f"{who} looks signed in somewhere else — usually just a refreshed or "
+        f"{who} looks signed in somewhere else - usually just a refreshed or "
         "closed tab. Continue below to move the session here; saved work "
         "loads automatically."
     )

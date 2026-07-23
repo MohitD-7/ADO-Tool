@@ -143,12 +143,12 @@ def _render_ai_fill_panel(item: dict, specs_list: list[dict]) -> None:
     elif len(rows) < _AI_FILL_MIN_BLANK_ROWS:
         disabled_reason = (
             f"AI fill activates at {_AI_FILL_MIN_BLANK_ROWS}+ blank V5 values. "
-            f"This item has {len(rows)} — fill them manually instead."
+            f"This item has {len(rows)} - fill them manually instead."
         )
 
     with st.expander("AI Fill V5 Values", expanded=False):
         st.caption(
-            "Fills blank V5 values for any row that has a V4 spec name — "
+            "Fills blank V5 values for any row that has a V4 spec name - "
             "category template rows or manually added ones. "
             "Existing V5 values are preserved."
         )

@@ -115,7 +115,7 @@ def _render_performance() -> None:
     snap = metrics.snapshot()
     render = snap["render"]
     if render["count"] == 0:
-        st.info("No render timings collected yet — use the app, then refresh.")
+        st.info("No render timings collected yet - use the app, then refresh.")
     else:
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Last render", f"{render['last']:.0f} ms")

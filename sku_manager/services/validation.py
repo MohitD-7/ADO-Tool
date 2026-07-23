@@ -7,7 +7,7 @@ from sku_manager.services.text_rules import find_violations
 
 LIMITS = {
     "title": 110,
-    "short_title": 80,
+    "short_title": 75,
     "include_text": 350,
     "description": 10000,
     "mfg_model": 25,
@@ -136,7 +136,7 @@ def item_warnings(
                 warnings.append(
                     f"<span style='color:#c62828;font-weight:700;'>"
                     f"Special char in {field_label}:</span> "
-                    f"<code>{v['symbol']}</code> ({v['meaning']}) — {action_desc}. "
+                    f"<code>{v['symbol']}</code> ({v['meaning']}) - {action_desc}. "
                     f"Click <em>Format</em> to fix."
                 )
 

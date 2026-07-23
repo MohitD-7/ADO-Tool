@@ -79,7 +79,7 @@ def render() -> None:
                         child_values.pop(attr, None)
                     st.rerun()
     else:
-        st.caption("No attributes yet — add one to start filling values.")
+        st.caption("No attributes yet - add one to start filling values.")
 
     add_col, btn_col = st.columns([3, 1])
     new_attr = add_col.text_input(

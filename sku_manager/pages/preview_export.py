@@ -48,7 +48,7 @@ def render(show_header: bool = True) -> None:
             for reason in blockers:
                 st.markdown(f"- {reason}")
     elif item_warning_list:
-        with st.expander(f"⚠ Warnings — not filled ({len(item_warning_list)})", expanded=False):
+        with st.expander(f"⚠ Warnings - not filled ({len(item_warning_list)})", expanded=False):
             st.caption("Non-blocking validation warnings:")
             for warning in item_warning_list:
                 st.markdown(f"- {warning}", unsafe_allow_html=True)
@@ -118,7 +118,7 @@ def _fullscreen_preview_dialog(html: str) -> None:
     components.html(html, height=760, scrolling=True)
 
 
-@st.dialog("Cannot submit — required fields missing")
+@st.dialog("Cannot submit - required fields missing")
 def _confirm_submit_dialog(ino: str, blockers: list[str]) -> None:
     st.markdown(
         f"**SKU {ino}** is missing the following required fields:"
