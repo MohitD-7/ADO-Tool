@@ -17,8 +17,19 @@ from sku_manager.services.git_sync import commit_and_push, is_configured
 from sku_manager.ui.components import is_reserved_chord, page_header, shortcut_capture, suggested_chords
 
 
-def _push_rules(message: str) -> None:
-    commit_and_push([rules_store.RULES_PATH], message)
+def _push_rules(message: str) -> bool:
+    return commit_and_push([rules_store.RULES_PATH], message)
+
+
+def _push_status_suffix(pushed: bool) -> str:
+    if pushed:
+        return " Pushed to GitHub - safe across redeploys."
+    if is_configured():
+        return (
+            " ⚠ Saved on this server only - the GitHub push did not go through, "
+            "so this change may be lost on the next deploy. Try again, or check the git token."
+        )
+    return " (Not pushed - no git token configured, so this only lives on this server for now.)"
 
 
 def render() -> None:
@@ -50,8 +61,8 @@ def render() -> None:
                     st.rerun()
                 if col_del.button("Del", key=f"del_{index}", disabled=not editable or not push_ack):
                     rules_store.delete_rule(rule_name)
-                    _push_rules(f"Auto-sync editor rules: deleted '{rule_name}'")
-                    st.success(f"Deleted '{rule_name}'.")
+                    pushed = _push_rules(f"Auto-sync editor rules: deleted '{rule_name}'")
+                    st.success(f"Deleted '{rule_name}'.{_push_status_suffix(pushed)}")
                     st.rerun()
         if st.button("+ New Rule", type="primary", use_container_width=True, disabled=not editable):
             st.session_state["_editing_rule"] = None
@@ -167,12 +178,12 @@ def render() -> None:
             else:
                 if editing_name:
                     rules_store.update_rule(editing_name, form)
-                    _push_rules(f"Auto-sync editor rules: updated '{form['name']}'")
-                    st.success(f"Updated '{form['name']}'.")
+                    pushed = _push_rules(f"Auto-sync editor rules: updated '{form['name']}'")
+                    st.success(f"Updated '{form['name']}'.{_push_status_suffix(pushed)}")
                 else:
                     rules_store.add_rule(form)
-                    _push_rules(f"Auto-sync editor rules: added '{form['name']}'")
-                    st.success(f"Created '{form['name']}'.")
+                    pushed = _push_rules(f"Auto-sync editor rules: added '{form['name']}'")
+                    st.success(f"Created '{form['name']}'.{_push_status_suffix(pushed)}")
                 del st.session_state["_rule_form"]
                 st.session_state.pop("_editing_rule", None)
                 st.rerun()

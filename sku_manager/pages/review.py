@@ -141,7 +141,7 @@ def _render_review_workspace() -> None:
         mime="text/plain",
         use_container_width=True,
     )
-    workspace.render()
+    workspace.render(restrict_to_review=True)
 
 
 def _default_export_name(source: str) -> str:

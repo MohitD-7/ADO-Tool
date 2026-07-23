@@ -305,20 +305,30 @@ def _dv2_workspace_header(details: dict) -> None:
     )
 
 
-def workspace_topbar() -> str:
+def workspace_topbar(restrict_to: str | None = None) -> str:
     """
     DESIGN.md-styled workspace top region:
       1. Product header card (ID, DRAFT, title, MPN)
       2. Underlined sub-tabs (General / Description / Features/Highlights / Specs / Review)
     Returns the active tab name (internal key).
+
+    `restrict_to`: when set to one of WORKSPACE_TABS' keys, forces that tab
+    active and disables every other tab button - used by the standalone
+    Review page so a reviewer who uploaded a batch there lands straight on
+    Review and can't wander into General/Specs/VarOpts from it. The normal
+    SKU Workspace page never passes this, so it behaves exactly as before.
     """
-    raw = st.session_state.get("workspace_tab", "Content")
-    if raw in _LEGACY_TAB_MAP:
-        raw = _LEGACY_TAB_MAP[raw]
-    if raw not in WORKSPACE_TABS:
-        raw = "Content"
-    active_tab = raw
-    st.session_state["workspace_tab"] = active_tab
+    if restrict_to and restrict_to in WORKSPACE_TABS:
+        active_tab = restrict_to
+        st.session_state["workspace_tab"] = active_tab
+    else:
+        raw = st.session_state.get("workspace_tab", "Content")
+        if raw in _LEGACY_TAB_MAP:
+            raw = _LEGACY_TAB_MAP[raw]
+        if raw not in WORKSPACE_TABS:
+            raw = "Content"
+        active_tab = raw
+        st.session_state["workspace_tab"] = active_tab
 
     item = current_item()
     if item:
@@ -329,11 +339,13 @@ def workspace_topbar() -> str:
     clicked   = None
     for col, tab_name in zip(btn_cols, tab_names):
         display = _DV2_TAB_LABELS.get(tab_name, tab_name)
+        locked = restrict_to is not None and tab_name != restrict_to
         if col.button(
             display,
             key=f"topbar_tab_{tab_name}",
             type="primary" if tab_name == active_tab else "secondary",
             use_container_width=True,
+            disabled=locked,
         ):
             clicked = tab_name
     if clicked and clicked != active_tab:

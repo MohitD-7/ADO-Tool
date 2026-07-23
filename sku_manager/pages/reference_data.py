@@ -54,13 +54,27 @@ def _sync_source_files(state) -> None:
         df.to_csv(path, sep="\t", index=False, encoding="utf-8")
 
 
-def _save_and_push(message: str) -> None:
+def _save_and_push(message: str) -> bool:
     """Persist reference data locally, then push to git so the redeploy the deploy
-    host does on every code push can never revert this live edit."""
+    host does on every code push can never revert this live edit. Returns
+    whether the push actually landed, so callers can tell the admin their
+    change is only local (and at risk on the next deploy) instead of staying
+    silent about it."""
     save_reference_data(st.session_state)
     _sync_source_files(st.session_state)
     paths = [REFERENCE_DATA_PATH] + list(_SYNCED_SOURCE_FILES.values())
-    commit_and_push(paths, message)
+    return commit_and_push(paths, message)
+
+
+def _push_status_suffix(pushed: bool) -> str:
+    if pushed:
+        return " Pushed to GitHub - safe across redeploys."
+    if is_configured():
+        return (
+            " ⚠ Saved on this server only - the GitHub push did not go through, "
+            "so this change may be lost on the next deploy. Try again, or check the git token."
+        )
+    return " (Not pushed - no git token configured, so this only lives on this server for now.)"
 
 
 def _read_uploaded_table(uploaded_file) -> pd.DataFrame:
@@ -163,8 +177,11 @@ def _render_table(label: str, state_key: str, editable: bool, push_ack: bool) ->
                 else:
                     st.session_state[state_key] = coerced_df
                     st.session_state[sig_key] = signature
-                    _save_and_push(f"Auto-sync reference data: replaced {label}")
-                    st.success(f"Loaded {len(coerced_df):,} rows into {label} and saved to {REFERENCE_DATA_PATH.name}.")
+                    pushed = _save_and_push(f"Auto-sync reference data: replaced {label}")
+                    st.success(
+                        f"Loaded {len(coerced_df):,} rows into {label} and saved to "
+                        f"{REFERENCE_DATA_PATH.name}.{_push_status_suffix(pushed)}"
+                    )
                     st.rerun()
 
         st.session_state[state_key] = stable_data_editor(
@@ -194,9 +211,9 @@ def _read_mapping_upload(uploaded_file) -> list[pd.DataFrame]:
     raise ValueError("Unsupported file type. Use .xlsx, .tsv, .csv, or .txt.")
 
 
-def _save_mapping(df: pd.DataFrame, message: str) -> None:
+def _save_mapping(df: pd.DataFrame, message: str) -> bool:
     st.session_state["category_mapping_df"] = df
-    _save_and_push(message)
+    return _save_and_push(message)
 
 
 def _render_category_mapping(editable: bool, push_ack: bool) -> None:
@@ -232,13 +249,15 @@ def _render_category_mapping(editable: bool, push_ack: bool) -> None:
                             "Group (V3), and Spec (V4) columns."
                         )
                     else:
-                        _save_mapping(merged, "Auto-sync reference data: category mapping upload")
+                        pushed = _save_mapping(merged, "Auto-sync reference data: category mapping upload")
                         parts = []
                         if added:
                             parts.append("added " + ", ".join(leaf_name(p) for p in added))
                         if updated:
                             parts.append("updated " + ", ".join(leaf_name(p) for p in updated))
-                        st.session_state["category_mapping_message"] = f"Category mapping saved: {'; '.join(parts)}."
+                        st.session_state["category_mapping_message"] = (
+                            f"Category mapping saved: {'; '.join(parts)}.{_push_status_suffix(pushed)}"
+                        )
                         st.rerun()
 
     for path, template_df in sections:
@@ -268,11 +287,13 @@ def _render_category_mapping(editable: bool, push_ack: bool) -> None:
                 disabled=not push_ack,
             ):
                 reset_stable_data_editor(f"category_mapping_section_{section_key}")
-                _save_mapping(
+                pushed = _save_mapping(
                     delete_taxonomy(st.session_state["category_mapping_df"], path),
                     f"Auto-sync reference data: deleted category '{leaf_name(path)}'",
                 )
-                st.session_state["category_mapping_message"] = f"Deleted category {leaf_name(path)}."
+                st.session_state["category_mapping_message"] = (
+                    f"Deleted category {leaf_name(path)}.{_push_status_suffix(pushed)}"
+                )
                 st.rerun()
 
     if not editable:
@@ -308,12 +329,13 @@ def _render_category_mapping(editable: bool, push_ack: bool) -> None:
         else:
             v1 = new_v1.strip() or leaf_name(path)
             template_df["Value1 (Category)"] = template_df["Value1 (Category)"].replace("", v1)
-            _save_mapping(
+            pushed = _save_mapping(
                 replace_taxonomy_rows(st.session_state["category_mapping_df"], path, template_df),
                 f"Auto-sync reference data: added category '{leaf_name(path)}'",
             )
             st.session_state["category_mapping_message"] = (
                 f"Added category {leaf_name(path)} with {len(template_df)} spec row(s)."
+                f"{_push_status_suffix(pushed)}"
             )
             for state_key in ("category_mapping_new_path", "category_mapping_new_v1", "category_mapping_new_rows"):
                 st.session_state.pop(state_key, None)
@@ -354,8 +376,8 @@ def render() -> None:
     # Save only after every editor above has written its pending edits into
     # session state — saving earlier would persist the pre-edit tables.
     if save_requested:
-        _save_and_push("Auto-sync reference data from live admin edit")
+        pushed = _save_and_push("Auto-sync reference data from live admin edit")
         st.session_state["reference_data_saved_message"] = (
-            f"Reference data saved to {REFERENCE_DATA_PATH.name}."
+            f"Reference data saved to {REFERENCE_DATA_PATH.name}.{_push_status_suffix(pushed)}"
         )
         st.rerun()

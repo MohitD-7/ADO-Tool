@@ -91,14 +91,14 @@ def _render_content_tab(item: dict) -> None:
         field_notes_editor(item, "highlights", "PDP highlight notes")
 
 
-def render() -> None:
+def render(restrict_to_review: bool = False) -> None:
     item = current_item()
     if not item:
         st.warning("Upload and select a SKU first.")
         return
 
     sync_description_state(item)
-    active_tab = workspace_topbar()
+    active_tab = workspace_topbar(restrict_to="Review" if restrict_to_review else None)
 
     st.markdown('<div class="vo-workspace-content-gap">&#8203;</div>', unsafe_allow_html=True)
 

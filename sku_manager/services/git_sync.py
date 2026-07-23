@@ -63,6 +63,15 @@ def commit_and_push(paths: list[Path], message: str) -> bool:
     is called from inside UI save handlers, and any escape here - a missing
     git binary, a bad path, a network hiccup - would otherwise crash the
     admin's save with a raw traceback instead of just skipping the push.
+
+    A running container's local git history is frozen at whatever commit it
+    was deployed from; a code push from anywhere else moves origin/main ahead
+    without this container knowing. A blind `git push` in that state is
+    rejected as non-fast-forward - the local commit still succeeds (so the
+    admin who saved sees their own change fine), but nothing reaches GitHub,
+    silently. Retry once via fetch+rebase before giving up, and clean up the
+    rebase if that retry also fails so the repo isn't left mid-rebase for the
+    next save attempt.
     """
     token = _token()
     if not token:
@@ -85,10 +94,21 @@ def commit_and_push(paths: list[Path], message: str) -> bool:
         ])
 
         push_url = _push_url(token)
-        if push_url:
-            _run(["git", "push", push_url, "HEAD:main"])
-        else:
-            _run(["git", "push"])
+        remote_ref = push_url if push_url else "origin"
+
+        try:
+            _run(["git", "push", remote_ref, "HEAD:main"])
+        except subprocess.CalledProcessError:
+            try:
+                _run(["git", "fetch", remote_ref, "main"])
+                _run(["git", "rebase", "FETCH_HEAD"])
+                _run(["git", "push", remote_ref, "HEAD:main"])
+            except subprocess.CalledProcessError:
+                subprocess.run(
+                    ["git", "rebase", "--abort"], cwd=_REPO_ROOT,
+                    capture_output=True, timeout=_TIMEOUT,
+                )
+                raise
         return True
     except Exception:
         return False
