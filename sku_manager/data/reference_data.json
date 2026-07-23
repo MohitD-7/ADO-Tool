@@ -30553,5 +30553,715 @@
       "Comments": ""
     }
   ],
+  "category_mapping": [
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Color"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Shoe Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Tripod Mounting Thread"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Operating Conditions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Image Processor"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Lens Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Sensor Resolution"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Image Sensor"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Image Stabilization"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Built-In ND Filter"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Capture Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Shutter Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Shutter Speed"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Bulb/Time Mode"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "ISO/Gain Sensitivity"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Metering Method"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Exposure Modes"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Exposure Compensation"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "White Balance"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Continuous Shooting"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Interval Recording"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Exposure Control",
+      "Value4 (Spec)": "Self-Timer"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Still Image Capture",
+      "Value4 (Spec)": "Aspect Ratio"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Still Image Capture",
+      "Value4 (Spec)": "Image File Format"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Still Image Capture",
+      "Value4 (Spec)": "Bit Depth"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "Internal Recording Modes"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "External Recording Modes"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "Fast-/Slow-Motion Support"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "Recording Limit"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "IP Streaming"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "Built-In Microphone"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Video Capture",
+      "Value4 (Spec)": "Audio Recording"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Media/Memory Card Slot"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Video I/O"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Audio I/O"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Power I/O"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Other I/O"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Wireless"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Mobile App Compatible"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Interface",
+      "Value4 (Spec)": "Location Tracking"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Monitor",
+      "Value4 (Spec)": "Display Size"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Monitor",
+      "Value4 (Spec)": "Resolution"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Monitor",
+      "Value4 (Spec)": "Display Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Size"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Resolution"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Eye Point"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Coverage"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Magnification"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Viewfinder",
+      "Value4 (Spec)": "Diopter Adjustment"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "Built-In Flash/Light"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "Flash Modes"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "Guide Number"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "Maximum Sync Speed"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "Dedicated Flash System"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Focus",
+      "Value4 (Spec)": "External Flash Connection"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Battery",
+      "Value4 (Spec)": "Battery Info"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Battery",
+      "Value4 (Spec)": "Battery Material"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Battery",
+      "Value4 (Spec)": "Battery Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Battery",
+      "Value4 (Spec)": "Battery Quantity"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Dimensions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless Cameras",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Weight"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Color"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Load Capacity"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Maximum Working Height"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Center Column"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Max Height without Center Column"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Minimum Working Height"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Closed Length"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Accessory Mounting"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Bubble Level"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Detachable Monopod"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Head Mount Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Primary Material"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Leg Lock"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Leg Sections"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Independent Leg Spread"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Legs",
+      "Value4 (Spec)": "Leg Positions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Pan & Tilt",
+      "Value4 (Spec)": "Drag Control"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Pan & Tilt",
+      "Value4 (Spec)": "Independent Pan Lock"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Pan & Tilt",
+      "Value4 (Spec)": "Independent Tilt Lock"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Pan & Tilt",
+      "Value4 (Spec)": "Vertical Tilt"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Pan & Tilt",
+      "Value4 (Spec)": "Lateral Tilt"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Head",
+      "Value4 (Spec)": "Camera Mounting"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Head",
+      "Value4 (Spec)": "Head Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Head",
+      "Value4 (Spec)": "Base Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Weight"
+    },
+    {
+      "Taxonomy Path": "Photography>>Tripods & Supports>>Tripods>>Photo Tripods",
+      "Value1 (Category)": "Photo Tripods",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Dimensions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Lens Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Lens Format"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Zoom Focal Length"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Fixed Focal Length"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Focus Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Aperture"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Lens Type"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Kit Style"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Compatibility"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Lens Series"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Special Features"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Filter Size"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Focus Distance"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Filter Diameter"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Image Stabilization"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Angle of View"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Accepts Teleconverters"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Internal Zoom"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Requires Rear Filters"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Weight"
+    },
+    {
+      "Taxonomy Path": "Photography>>Lenses>>Mirrorless Lenses",
+      "Value1 (Category)": "Mirrorless Lenses",
+      "Value3 (Group)": "Physical Details",
+      "Value4 (Spec)": "Dimensions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Color"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Shoe Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Tripod Mounting Thread"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Operating Conditions"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "General",
+      "Value4 (Spec)": "Image Processor"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Lens Mount"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Sensor Resolution"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Image Sensor"
+    },
+    {
+      "Taxonomy Path": "Photography>>Cameras>>Mirrorless",
+      "Value1 (Category)": "Mirrorless Cameras",
+      "Value3 (Group)": "Imaging",
+      "Value4 (Spec)": "Image Stabilization"
+    }
+  ],
   "html_template": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Product Sample Page</title>\n    <style>\n      body {font-family:Calibri;font-size: 15px;}\n      table, th, td {\n        border: 1px solid #ccc;\n        border-collapse: collapse;\n      }\n      td {\n        padding-left: 7px;\n        padding-right: 7px;\n        padding-top: 5px;\n        padding-bottom: 5px;\n      }\n\n      /* Style the tab */\n      div.tab {\n        overflow: hidden;\n        border: 1px solid #ccc;\n        background-color: #f1f1f1;\n      }\n\n      /* Style the buttons inside the tab */\n      div.tab button {\n        background-color: inherit;\n        float: left;\n        border: none;\n        outline: none;\n        cursor: pointer;\n        padding: 5px 15px;\n        transition: 0.3s;\n        height:30px;\n      }\n\n      /* Change background color of buttons on hover */\n      div.tab button:hover {\n        background-color: #ddd;\n      }\n\n      /* Create an active/current tablink class */\n      div.tab button.active {\n        background-color: #ccc;\n      }\n\n      /* Style the tab content */\n      .tabcontent {\n        display: none;\n        padding: 6px 12px;\n        border: 1px solid #ccc;\n        height:450px;\n        border-top: none;\n      }\n      .tabcontent {\n        -webkit-animation: fadeEffect 1s;\n        animation: fadeEffect 1s; /* Fading effect takes 1 second */\n      }\n\n      @-webkit-keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n\n      @keyframes fadeEffect {\n        from {opacity: 0;}\n        to {opacity: 1;}\n      }\n    </style>\n  </head>\n\n  <body>\n    <table style=\"height: 500px;\" border=\"0\" width=100% cellspacing=\"0\" align=\"center\">\n      <tbody>\n        <tr>\n          <td rowspan=\"3\" width=125 align=\"center\"><img src=\"https://virtualops.net/wp-content/uploads/2022/12/logo-dark.png\" alt=\"\"/></td>\n          <td colspan=\"4\" width=\"675\" height=\"50\" style=\"font-size:19px;\">\n            <strong>--Title--</strong>\n            <br><font size=\"3\">--ShortTitle--</font>\n          </td>\n        </tr>\n        <tr>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Item No</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Item</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Mfg Model</strong></td>\n          <td height=\"20\" width=225 style=\"background-color: #f1f1f1;\"><strong>Warranty Months</strong></td>\n        </tr>\n        <tr>\n          <td height=\"30\">--ItemNo--</td>\n          <td height=\"30\">--MfgItem--</td>\n          <td height=\"30\">--MfgModel--</td>\n          <td height=\"30\">--Warranty Months--</td>\n        </tr>\n        <tr>\n          <td colspan=\"5\" rowspan=\"4\" valign=\"top\">\n            <div class=\"tab\">\n              <button class=\"tablinks\" accesskey=\"d\" onclick=\"openCity(event, 'Description')\" id=\"defaultOpen\"><strong><u>D</u>escription</strong></button>\n              <button class=\"tablinks\" accesskey=\"f\" onclick=\"openCity(event, 'Features')\"><strong><u>F</u>eatures</strong></button>\n              <button class=\"tablinks\" accesskey=\"s\" onclick=\"openCity(event, 'Specifications')\"><strong><u>S</u>pecifications</strong></button>\n              <button class=\"tablinks\" accesskey=\"h\" onclick=\"openCity(event, 'Highlights')\"><strong><u>H</u>ighlights</strong></button>\n              <button class=\"tablinks\" accesskey=\"l\" onclick=\"openCity(event, 'Includes')\"><strong>Inc<u>l</u>udes</strong></button>\n              <button class=\"tablinks\" accesskey=\"r\" onclick=\"openCity(event, 'Battery Info')\"><strong>Batte<u>r</u>y Info</strong></button>\n            </div>\n\n            <div id=\"Description\" class=\"tabcontent\" style=\"overflow:auto;\">\n              --Description--\n            </div>\n\n            <div id=\"Features\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Features--\n              </table>\n            </div>\n\n            <div id=\"Specifications\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Specifications--\n              </table>\n            </div>\n\n            <div id=\"Highlights\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Highlights--\n              </table>\n            </div>\n\n            <div id=\"Includes\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Includes--\n              </table>\n            </div>\n\n            <div id=\"Battery Info\" class=\"tabcontent\" style=\"overflow:auto;\">\n              <table>\n                --Battery Info--\n              </table>\n            </div>\n            <script>\n              function openCity(evt, cityName) {\n                // Declare all variables\n                var i, tabcontent, tablinks;\n\n                // Get all elements with class=\"tabcontent\" and hide them\n                tabcontent = document.getElementsByClassName(\"tabcontent\");\n                for (i = 0; i < tabcontent.length; i++) {\n                  tabcontent[i].style.display = \"none\";\n                }\n\n                // Get all elements with class=\"tablinks\" and remove the class \"active\"\n                tablinks = document.getElementsByClassName(\"tablinks\");\n                for (i = 0; i < tablinks.length; i++) {\n                  tablinks[i].className = tablinks[i].className.replace(\" active\", \"\");\n                }\n\n                // Show the current tab, and add an \"active\" class to the button that opened the tab\n                document.getElementById(cityName).style.display = \"block\";\n                evt.currentTarget.className += \" active\";\n              }\n              document.getElementById(\"defaultOpen\").click();\n            </script>\n          </td>\n        </tr>\n      </tbody>\n    </table>\n\n  </body>\n</html>"
 }
