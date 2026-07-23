@@ -21,7 +21,7 @@ def _render_content_tab(item: dict) -> None:
             embedded=True,
             show_links=False,
             show_feedback=False,
-            show_format=False,
+            show_format=True,
             show_notes=False,
         )
     with pane:

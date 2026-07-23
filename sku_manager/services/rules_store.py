@@ -6,9 +6,12 @@ from __future__ import annotations
 
 import json
 import os
+from pathlib import Path
 
 _RULES_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "editor_rules.json")
 _RULES_PATH = os.path.normpath(_RULES_PATH)
+
+RULES_PATH = Path(_RULES_PATH)
 
 
 def _ensure_dir() -> None:

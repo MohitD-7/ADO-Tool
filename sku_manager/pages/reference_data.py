@@ -17,6 +17,7 @@ from sku_manager.services.category_mapping import (
     replace_taxonomy_rows,
     split_by_taxonomy,
 )
+from sku_manager.services.git_sync import commit_and_push
 from sku_manager.services.reference_store import (
     REFERENCE_DATA_PATH,
     coerce_uploaded_frame,
@@ -53,6 +54,15 @@ def _sync_source_files(state) -> None:
         df.to_csv(path, sep="\t", index=False, encoding="utf-8")
 
 
+def _save_and_push(message: str) -> None:
+    """Persist reference data locally, then push to git so the redeploy the deploy
+    host does on every code push can never revert this live edit."""
+    save_reference_data(st.session_state)
+    _sync_source_files(st.session_state)
+    paths = [REFERENCE_DATA_PATH] + list(_SYNCED_SOURCE_FILES.values())
+    commit_and_push(paths, message)
+
+
 def _read_uploaded_table(uploaded_file) -> pd.DataFrame:
     name = uploaded_file.name.lower()
     if name.endswith((".tsv", ".txt")):
@@ -84,8 +94,8 @@ def _reload_reference_data() -> None:
         st.session_state[key] = value
 
 
-def _render_auth_controls() -> tuple[bool, bool]:
-    """Returns (editable, save_requested).
+def _render_auth_controls() -> tuple[bool, bool, bool]:
+    """Returns (editable, save_requested, push_ack).
 
     The actual save must happen at the END of render(): the table editors below
     only write their pending edits into session state when they render, so
@@ -95,12 +105,20 @@ def _render_auth_controls() -> tuple[bool, bool]:
     password = _configured_password()
 
     if is_admin:
+        st.warning(
+            "Saving here pushes to GitHub and **redeploys the live app for every user**. "
+            "Confirm everyone else has saved or exported their in-progress work before you continue."
+        )
+        push_ack = st.checkbox(
+            "I've confirmed it's safe to push and redeploy now",
+            key="reference_data_push_ack",
+        )
         c1, c2, c3 = st.columns([1, 1, 3])
-        save_requested = c1.button("Save Changes", type="primary", width="stretch")
+        save_requested = c1.button("Save Changes", type="primary", width="stretch", disabled=not push_ack)
         if c2.button("Lock Editing", width="stretch"):
             st.session_state["reference_data_admin"] = False
             st.rerun()
-        return True, save_requested
+        return True, save_requested, push_ack
 
     c1, c2, c3 = st.columns([1.5, 1, 2.5])
     with c1:
@@ -117,10 +135,10 @@ def _render_auth_controls() -> tuple[bool, bool]:
             st.info("Viewing is open. Editing requires admin unlock.")
         else:
             st.info("Viewing is open. Set SKU_REFERENCE_DATA_PASSWORD or st.secrets['reference_data_password'] to enable editing.")
-    return False, False
+    return False, False, False
 
 
-def _render_table(label: str, state_key: str, editable: bool) -> None:
+def _render_table(label: str, state_key: str, editable: bool, push_ack: bool) -> None:
     df = st.session_state[state_key]
     st.caption(f"{len(df):,} rows")
 
@@ -129,6 +147,7 @@ def _render_table(label: str, state_key: str, editable: bool) -> None:
             f"Replace {label} from a file (.tsv, .csv, .xlsx)",
             type=["tsv", "csv", "txt", "xlsx", "xls"],
             key=f"{state_key}_upload",
+            disabled=not push_ack,
         )
         if uploaded is not None:
             signature = (uploaded.name, uploaded.size)
@@ -142,8 +161,7 @@ def _render_table(label: str, state_key: str, editable: bool) -> None:
                 else:
                     st.session_state[state_key] = coerced_df
                     st.session_state[sig_key] = signature
-                    save_reference_data(st.session_state)
-                    _sync_source_files(st.session_state)
+                    _save_and_push(f"Auto-sync reference data: replaced {label}")
                     st.success(f"Loaded {len(coerced_df):,} rows into {label} and saved to {REFERENCE_DATA_PATH.name}.")
                     st.rerun()
 
@@ -174,13 +192,12 @@ def _read_mapping_upload(uploaded_file) -> list[pd.DataFrame]:
     raise ValueError("Unsupported file type. Use .xlsx, .tsv, .csv, or .txt.")
 
 
-def _save_mapping(df: pd.DataFrame) -> None:
+def _save_mapping(df: pd.DataFrame, message: str) -> None:
     st.session_state["category_mapping_df"] = df
-    save_reference_data(st.session_state)
-    _sync_source_files(st.session_state)
+    _save_and_push(message)
 
 
-def _render_category_mapping(editable: bool) -> None:
+def _render_category_mapping(editable: bool, push_ack: bool) -> None:
     mapping_df = normalize_mapping_frame(st.session_state["category_mapping_df"])
     sections = split_by_taxonomy(mapping_df)
     st.caption(f"{len(sections)} categor{'y' if len(sections) == 1 else 'ies'}, {len(mapping_df):,} spec rows. Each category below is its own section.")
@@ -195,6 +212,7 @@ def _render_category_mapping(editable: bool) -> None:
             "Categories in the file replace their existing rows; all other categories are kept.",
             type=["xlsx", "xls", "xlsm", "tsv", "csv", "txt"],
             key="category_mapping_upload",
+            disabled=not push_ack,
         )
         if uploaded is not None:
             signature = (uploaded.name, uploaded.size)
@@ -212,7 +230,7 @@ def _render_category_mapping(editable: bool) -> None:
                             "Group (V3), and Spec (V4) columns."
                         )
                     else:
-                        _save_mapping(merged)
+                        _save_mapping(merged, "Auto-sync reference data: category mapping upload")
                         parts = []
                         if added:
                             parts.append("added " + ", ".join(leaf_name(p) for p in added))
@@ -242,9 +260,16 @@ def _render_category_mapping(editable: bool) -> None:
                 st.session_state["category_mapping_df"] = replace_taxonomy_rows(
                     st.session_state["category_mapping_df"], path, edited
                 )
-            if st.button("Delete This Category", key=f"category_mapping_delete_{section_key}"):
+            if st.button(
+                "Delete This Category",
+                key=f"category_mapping_delete_{section_key}",
+                disabled=not push_ack,
+            ):
                 reset_stable_data_editor(f"category_mapping_section_{section_key}")
-                _save_mapping(delete_taxonomy(st.session_state["category_mapping_df"], path))
+                _save_mapping(
+                    delete_taxonomy(st.session_state["category_mapping_df"], path),
+                    f"Auto-sync reference data: deleted category '{leaf_name(path)}'",
+                )
                 st.session_state["category_mapping_message"] = f"Deleted category {leaf_name(path)}."
                 st.rerun()
 
@@ -269,7 +294,7 @@ def _render_category_mapping(editable: bool) -> None:
         height=160,
         placeholder="General\tColor\nGeneral\tLoad Capacity\nPhysical Details\tWeight",
     )
-    if st.button("Add Category", type="primary"):
+    if st.button("Add Category", type="primary", disabled=not push_ack):
         path = new_path.strip()
         template_df = parse_template_lines(new_rows_text)
         if not path:
@@ -281,7 +306,10 @@ def _render_category_mapping(editable: bool) -> None:
         else:
             v1 = new_v1.strip() or leaf_name(path)
             template_df["Value1 (Category)"] = template_df["Value1 (Category)"].replace("", v1)
-            _save_mapping(replace_taxonomy_rows(st.session_state["category_mapping_df"], path, template_df))
+            _save_mapping(
+                replace_taxonomy_rows(st.session_state["category_mapping_df"], path, template_df),
+                f"Auto-sync reference data: added category '{leaf_name(path)}'",
+            )
             st.session_state["category_mapping_message"] = (
                 f"Added category {leaf_name(path)} with {len(template_df)} spec row(s)."
             )
@@ -294,7 +322,7 @@ def render() -> None:
     page_header("Admin", "Reference Data")
     st.caption("These tables replace the validation/configuration sheets from the legacy workbook.")
 
-    editable, save_requested = _render_auth_controls()
+    editable, save_requested, push_ack = _render_auth_controls()
     saved_message = st.session_state.pop("reference_data_saved_message", "")
     if saved_message:
         st.success(saved_message)
@@ -307,9 +335,9 @@ def render() -> None:
     for tab, (label, state_key) in zip(tabs, TABLES):
         with tab:
             if state_key == "category_mapping_df":
-                _render_category_mapping(editable)
+                _render_category_mapping(editable, push_ack)
             else:
-                _render_table(label, state_key, editable)
+                _render_table(label, state_key, editable, push_ack)
 
     with tabs[-1]:
         if editable:
@@ -324,8 +352,7 @@ def render() -> None:
     # Save only after every editor above has written its pending edits into
     # session state — saving earlier would persist the pre-edit tables.
     if save_requested:
-        save_reference_data(st.session_state)
-        _sync_source_files(st.session_state)
+        _save_and_push("Auto-sync reference data from live admin edit")
         st.session_state["reference_data_saved_message"] = (
             f"Reference data saved to {REFERENCE_DATA_PATH.name}."
         )

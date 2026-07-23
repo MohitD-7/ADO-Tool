@@ -13,14 +13,19 @@ import streamlit as st
 from sku_manager.pages.reference_data import admin_password
 from sku_manager.services import html_rules as logic
 from sku_manager.services import rules_store
+from sku_manager.services.git_sync import commit_and_push
 from sku_manager.ui.components import is_reserved_chord, page_header, shortcut_capture, suggested_chords
+
+
+def _push_rules(message: str) -> None:
+    commit_and_push([rules_store.RULES_PATH], message)
 
 
 def render() -> None:
     page_header("Description Editor", "Custom Rules")
 
     rules = rules_store.load_rules()
-    editable = _render_auth_controls()
+    editable, push_ack = _render_auth_controls()
 
     left, right = st.columns([1.1, 1.9])
 
@@ -43,8 +48,9 @@ def render() -> None:
                     st.session_state["_editing_rule"] = rule_name
                     st.session_state["_rule_form"] = dict(rule)
                     st.rerun()
-                if col_del.button("Del", key=f"del_{index}", disabled=not editable):
+                if col_del.button("Del", key=f"del_{index}", disabled=not editable or not push_ack):
                     rules_store.delete_rule(rule_name)
+                    _push_rules(f"Auto-sync editor rules: deleted '{rule_name}'")
                     st.success(f"Deleted '{rule_name}'.")
                     st.rerun()
         if st.button("+ New Rule", type="primary", use_container_width=True, disabled=not editable):
@@ -149,7 +155,7 @@ def render() -> None:
             st.code(preview_out, language="html")
 
         sa, sb, sc_ = st.columns([2, 1, 1])
-        if sa.button("Save Rule", type="primary", use_container_width=True):
+        if sa.button("Save Rule", type="primary", use_container_width=True, disabled=not push_ack):
             errors = logic.validate_rule(
                 form,
                 rules_store.load_rules(),
@@ -161,9 +167,11 @@ def render() -> None:
             else:
                 if editing_name:
                     rules_store.update_rule(editing_name, form)
+                    _push_rules(f"Auto-sync editor rules: updated '{form['name']}'")
                     st.success(f"Updated '{form['name']}'.")
                 else:
                     rules_store.add_rule(form)
+                    _push_rules(f"Auto-sync editor rules: added '{form['name']}'")
                     st.success(f"Created '{form['name']}'.")
                 del st.session_state["_rule_form"]
                 st.session_state.pop("_editing_rule", None)
@@ -175,18 +183,28 @@ def render() -> None:
             st.rerun()
 
 
-def _render_auth_controls() -> bool:
+def _render_auth_controls() -> tuple[bool, bool]:
+    """Returns (editable, push_ack)."""
     is_admin = bool(st.session_state.get("editor_rules_admin", False))
     password = admin_password()
 
     if is_admin:
+        st.warning(
+            "Saving or deleting a rule here pushes to GitHub and **redeploys the live app "
+            "for every user**. Confirm everyone else has saved or exported their in-progress "
+            "work before you continue."
+        )
+        push_ack = st.checkbox(
+            "I've confirmed it's safe to push and redeploy now",
+            key="editor_rules_push_ack",
+        )
         c1, _ = st.columns([1, 4])
         if c1.button("Lock Editing", width="stretch"):
             st.session_state["editor_rules_admin"] = False
             st.session_state.pop("_rule_form", None)
             st.session_state.pop("_editing_rule", None)
             st.rerun()
-        return True
+        return True, push_ack
 
     c1, c2, c3 = st.columns([1.5, 1, 2.5])
     with c1:
@@ -203,7 +221,7 @@ def _render_auth_controls() -> bool:
             st.info("Viewing is open. Editing requires admin unlock.")
         else:
             st.info("Viewing is open. Set SKU_REFERENCE_DATA_PASSWORD or st.secrets['reference_data_password'] to enable editing.")
-    return False
+    return False, False
 
 
 def _blank_rule() -> dict:
