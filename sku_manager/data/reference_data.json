@@ -301,19 +301,19 @@
     {
       "Symbol": "µ",
       "Action required": "Replace",
-      "Replace Value": "micro",
+      "Replace Value": " micro",
       "Symbol Meaning": "Mu or Micro"
     },
     {
       "Symbol": "μA",
       "Action required": "Replace",
-      "Replace Value": "micro A",
+      "Replace Value": " microA",
       "Symbol Meaning": ""
     },
     {
       "Symbol": "μV",
       "Action required": "Replace",
-      "Replace Value": "micro V",
+      "Replace Value": " microV",
       "Symbol Meaning": ""
     },
     {
@@ -415,7 +415,7 @@
     {
       "Symbol": "∞",
       "Action required": "Replace",
-      "Replace Value": "Infinite",
+      "Replace Value": " Infinite",
       "Symbol Meaning": ""
     },
     {
@@ -427,13 +427,13 @@
     {
       "Symbol": "Ω",
       "Action required": "Replace",
-      "Replace Value": "Ohm",
+      "Replace Value": " Ohm",
       "Symbol Meaning": "Ohm"
     },
     {
       "Symbol": "μ",
       "Action required": "Replace",
-      "Replace Value": "micro",
+      "Replace Value": " micro",
       "Symbol Meaning": ""
     },
     {
@@ -607,7 +607,7 @@
     {
       "Symbol": "å",
       "Action required": "Replace",
-      "Replace Value": "Angstrom",
+      "Replace Value": " Angstrom",
       "Symbol Meaning": ""
     },
     {

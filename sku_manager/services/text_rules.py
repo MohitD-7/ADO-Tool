@@ -55,6 +55,11 @@ def _iter_rule_rows(rules_df: pd.DataFrame | None) -> Iterable[dict[str, str]]:
                 "meaning": str(row.get("Symbol Meaning", "")),
             }
         )
+    # Longer/more specific symbols (e.g. "μV") must be tried before shorter
+    # ones they contain (e.g. "µ"), since Unicode case-folding under
+    # IGNORECASE makes the micro sign and Greek mu match each other and a
+    # generic single-char rule would otherwise consume the match first.
+    rows.sort(key=lambda r: len(r["symbol"]), reverse=True)
     return rows
 
 
@@ -80,7 +85,11 @@ def _symbol_variants(symbol: str) -> list[str]:
 
 def _variant_pattern(variant: str, original_symbol: str) -> str:
     escaped = re.escape(variant)
-    if variant.isalnum() and any(char.isalpha() for char in variant):
+    # Word-boundary guard only applies to plain-ASCII fallback spellings
+    # ("tm", "(c)" -> "r", etc.) so we don't match "tm" inside "item".
+    # Real Unicode symbols (µ, μ, Ω, ...) are unambiguous even glued to a
+    # digit or letter (100µA, 5µF, 10Ω), so they must not be guarded here.
+    if variant.isascii() and variant.isalnum() and any(char.isalpha() for char in variant):
         return rf"(?<![A-Za-z0-9]){escaped}(?![A-Za-z0-9])"
     return escaped
 

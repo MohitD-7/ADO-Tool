@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 from sku_manager.services.text_rules import find_violations
 
 
@@ -102,23 +104,23 @@ def item_warnings(
     if len(highlights) > 8:
         warnings.append("Highlights should not exceed 8 rows.")
 
-    # Special-character violations across all text fields
-    if rules_df is not None and not rules_df.empty:
-        fields = {
-            "Title":       details.get("title", ""),
-            "Short Title": details.get("short_title", ""),
-            "Description": details.get("description", ""),
-            "Mfg Model":   details.get("mfg_model", ""),
-        }
-        include_text_blob = " ".join(str(e.get("text", "") or "") for e in includes)
-        if include_text_blob.strip():
-            fields["Includes"] = include_text_blob
-        for feat in features:
-            fields["Features"] = fields.get("Features", "") + " " + str(feat)
-        for spec in specs:
-            fields["Specs"] = (fields.get("Specs", "") + " "
-                + str(spec.get("Spec", "")) + " " + str(spec.get("Value", "")))
+    # Special-character / double-space violations across all text fields
+    fields = {
+        "Title":       details.get("title", ""),
+        "Short Title": details.get("short_title", ""),
+        "Description": details.get("description", ""),
+        "Mfg Model":   details.get("mfg_model", ""),
+    }
+    include_text_blob = " ".join(str(e.get("text", "") or "") for e in includes)
+    if include_text_blob.strip():
+        fields["Includes"] = include_text_blob
+    for feat in features:
+        fields["Features"] = fields.get("Features", "") + " " + str(feat)
+    for spec in specs:
+        fields["Specs"] = (fields.get("Specs", "") + " "
+            + str(spec.get("Spec", "")) + " " + str(spec.get("Value", "")))
 
+    if rules_df is not None and not rules_df.empty:
         seen = set()
         for field_label, text in fields.items():
             for v in find_violations(text, rules_df):
@@ -137,5 +139,13 @@ def item_warnings(
                     f"<code>{v['symbol']}</code> ({v['meaning']}) — {action_desc}. "
                     f"Click <em>Format</em> to fix."
                 )
+
+    for field_label, text in fields.items():
+        if re.search(r"[ \t]{2,}", str(text)):
+            warnings.append(
+                f"<span style='color:#c62828;font-weight:700;'>"
+                f"Double space in {field_label}:</span> "
+                f"collapse to a single space. Click <em>Format</em> to fix."
+            )
 
     return warnings

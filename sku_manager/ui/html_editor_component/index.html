@@ -732,6 +732,17 @@ function runTextAudit() {
         }
       }
 
+      var spaceRx = /[ \t]{2,}/g;
+      var spaceMatch;
+      while ((spaceMatch = spaceRx.exec(segment)) !== null) {
+        markAuditRange(
+          ranges[r].start + spaceMatch.index,
+          ranges[r].start + spaceMatch.index + spaceMatch[0].length,
+          "cm-redline cm-redline-special",
+          "Double space — will collapse to one"
+        );
+      }
+
       if (!spellDictionary) continue;
       var wordRx = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
       var wordMatch;
