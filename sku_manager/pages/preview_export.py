@@ -14,6 +14,7 @@ from sku_manager.services.export import (
     render_html,
     text_bytes,
 )
+from sku_manager.services.variants import build_variant_df
 from sku_manager.services.validation import item_warnings, submit_blockers
 from sku_manager.state import current_item, mark_status, sync_description_state
 from sku_manager.ui.components import page_header
@@ -84,10 +85,11 @@ def render(show_header: bool = True) -> None:
         ).strip() or "Items Processed"
 
         warranty_df = build_warranty_export_df(st.session_state["queue_df"], st.session_state["items"])
+        variant_df = build_variant_df(st.session_state["queue_df"], st.session_state.get("variants", {}))
         dl_xlsx, dl_text = st.columns(2)
         dl_xlsx.download_button(
             "Download Excel",
-            data=excel_bytes(output_df, input_df, video_links_df, warranty_df),
+            data=excel_bytes(output_df, input_df, video_links_df, warranty_df, variant_df),
             file_name=f"{excel_filename}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             use_container_width=True,

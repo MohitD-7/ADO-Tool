@@ -180,6 +180,7 @@ def _render_downloads() -> None:
         output_df = build_output_df(queue_df, items)
         input_df = build_input_sheet_df(queue_df, items)
         video_links_df = build_video_links_df(queue_df, items)
+        variant_df = build_variant_df(queue_df, st.session_state.get("variants", {}))
 
         xlsx_col, text_col = st.columns(2)
         excel_name = xlsx_col.text_input(
@@ -199,7 +200,7 @@ def _render_downloads() -> None:
         dl_xlsx, dl_text = st.columns(2)
         dl_xlsx.download_button(
             "Download Excel",
-            data=excel_bytes(output_df, input_df, video_links_df, warranty_df),
+            data=excel_bytes(output_df, input_df, video_links_df, warranty_df, variant_df),
             file_name=f"{excel_name}.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             type="primary",

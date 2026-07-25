@@ -18,7 +18,6 @@ DESCRIPTION_EVENT_SUFFIX = "_last_event"
 
 _CLONE_PRESERVED_DETAIL_FIELDS = {
     "item_no",
-    "mfg_item",
     "atr_type",
     "jira",
     "input_title",
@@ -117,6 +116,7 @@ def _should_reset_item_widget_key(state_key: str, item_no: str) -> bool:
         f"title_{item_no}",
         f"mfg_model_{item_no}",
         f"short_title_{item_no}",
+        f"category_select_{item_no}",
         f"warranty_brand_{item_no}",
         f"warranty_months_{item_no}",
         f"similar_to_select_{item_no}",

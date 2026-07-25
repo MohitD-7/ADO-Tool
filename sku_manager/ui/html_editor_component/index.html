@@ -419,11 +419,11 @@ function applyIncomingValue(args) {
     cm.setValue(next);
     suppressChange = false;
     dirty = false;
-    lastSentValue = next;
     updateCounter();
     updatePreview();
     scheduleTextAudit(80);
     scheduleRepaint();
+    commitValue({ reason: "forced_sync", force: true });
     return;
   }
   if (dirty) return;
@@ -450,7 +450,7 @@ function commitValue(extra) {
   // and page close still forces a commit via flush.
   if (fullscreenActive && !(extra && extra.flush)) return;
   var currentValue = cm.getValue();
-  var force = extra && (extra.navigateTo || extra.switchItem);
+  var force = extra && (extra.navigateTo || extra.switchItem || extra.force);
   if (!force && currentValue === lastSentValue) return;
   lastSentValue = currentValue;
   var payload = Object.assign({ value: currentValue, eventId: String(Date.now()) + ":" + String(++eventCounter) }, extra || {});

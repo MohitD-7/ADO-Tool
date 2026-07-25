@@ -10,6 +10,7 @@ import pandas as pd
 from sku_manager.config import INPUT_SHEET_COLUMNS, OUTPUT_COLUMNS, QUEUE_COLUMNS
 from sku_manager.models import new_item_record
 from sku_manager.services.relationships import ROLE_CHILD, current_relationships
+from sku_manager.services.variants import VARIANT_COLUMNS
 
 
 def _child_item_nos(queue_df: pd.DataFrame) -> set[str]:
@@ -249,6 +250,7 @@ def excel_bytes(
     input_df: pd.DataFrame | None = None,
     video_links_df: pd.DataFrame | None = None,
     warranty_df: pd.DataFrame | None = None,
+    variant_df: pd.DataFrame | None = None,
 ) -> bytes:
     buffer = BytesIO()
     if video_links_df is None:
@@ -258,12 +260,15 @@ def excel_bytes(
             "SKU", "SKIP_Y_N", "MFG_CODE", "DESCR", "MO_PARTS", "MO_LABOR",
             "URL", "INT_PREFIX", "PHONE#", "EXTENSION", "DISCONT"
         ])
+    if variant_df is None:
+        variant_df = pd.DataFrame(columns=VARIANT_COLUMNS)
     with pd.ExcelWriter(buffer, engine="xlsxwriter") as writer:
         if input_df is not None:
             _write_sheet(writer, input_df, "Input")
         _write_sheet(writer, output_df, "-Item Processed Details-")
         _write_sheet(writer, video_links_df, "Video Links")
         _write_sheet(writer, warranty_df, "Warranty")
+        _write_sheet(writer, variant_df, "Variant Options")
     return buffer.getvalue()
 
 
@@ -282,10 +287,10 @@ def text_bytes(output_df: pd.DataFrame) -> bytes:
     return output_df[columns].to_csv(index=False, sep="\t").encode("utf-8-sig")
 
 
-def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
+def parse_output_excel(file) -> tuple[pd.DataFrame, dict, dict]:
     """
     Reverse-parse an output Excel (produced by export_excel) back into
-    a (queue_df, items) pair that the workspace can load directly.
+    a (queue_df, items, variants) triple that the workspace can load directly.
 
     Field Name mapping:
       Title, Short Title, Includes, Description,
@@ -294,6 +299,10 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
       Feature (Value1=order, Value2=text),
       Specification (Value2=order, Value4=key, Value5=value),
       Highlight (Value1=order, Value2=text)
+
+    `variants` is the Var Opts sheet (PSKU/CSEQ/CSKU/ASEQ/ATTRIBUTE/VALUE)
+    reconstructed into the same {parent_sku: {"attributes": [...], "values":
+    {child_sku: {attr: value}}}} shape used by st.session_state["variants"].
     """
     required = {"Field Name", "Item Number"}
     try:
@@ -355,12 +364,15 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
     input_order, input_snapshot = input_queue_snapshot()
 
     # Collect ordered item numbers preserving first-seen order from the output
-    # sheet, but prefer the Input sheet order when it is present.
+    # sheet, but prefer the Input sheet order when it is present. Child SKUs
+    # never carry their own rows in the output/content sheet (by design), so
+    # they only show up in processed_item_nos' absence - use input_order as-is
+    # rather than intersecting, or children get silently dropped on reimport.
     processed_item_nos = list(dict.fromkeys(
         str(r).strip() for r in df["Item Number"] if str(r).strip()
     ))
     if input_order:
-        item_nos = [ino for ino in input_order if ino in processed_item_nos]
+        item_nos = list(input_order)
         item_nos.extend(ino for ino in processed_item_nos if ino not in item_nos)
     else:
         item_nos = processed_item_nos
@@ -531,7 +543,37 @@ def parse_output_excel(file) -> tuple[pd.DataFrame, dict]:
         for ino in item_nos
     ]
     queue_df = pd.DataFrame(queue_rows, columns=QUEUE_COLUMNS)
-    return queue_df, items
+
+    def variants_snapshot() -> dict:
+        variant_sheet = sheets.get("Variant Options")
+        if variant_sheet is None or variant_sheet.empty:
+            return {}
+        variant_sheet = variant_sheet.fillna("")
+        if not {"PSKU", "CSKU", "ATTRIBUTE"}.issubset(set(variant_sheet.columns)):
+            return {}
+
+        def as_num(value) -> int:
+            text = str(value).strip()
+            return int(text) if text.isdigit() else 0
+
+        rows = sorted(
+            (row for _, row in variant_sheet.iterrows()),
+            key=lambda row: (as_num(row.get("CSEQ", "")), as_num(row.get("ASEQ", ""))),
+        )
+        result: dict[str, dict] = {}
+        for row in rows:
+            psku = str(row.get("PSKU", "")).strip()
+            csku = str(row.get("CSKU", "")).strip()
+            attr = str(row.get("ATTRIBUTE", "")).strip()
+            if not psku or not csku or not attr:
+                continue
+            entry = result.setdefault(psku, {"attributes": [], "values": {}})
+            if attr not in entry["attributes"]:
+                entry["attributes"].append(attr)
+            entry["values"].setdefault(csku, {})[attr] = str(row.get("VALUE", "")).strip()
+        return result
+
+    return queue_df, items, variants_snapshot()
 
 
 def load_warranty_data(warranty_df: pd.DataFrame | None = None) -> pd.DataFrame:

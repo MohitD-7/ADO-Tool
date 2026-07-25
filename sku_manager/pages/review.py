@@ -20,6 +20,7 @@ from sku_manager.services.export import (
     parse_output_excel,
     text_bytes,
 )
+from sku_manager.services.variants import build_variant_df
 from sku_manager.state import set_batch, set_description_state, sync_description_state
 from sku_manager.ui.components import page_header
 from sku_manager.ui.layout import review_sku_bar
@@ -54,10 +55,11 @@ def _render_upload() -> None:
 
     queue_frames: list[pd.DataFrame] = []
     merged_items: dict = {}
+    merged_variants: dict = {}
     duplicates: list[str] = []
     for uploaded in uploaded_files:
         try:
-            queue_df, items = parse_output_excel(uploaded)
+            queue_df, items, variants = parse_output_excel(uploaded)
         except ValueError as exc:
             st.error(f"{uploaded.name}: {exc}")
             return
@@ -68,6 +70,8 @@ def _render_upload() -> None:
                 duplicates.append(ino)
                 continue
             merged_items[ino] = item
+        for psku, entry in variants.items():
+            merged_variants.setdefault(psku, entry)
         st.caption(f"{uploaded.name}: {len(items)} SKU(s)")
 
     combined_queue = pd.concat(queue_frames, ignore_index=True)
@@ -84,6 +88,7 @@ def _render_upload() -> None:
     if st.button("Open for Review", type="primary"):
         set_batch(combined_queue)
         st.session_state["items"] = merged_items
+        st.session_state["variants"] = merged_variants
         st.session_state["current_item_no"] = next(iter(merged_items), "")
         st.session_state["_review_loaded"] = True
         st.session_state["_review_source_name"] = source_label
@@ -124,11 +129,12 @@ def _render_review_workspace() -> None:
     input_df = build_input_sheet_df(st.session_state["queue_df"], st.session_state["items"])
     video_links_df = build_video_links_df(st.session_state["queue_df"], st.session_state["items"])
     warranty_df = build_warranty_export_df(st.session_state["queue_df"], st.session_state["items"])
+    variant_df = build_variant_df(st.session_state["queue_df"], st.session_state.get("variants", {}))
 
     xl_col, txt_col = st.columns(2)
     xl_col.download_button(
         "Download Excel",
-        data=excel_bytes(output_df, input_df, video_links_df, warranty_df),
+        data=excel_bytes(output_df, input_df, video_links_df, warranty_df, variant_df),
         file_name=f"{excel_name}.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         use_container_width=True,
