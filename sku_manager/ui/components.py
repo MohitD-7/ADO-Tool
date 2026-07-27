@@ -354,11 +354,12 @@ def links_panel(item: dict, key_suffix: str = "shared") -> None:
     """Common source-link box for the current SKU."""
     ino = item["details"]["item_no"]
     links = item.setdefault("links", {})
-    existing = _line_list(links.get("general", []))
+    key = f"source_links_{key_suffix}_{ino}"
+    if key not in st.session_state:
+        st.session_state[key] = "\n".join(_line_list(links.get("general", [])))
     updated = st.text_area(
         "Source links",
-        value="\n".join(existing),
-        key=f"source_links_{key_suffix}_{ino}",
+        key=key,
         height=110,
         placeholder="https://example.com/source-1\nhttps://example.com/source-2",
     )
@@ -372,11 +373,12 @@ def source_video_panel(item: dict, key_suffix: str = "shared", *, expanded: bool
     with st.expander("Source and video links", expanded=expanded):
         st.caption("Put one link per line. These apply to the whole SKU.")
         links_panel(item, key_suffix=key_suffix)
-        video_value = "\n".join(_line_list(item.setdefault("details", {}).get("video_link", "")))
+        video_key = f"video_links_{key_suffix}_{item['details']['item_no']}"
+        if video_key not in st.session_state:
+            st.session_state[video_key] = "\n".join(_line_list(item.setdefault("details", {}).get("video_link", "")))
         updated_video = st.text_area(
             "Video links",
-            value=video_value,
-            key=f"video_links_{key_suffix}_{item['details']['item_no']}",
+            key=video_key,
             height=92,
             placeholder="https://example.com/video-1\nhttps://example.com/video-2",
         )

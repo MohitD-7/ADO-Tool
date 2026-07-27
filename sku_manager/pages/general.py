@@ -93,6 +93,15 @@ def _apply_similar_to(current_item_no: str, select_key: str) -> None:
     if not source_item_no:
         return
     if clone_item_from_similar(current_item_no, source_item_no):
+        # clone_item_from_similar() already updated `details` and cleared the
+        # per-item widget keys, but Title / MFG Model / Warranty Months are
+        # bound by key= (see set_basic_info_state's docstring below) - push the
+        # cloned values straight into those widget keys here, in the on_click
+        # callback, before the widgets are re-instantiated, exactly like the
+        # Format button does via set_basic_info_state().
+        details = st.session_state.get("items", {}).get(current_item_no, {}).get("details", {})
+        set_basic_info_state(current_item_no, details)
+        st.session_state[f"warranty_months_{current_item_no}"] = details.get("warranty_months", "")
         st.session_state[f"similar_to_message_{current_item_no}"] = f"Copied details from {source_item_no}."
     else:
         st.session_state[f"similar_to_error_{current_item_no}"] = "Could not copy details from the selected SKU."
@@ -285,17 +294,21 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
 
         c_title, c_mpn = st.columns([2, 1])
         with c_title:
-            _dv2_label("Title *", details.get("title", ""), LIMITS["title"])
+            title_key = f"title_{details['item_no']}"
+            if title_key not in st.session_state:
+                st.session_state[title_key] = details.get("title", "")
+            _dv2_label("Title *", st.session_state.get(title_key, ""), LIMITS["title"])
             details["title"] = st.text_input(
-                "Title", value=details.get("title", ""),
-                key=f"title_{details['item_no']}",
+                "Title", key=title_key,
                 label_visibility="collapsed",
             )
         with c_mpn:
-            _dv2_label("MFG Model / MPN", details.get("mfg_model", ""), LIMITS["mfg_model"])
+            mfg_model_key = f"mfg_model_{details['item_no']}"
+            if mfg_model_key not in st.session_state:
+                st.session_state[mfg_model_key] = details.get("mfg_model", "")
+            _dv2_label("MFG Model / MPN", st.session_state.get(mfg_model_key, ""), LIMITS["mfg_model"])
             details["mfg_model"] = st.text_input(
-                "MFG Model", value=details.get("mfg_model", ""),
-                key=f"mfg_model_{details['item_no']}",
+                "MFG Model", key=mfg_model_key,
                 label_visibility="collapsed",
             )
         # Short Title (full width) + Copy Title button aligned right
@@ -351,9 +364,11 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
                     )
         with wm_col:
             _dv2_label("Warranty Months (optional)")
+            warranty_months_key = f"warranty_months_{details['item_no']}"
+            if warranty_months_key not in st.session_state:
+                st.session_state[warranty_months_key] = details.get("warranty_months", "")
             details["warranty_months"] = st.text_input(
-                "Warranty Months", value=details.get("warranty_months", ""),
-                key=f"warranty_months_{details['item_no']}",
+                "Warranty Months", key=warranty_months_key,
                 label_visibility="collapsed",
                 placeholder="e.g., 12",
             )
