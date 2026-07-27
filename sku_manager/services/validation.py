@@ -52,6 +52,13 @@ def submit_blockers(item: dict) -> list[str]:
     if not non_empty_includes:
         problems.append("Includes has no rows.")
 
+    source_links = [
+        link for link in (item.get("links", {}) or {}).get("general", [])
+        if str(link or "").strip()
+    ]
+    if not source_links:
+        problems.append("Need at least 1 Source Link.")
+
     non_empty_features = [f for f in features if str(f).strip()]
     if len(non_empty_features) < 2:
         problems.append(f"Need at least 2 Features (have {len(non_empty_features)}).")

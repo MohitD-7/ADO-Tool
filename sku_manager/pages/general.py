@@ -25,6 +25,7 @@ from sku_manager.ui.components import (
     right_feedback_panel,
     source_video_panel,
 )
+from sku_manager.ui.grid import reset_stable_data_editor
 
 
 def _select_options(df, column: str) -> list[str]:
@@ -227,6 +228,16 @@ def _format_all_callback(item: dict) -> None:
     for spec in item.get("specs", []):
         spec["Spec"] = format_text(str(spec.get("Spec", "") or ""), rules_df)
         spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
+
+    # stable_data_editor() intentionally skips remounting a grid whose widget
+    # was edited on the immediately-preceding rerun (to protect in-flight
+    # typing/pasting from being clobbered). That heuristic misfires here: if
+    # the user's last interaction was typing straight into one of these grids,
+    # this formatting pass would otherwise be invisible until some later,
+    # unrelated rerun. Force a fresh remount so the corrected text shows now.
+    reset_stable_data_editor(f"features_editor_{item_no}")
+    reset_stable_data_editor(f"highlights_editor_{item_no}")
+    reset_stable_data_editor(f"includes_editor_{item_no}")
 
 
 def _dv2_label(text: str, value: str | None = None, limit: int | None = None) -> None:
