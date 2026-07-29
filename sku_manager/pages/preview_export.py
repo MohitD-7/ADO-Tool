@@ -14,10 +14,34 @@ from sku_manager.services.export import (
     render_html,
     text_bytes,
 )
+from sku_manager.services import metrics, worksave
 from sku_manager.services.variants import build_variant_df
 from sku_manager.services.validation import item_warnings, submit_blockers
 from sku_manager.state import current_item, mark_status, sync_description_state
 from sku_manager.ui.components import page_header
+
+
+def _mark_completed_and_save(ino: str) -> None:
+    """Mark a SKU Completed and save its work to disk right away.
+
+    autosave_tick() (called at the end of every main() run) would eventually
+    pick this up too, but a completed SKU shouldn't depend on some *later*
+    rerun happening first - if the user closes the tab immediately after
+    submitting, that later rerun never comes. Saving here guarantees a
+    completed SKU is never lost even if the user forgets to save.
+
+    A save failure here (e.g. a transient lock timeout) must not block the
+    submit itself - swallow it exactly like autosave_tick() does; the next
+    autosave_tick() at the end of this rerun will retry anyway.
+    """
+    mark_status(ino, "Completed")
+    user = str(st.session_state.get("save_user", "") or "")
+    if not user:
+        return
+    try:
+        worksave.save_workspace(user)
+    except Exception as exc:
+        metrics.record_error(user, exc)
 
 
 def render(show_header: bool = True) -> None:
@@ -65,7 +89,7 @@ def render(show_header: bool = True) -> None:
         if blockers:
             _confirm_submit_dialog(ino, blockers)
         else:
-            mark_status(ino, "Completed")
+            _mark_completed_and_save(ino)
             st.session_state["_submitted_ino"] = ino
             st.rerun()
 
@@ -135,7 +159,7 @@ def _confirm_submit_dialog(ino: str, blockers: list[str]) -> None:
     if c1.button("OK", use_container_width=True):
         st.rerun()
     if c2.button("Submit Anyway", type="primary", use_container_width=True):
-        mark_status(ino, "Completed")
+        _mark_completed_and_save(ino)
         st.session_state["_submitted_ino"] = ino
         st.rerun()
 

@@ -275,8 +275,11 @@ def _dv2_workspace_header(details: dict) -> None:
             queue_mfg_item = str(match.iloc[0].get("Mfg Item", ""))
 
     item_no = html.escape(raw_item_no)
-    title_text = details.get("input_title", "") or queue_title or details.get("title", "") or "Untitled SKU"
-    mfg_text = details.get("input_mfg_item", "") or queue_mfg_item or details.get("mfg_item", "") or details.get("mfg_model", "")
+    # Frozen, as-uploaded values only - never the editable title/mfg_item/
+    # mfg_model, so a "Similar To" clone (which intentionally overwrites those)
+    # never changes this card. It stays tied to this SKU's own original identity.
+    title_text = details.get("input_title", "") or queue_title or "Untitled SKU"
+    mfg_text = details.get("input_mfg_item", "") or queue_mfg_item
     title = html.escape(str(title_text))
     mfg_item = html.escape(str(mfg_text))
     category = html.escape(str(details.get("category", "") or ""))
