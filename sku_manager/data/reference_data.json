@@ -699,6 +699,12 @@
       "Action required": "Replace",
       "Replace Value": "<",
       "Symbol Meaning": "Less than"
+    },
+    {
+      "Symbol": "*",
+      "Action required": "Delete",
+      "Replace Value": "",
+      "Symbol Meaning": "Asterisk"
     }
   ],
   "warranty": [

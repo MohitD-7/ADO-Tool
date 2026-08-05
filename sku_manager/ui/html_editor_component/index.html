@@ -768,7 +768,10 @@ function ins(text) { cm.replaceSelection(text); cm.focus(); scheduleRepaint(); }
 function getValue() { return cm.getValue(); }
 function setValue(v) { cm.setValue(v); cm.focus(); }
 function wrap(open, close) { wrapSel(open, close); }
-function doSingleLine() { setValue(getValue().split("\n").join(" ")); }
+function doSingleLine() {
+  var lines = getValue().split("\n").map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
+  setValue(lines.join(" ").replace(/>\s+</g, "><"));
+}
 
 function doCase(type) {
   var sel = cm.getSelection();
@@ -780,6 +783,7 @@ function doCase(type) {
     result = target.toLowerCase();
   } else {
     result = target
+      .toLowerCase()
       .replace(/([.!?]\s*)(\S)/g, function(m, a, b) { return a + b.toUpperCase(); })
       .replace(/^(\s*)(\S)/, function(m, a, b) { return a + b.toUpperCase(); });
   }
