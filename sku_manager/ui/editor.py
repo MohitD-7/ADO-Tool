@@ -101,6 +101,7 @@ def _toolbar_html() -> str:
     <button class="btn" onclick="doCase('upper')" title="UPPERCASE">AA</button>
     <button class="btn" onclick="doCase('lower')" title="lowercase">aa</button>
     <button class="btn" onclick="doCase('sentence')" title="Sentence case">Aa</button>
+    <button class="btn" onclick="doCase('title')" title="Title Case (Alt+T)">AaAa</button>
   </div>
   <div class="sep"></div>
   <div class="tb-group">

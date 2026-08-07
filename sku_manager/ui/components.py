@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import html
+from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 try:
     from streamlit_sortables import sort_items
@@ -12,6 +14,13 @@ except ImportError:
     sort_items = None
 
 from sku_manager.services.validation import char_count_status
+
+_shortcut_capture_component = components.declare_component(
+    "shortcut_capture", path=str(Path(__file__).with_name("shortcut_capture_component"))
+)
+_brand_autocomplete_component = components.declare_component(
+    "brand_autocomplete", path=str(Path(__file__).with_name("brand_autocomplete_component"))
+)
 
 
 def enable_global_spellcheck() -> None:
@@ -418,13 +427,6 @@ def suggested_chords() -> list[str]:
     return list(_SUGGESTED_CHORDS)
 
 
-def _get_shortcut_capture_component():
-    from pathlib import Path
-    import streamlit.components.v1 as components
-    _dir = Path(__file__).with_name("shortcut_capture_component")
-    return components.declare_component("shortcut_capture", path=str(_dir))
-
-
 def shortcut_capture(current: str, key: str) -> str:
     """
     Keyboard-chord capture widget. Renders a focusable box; when focused, the
@@ -436,18 +438,10 @@ def shortcut_capture(current: str, key: str) -> str:
     `key` must be unique per usage so Streamlit tracks the widget's returned
     value across reruns.
     """
-    comp = _get_shortcut_capture_component()
-    result = comp(initial=current or "", key=key, default={"chord": current or ""})
+    result = _shortcut_capture_component(initial=current or "", key=key, default={"chord": current or ""})
     if isinstance(result, dict) and "chord" in result:
         return str(result.get("chord") or "")
     return current or ""
-
-
-def _get_brand_autocomplete_component():
-    from pathlib import Path
-    import streamlit.components.v1 as components
-    _dir = Path(__file__).with_name("brand_autocomplete_component")
-    return components.declare_component("brand_autocomplete", path=str(_dir))
 
 
 def brand_autocomplete(current: str, brands: list[str], key: str) -> str:
@@ -457,8 +451,7 @@ def brand_autocomplete(current: str, brands: list[str], key: str) -> str:
     is sent back to Python on Enter or on losing focus (not per keystroke).
     Returns the committed value, or `current` if nothing committed yet.
     """
-    comp = _get_brand_autocomplete_component()
-    result = comp(initial=current or "", brands=brands, key=key, default={"value": current or ""})
+    result = _brand_autocomplete_component(initial=current or "", brands=brands, key=key, default={"value": current or ""})
     if isinstance(result, dict) and "value" in result:
         return str(result.get("value") or "")
     return current or ""

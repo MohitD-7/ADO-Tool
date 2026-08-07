@@ -371,7 +371,8 @@ function mountEditor(args) {
       "Ctrl-B": function() { wrapSel("<b>", "</b>"); },
       "Ctrl-I": function() { wrapSel("<i>", "</i>"); },
       "Ctrl-F": function() { toggleFind(); return false; },
-      "Ctrl-L": function() { doSingleLine(); }
+      "Ctrl-L": function() { doSingleLine(); },
+      "Alt-T": function() { doCase("title"); }
     }
   });
 
@@ -770,24 +771,33 @@ function setValue(v) { cm.setValue(v); cm.focus(); }
 function wrap(open, close) { wrapSel(open, close); }
 function doSingleLine() {
   var lines = getValue().split("\n").map(function(l) { return l.trim(); }).filter(function(l) { return l.length > 0; });
-  setValue(lines.join(" ").replace(/>\s+</g, "><"));
+  setValue(lines.join(" ").replace(/>\s+/g, ">").replace(/\s+</g, "<"));
 }
 
-function doCase(type) {
-  var sel = cm.getSelection();
-  var target = sel || getValue();
-  var result;
+function applyCase(target, type) {
   if (type === "upper") {
-    result = target.toUpperCase();
+    return target.toUpperCase();
   } else if (type === "lower") {
-    result = target.toLowerCase();
-  } else {
-    result = target
+    return target.toLowerCase();
+  } else if (type === "title") {
+    return target
       .toLowerCase()
-      .replace(/([.!?]\s*)(\S)/g, function(m, a, b) { return a + b.toUpperCase(); })
-      .replace(/^(\s*)(\S)/, function(m, a, b) { return a + b.toUpperCase(); });
+      .replace(/(^|\s)([a-z])/g, function(m, sep, ch) { return sep + ch.toUpperCase(); });
   }
-  if (sel) { cm.replaceSelection(result); } else { setValue(result); }
+  return target
+    .toLowerCase()
+    .replace(/([.!?]\s*)(\S)/g, function(m, a, b) { return a + b.toUpperCase(); })
+    .replace(/^(\s*)(\S)/, function(m, a, b) { return a + b.toUpperCase(); });
+}
+function doCase(type) {
+  if (!cm.somethingSelected()) {
+    setValue(applyCase(getValue(), type));
+    return;
+  }
+  var results = cm.getSelections().map(function(s) { return applyCase(s, type); });
+  cm.replaceSelections(results);
+  cm.focus();
+  scheduleRepaint();
 }
 
 var linkBar = null;
