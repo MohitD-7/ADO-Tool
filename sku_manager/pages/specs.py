@@ -85,7 +85,9 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
         st.markdown("### Add Specification")
         c1, c2, c3, c4 = st.columns(4)
         new_category = c1.text_input("V1 Category", key=f"new_spec_cat_{ino}", placeholder="optional")
-        new_group = c2.text_input("V3 Group", key=f"new_spec_grp_{ino}", placeholder="optional")
+        with c2:
+            new_group = st.text_input("V3 Group", key=f"new_spec_grp_{ino}", placeholder="optional")
+            character_counter(new_group, LIMITS["spec_group"])
         with c3:
             new_key = st.text_input("V4 Spec", key=f"new_spec_key_{ino}", placeholder="e.g. Color")
             character_counter(new_key, LIMITS["spec_key"])

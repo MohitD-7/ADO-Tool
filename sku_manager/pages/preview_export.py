@@ -69,9 +69,9 @@ def render(show_header: bool = True) -> None:
 
     if blockers:
         with st.expander(f"⚠ Not filled / required ({len(blockers)})", expanded=False):
-            st.caption("This SKU cannot be submitted yet. Complete the required fields:")
+            st.caption("This SKU cannot be submitted yet. Fix the following:")
             for reason in blockers:
-                st.markdown(f"- {reason}")
+                st.markdown(f"- {reason}", unsafe_allow_html=True)
     elif item_warning_list:
         with st.expander(f"⚠ Warnings - not filled ({len(item_warning_list)})", expanded=False):
             st.caption("Non-blocking validation warnings:")
@@ -147,13 +147,13 @@ def _fullscreen_preview_dialog(html: str) -> None:
 @st.dialog("Cannot submit - required fields missing")
 def _confirm_submit_dialog(ino: str, blockers: list[str]) -> None:
     st.markdown(
-        f"**SKU {ino}** is missing the following required fields:"
+        f"**SKU {ino}** cannot be submitted yet - the following need to be fixed:"
     )
     for reason in blockers:
-        st.markdown(f"- {reason}")
+        st.markdown(f"- {reason}", unsafe_allow_html=True)
     st.markdown("---")
     st.caption(
-        "You can go back and complete these fields, or submit anyway and leave them empty."
+        "You can go back and fix these, or submit anyway and leave them as-is."
     )
     c1, c2 = st.columns(2)
     if c1.button("OK", use_container_width=True):
