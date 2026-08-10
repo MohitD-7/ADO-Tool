@@ -24,6 +24,7 @@ from sku_manager.services import metrics, worksave
 from sku_manager.state import init_state, sync_description_state
 from sku_manager.styles import inject_styles
 from sku_manager.ui.components import enable_global_spellcheck
+from sku_manager.ui.grid import blur_active_cell_before_click
 from sku_manager.ui.layout import sidebar_nav
 
 
@@ -113,6 +114,7 @@ def main() -> None:
     with metrics.timer("styles"):
         inject_styles()
         enable_global_spellcheck()
+        blur_active_cell_before_click()
     sync_description_state()
     with metrics.timer("sidebar_nav"):
         page = sidebar_nav()

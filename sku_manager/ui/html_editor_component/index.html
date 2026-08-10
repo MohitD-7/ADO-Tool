@@ -760,8 +760,12 @@ function runTextAudit() {
   });
 }
 function wrapSel(open, close) {
-  var sel = cm.getSelection() || "text";
-  cm.replaceSelection(open + sel + close, "around");
+  if (!cm.somethingSelected()) {
+    cm.replaceSelection(open + "text" + close, "around");
+  } else {
+    var results = cm.getSelections().map(function(s) { return open + s + close; });
+    cm.replaceSelections(results, "around");
+  }
   cm.focus();
   scheduleRepaint();
 }
@@ -996,9 +1000,12 @@ function chordMatches(e, sc) {
       && e.key.toLowerCase() === key;
 }
 function applyRuleInEditor(rule) {
-  var sel = cm.getSelection();
-  var out = applyRuleLogic(sel, rule);
-  if (sel) { cm.replaceSelection(out); } else { setValue(getValue() + out); }
+  if (!cm.somethingSelected()) {
+    setValue(getValue() + applyRuleLogic("", rule));
+    return;
+  }
+  var results = cm.getSelections().map(function(s) { return applyRuleLogic(s, rule); });
+  cm.replaceSelections(results);
 }
 function applyRuleLogic(text, rule) {
   var lines = rule.apply_per_line ? text.split("\n") : [text];

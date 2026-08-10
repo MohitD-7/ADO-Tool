@@ -82,6 +82,58 @@ def select_first_data_editor_cell(key: str) -> None:
     )
 
 
+def blur_active_cell_before_click() -> None:
+    """Give an in-progress data_editor cell edit time to commit before a click acts.
+
+    st.data_editor (glide-data-grid) only syncs a cell's value back to
+    Streamlit's widget state once the edit is committed - and that sync is
+    throttled/debounced client-side, not instant. If a user double-clicks
+    straight into a cell (opening its inline text editor), pastes a value,
+    and clicks a button elsewhere without clicking away first, the button's
+    click can fire and trigger a rerun before the debounced sync has landed,
+    silently dropping the edit (reported for "Save Specs", but the same race
+    applies to any data_editor + button pairing).
+
+    Forcing blur one event earlier (e.g. on mousedown) only closes a
+    same-tick JS race; it doesn't wait out an actual debounce window measured
+    in tens-to-hundreds of milliseconds. So instead: swallow a button's first
+    click when something else was focused at the time (i.e. an editor was
+    open), wait long enough to clear a realistic debounce window, then replay
+    the click for real. The natural mousedown/blur behavior that triggers the
+    grid's own commit is left completely untouched - this only delays when
+    the button's own action is allowed to fire.
+
+    Installed once globally (flag on the top document) so it covers every
+    page's data editors, not just the one that happened to render this call.
+    """
+    components.html(
+        """
+<script>
+(function() {
+  var doc = window.parent.document;
+  if (doc.__vo_flush_edits_installed) return;
+  doc.__vo_flush_edits_installed = true;
+  var FLUSH_DELAY_MS = 250;
+  doc.addEventListener("click", function(e) {
+    var btn = e.target.closest && e.target.closest("button");
+    if (!btn || btn.__voReplaying) return;
+    var active = doc.activeElement;
+    if (!active || active === doc.body || active === btn || btn.contains(active)) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    setTimeout(function() {
+      btn.__voReplaying = true;
+      btn.click();
+      btn.__voReplaying = false;
+    }, FLUSH_DELAY_MS);
+  }, true);
+})();
+</script>
+""",
+        height=0,
+    )
+
+
 def _frame_signature(df: pd.DataFrame) -> str:
     normalised = _normalise_frame(df).astype("object")
     normalised = normalised.where(pd.notna(normalised), "")
