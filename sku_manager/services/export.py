@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 from html import escape
 from html.parser import HTMLParser
 from io import BytesIO
@@ -277,14 +278,26 @@ def excel_bytes(
 TEXT_COLUMNS = ["", "Field Name", "Item Number", "Value1", "Value2", "Value3", "Value4", "Value5"]
 
 
+def _flatten_cell(value) -> str:
+    """Plain-text form of a cell: no embedded tabs/newlines, since text_bytes
+    writes unquoted TSV where those characters would be mistaken for column
+    or row breaks."""
+    text = "" if pd.isna(value) else str(value)
+    return text.replace("\t", " ").replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+
+
 def text_bytes(output_df: pd.DataFrame) -> bytes:
     """Tab-separated Notepad-friendly export of the filled output sheet.
 
     Includes the empty leading column but stops at Value5 — Comments, Source,
-    and Source are omitted.
+    and Source are omitted. Written without CSV quoting: this file is meant
+    to be read as plain text, not re-parsed as CSV, so a value containing a
+    literal " (e.g. 55" TV) must not come out doubled/wrapped as "" per
+    csv.QUOTE_MINIMAL's default escaping.
     """
     columns = [col for col in TEXT_COLUMNS if col in output_df.columns]
-    return output_df[columns].to_csv(index=False, sep="\t").encode("utf-8-sig")
+    flat_df = output_df[columns].map(_flatten_cell)
+    return flat_df.to_csv(index=False, sep="\t", quoting=csv.QUOTE_NONE).encode("utf-8-sig")
 
 
 def parse_output_excel(file) -> tuple[pd.DataFrame, dict, dict]:

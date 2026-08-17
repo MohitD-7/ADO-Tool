@@ -91,6 +91,18 @@ def test_text_bytes_stops_at_value5(parent_child_batch):
     assert "Source" not in header
 
 
+def test_text_bytes_does_not_double_quote_marks(parent_child_batch):
+    """A value containing a literal " (e.g. 55" TV) must come through as a
+    single quote mark, not doubled and wrapped ("") the way csv.QUOTE_MINIMAL
+    would render it — this file is read as plain text, not re-parsed as CSV."""
+    queue, items = parent_child_batch
+    items["P1"]["specs"] = [{"category": "", "group": "", "Spec": "Screen Size", "Value": '55" Class'}]
+    output = build_output_df(queue, items)
+    text = text_bytes(output).decode("utf-8-sig")
+    assert '55" Class' in text
+    assert '""' not in text
+
+
 # ── HTML safety / rendering ──────────────────────────────────────────────────
 def test_sanitize_strips_script():
     cleaned = sanitize_description_html("<script>alert(1)</script>Hello")
