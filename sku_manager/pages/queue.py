@@ -88,11 +88,11 @@ def render() -> None:
     else:
         filtered = filtered.reset_index().rename(columns={"index": "orig_index"})
 
-    header_cols = st.columns([0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6])
+    header_cols = st.columns([0.45, 1.05, 1.55, 2.4, 1.15, 1.2, 1.0, 0.8, 0.6])
     header_style = "font-size:11px;font-weight:800;text-transform:uppercase;color:#6f8090;padding-bottom:2px;border-bottom:1px solid #e2e8f0;"
     for col, label in zip(
         header_cols,
-        ["#", "ATR", "Item No", "Title", "Status", "JIRA", "Preview", "Open"],
+        ["#", "ATR", "Item No", "Title", "Mfg Item", "Status", "JIRA", "Preview", "Open"],
     ):
         col.markdown(f"<div style='{header_style}'>{label}</div>", unsafe_allow_html=True)
 
@@ -109,11 +109,12 @@ def render() -> None:
         is_child = str(row.get("ATR Type", "")).strip() == ""
         item_no = str(row["Item No"])
         title = str(row["Title"])
+        mfg_item = str(row.get("Mfg Item", ""))
         status = str(row["Status"])
         jira = str(row.get("JIRA", ""))
 
         row_cols = st.columns(
-            [0.45, 1.05, 1.55, 3.0, 1.2, 1.0, 0.8, 0.6],
+            [0.45, 1.05, 1.55, 2.4, 1.15, 1.2, 1.0, 0.8, 0.6],
             vertical_alignment="center",
         )
         pos_style = "color:#6f8090;font-weight:700;"
@@ -130,15 +131,19 @@ def render() -> None:
             f"<div style='color:#1a2330;'>{html.escape(title[:90])}</div>",
             unsafe_allow_html=True,
         )
+        row_cols[4].markdown(
+            f"<div style='color:#405166;'>{html.escape(mfg_item)}</div>",
+            unsafe_allow_html=True,
+        )
         current_status = status if status in STATUS_OPTIONS else STATUS_OPTIONS[0]
-        new_status = row_cols[4].selectbox(
+        new_status = row_cols[5].selectbox(
             "status",
             STATUS_OPTIONS,
             index=STATUS_OPTIONS.index(current_status),
             key=f"queue_status_{item_no}",
             label_visibility="collapsed",
         )
-        row_cols[5].markdown(
+        row_cols[6].markdown(
             f"<div style='color:#405166;'>{html.escape(jira)}</div>",
             unsafe_allow_html=True,
         )
@@ -146,7 +151,7 @@ def render() -> None:
             queue_df.at[orig_idx, "Status"] = new_status
             changed = True
 
-        if row_cols[6].button(
+        if row_cols[7].button(
             "Preview",
             key=f"queue_preview_{item_no}",
             use_container_width=True,
@@ -155,7 +160,7 @@ def render() -> None:
         ):
             _preview_dialog(item_no)
 
-        if row_cols[7].button(
+        if row_cols[8].button(
             "Open",
             key=f"queue_open_{item_no}",
             type="primary",
@@ -168,6 +173,11 @@ def render() -> None:
             st.session_state["active_page"] = "SKU Workspace"
             st.session_state["workspace_tab"] = "Content"
             st.rerun()
+
+        st.markdown(
+            "<hr style='margin:6px 0;border:none;border-top:1px solid #cbd5e1;'>",
+            unsafe_allow_html=True,
+        )
 
     if changed:
         st.session_state["queue_df"] = queue_df
