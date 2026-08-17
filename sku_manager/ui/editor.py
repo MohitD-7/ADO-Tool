@@ -13,6 +13,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 from sku_manager.services.rules_store import load_rules
+from sku_manager.state import PENDING_FORMAT_ALL_KEY
 _COMPONENT_DIR = Path(__file__).with_name("html_editor_component")
 _html_editor_component = components.declare_component(
     "html_editor_component",
@@ -79,6 +80,16 @@ def html_editor(value: str, sync_key: str, height: int = 320) -> str:
             if navigate_to in _WORKSPACE_TABS and navigate_to != st.session_state.get("workspace_tab"):
                 st.session_state["workspace_tab"] = navigate_to
                 st.rerun()
+            if result.get("formatAll"):
+                # format_all_visible_text() touches widget-bound session_state
+                # keys outside this component (title_*/short_title_*/etc.), so
+                # it can't run here inline - queue it for apply_pending_format_all()
+                # to run at the top of the next script run, before those
+                # widgets are instantiated.
+                current_item_no = st.session_state.get("current_item_no", "")
+                if current_item_no:
+                    st.session_state[PENDING_FORMAT_ALL_KEY] = current_item_no
+                    st.rerun()
 
     return current
 
@@ -106,6 +117,10 @@ def _toolbar_html() -> str:
   <div class="sep"></div>
   <div class="tb-group">
     <button class="btn accent" onclick="toggleFind()" title="Find and replace (Ctrl+F)">Find/Replace</button>
+  </div>
+  <div class="sep"></div>
+  <div class="tb-group">
+    <button class="btn primary" onclick="requestFormatAll()" title="Apply Special Characters clean-up to this SKU's title, description, includes, features, highlights, and specs">Format Visible Text</button>
   </div>
 </div>"""
 

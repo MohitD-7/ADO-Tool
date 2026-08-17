@@ -462,6 +462,13 @@ function commitValue(extra) {
   Streamlit.setComponentValue(payload);
 }
 
+function requestFormatAll() {
+  // flush bypasses the "stay quiet while fullscreen" guard above - this is a
+  // deliberate, infrequent click, not routine typing, and Python needs the
+  // round trip to run format_all_visible_text() and push the result back in.
+  commitValue({ reason: "format_all", formatAll: true, force: true, flush: true });
+}
+
 function scheduleCommit(delayMs) {
   if (commitTimer) clearTimeout(commitTimer);
   commitTimer = setTimeout(function() {

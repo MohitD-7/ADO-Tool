@@ -8,6 +8,8 @@ import streamlit as st
 from sku_manager.config import QUEUE_COLUMNS
 from sku_manager.models import DETAIL_DEFAULTS, new_item_record
 from sku_manager.services.reference_store import TABLE_DEFINITIONS, get_reference_data
+from sku_manager.services.text_rules import format_text
+from sku_manager.ui.grid import reset_stable_data_editor
 
 
 DESCRIPTION_PREFIX = "_desc_"
@@ -15,6 +17,14 @@ DESCRIPTION_WIDGET_SUFFIX = "_w"
 DESCRIPTION_FORCE_SUFFIX = "_force"
 DESCRIPTION_COMPONENT_SUFFIX = "_component"
 DESCRIPTION_EVENT_SUFFIX = "_last_event"
+
+# Set by the html_editor component (ui/editor.py) when its "Format Visible
+# Text" toolbar button is clicked - read and cleared by
+# apply_pending_format_all() before any page widgets are instantiated, since
+# the format pass writes into widget-bound session_state keys (title_*,
+# short_title_*, mfg_model_*) that Streamlit forbids touching once their
+# widget has rendered this run.
+PENDING_FORMAT_ALL_KEY = "_pending_format_all"
 
 _CLONE_PRESERVED_DETAIL_FIELDS = {
     "item_no",
@@ -103,6 +113,85 @@ def set_description_state(item_no: str, value: str) -> None:
     st.session_state.pop(widget_key, None)
     st.session_state.pop(f"{sync_key}{DESCRIPTION_COMPONENT_SUFFIX}", None)
     st.session_state.pop(f"{sync_key}{DESCRIPTION_EVENT_SUFFIX}", None)
+
+
+def set_basic_info_state(item_no: str, details: dict) -> None:
+    """Push title/short title/MFG model into the text_input widgets' own
+    session_state keys. Those widgets are bound via `key=`, so once rendered
+    once, changing `details[...]` alone has no visible effect - the widget
+    keeps redrawing from its own stale session_state entry and overwrites
+    `details[...]` right back on the next rerun."""
+    st.session_state[f"title_{item_no}"] = details.get("title", "")
+    st.session_state[f"short_title_{item_no}"] = details.get("short_title", "")
+    st.session_state[f"mfg_model_{item_no}"] = details.get("mfg_model", "")
+
+
+def format_all_visible_text(item: dict) -> None:
+    """Run the Special Characters clean-up rules (`special_rules_df`) over
+    every visible text field of `item`: title, short title, MFG model,
+    description, includes, features, highlights, and specs.
+
+    Must only run either from a widget's on_click callback (which Streamlit
+    runs before the next rerun's widgets exist) or from
+    apply_pending_format_all() (which runs before any page widgets are
+    instantiated this run) - it writes straight into widget-bound
+    session_state keys (title_*/short_title_*/mfg_model_* via
+    set_basic_info_state, and the description's force key), which raises
+    StreamlitAPIException if their widget already rendered this run.
+
+    Title/Short Title/MFG Model are read from their own session_state widget
+    keys, not from `details[...]`: `details` is only refreshed by the
+    text_input's own script-body line, which may not have run yet, so it can
+    still hold a stale pre-edit value if the field's own change hasn't been
+    through a rerun yet (e.g. you edit the field then immediately trigger
+    formatting) - reading `details` here would silently reformat old text
+    instead of what's currently typed.
+    """
+    details = item["details"]
+    item_no = details["item_no"]
+    rules_df = st.session_state["special_rules_df"]
+
+    for key in ["title", "short_title", "mfg_model"]:
+        widget_key = f"{key}_{item_no}"
+        current_value = st.session_state.get(widget_key, details.get(key, ""))
+        details[key] = format_text(current_value, rules_df)
+    set_basic_info_state(item_no, details)
+
+    description_value = sync_description_state(item)
+    details["description"] = format_text(description_value, rules_df)
+    set_description_state(item_no, details["description"])
+
+    for entry in item.setdefault("includes", []):
+        if entry.get("text"):
+            entry["text"] = format_text(entry["text"], rules_df)
+    item["features"] = [format_text(str(f), rules_df) for f in item.get("features", [])]
+    item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
+    for spec in item.get("specs", []):
+        spec["Spec"] = format_text(str(spec.get("Spec", "") or ""), rules_df)
+        spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
+
+    # stable_data_editor() intentionally skips remounting a grid whose widget
+    # was edited on the immediately-preceding rerun (to protect in-flight
+    # typing/pasting from being clobbered). That heuristic misfires here: if
+    # the user's last interaction was typing straight into one of these grids,
+    # this formatting pass would otherwise be invisible until some later,
+    # unrelated rerun. Force a fresh remount so the corrected text shows now.
+    reset_stable_data_editor(f"features_editor_{item_no}")
+    reset_stable_data_editor(f"highlights_editor_{item_no}")
+    reset_stable_data_editor(f"includes_editor_{item_no}")
+
+
+def apply_pending_format_all() -> None:
+    """Consume a "Format Visible Text" request queued by the full-screen
+    description editor (see ui/editor.py). Must run early in app.main(),
+    before PAGE_RENDERERS[page]() instantiates any widgets - see
+    format_all_visible_text()'s docstring for why."""
+    item_no = st.session_state.pop(PENDING_FORMAT_ALL_KEY, None)
+    if not item_no:
+        return
+    item = st.session_state.get("items", {}).get(item_no)
+    if item:
+        format_all_visible_text(item)
 
 
 def _should_reset_item_widget_key(state_key: str, item_no: str) -> bool:

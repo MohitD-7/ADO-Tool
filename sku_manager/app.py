@@ -21,7 +21,7 @@ from sku_manager.pages import (
     workspace,
 )
 from sku_manager.services import metrics, worksave
-from sku_manager.state import init_state, sync_description_state
+from sku_manager.state import apply_pending_format_all, init_state, sync_description_state
 from sku_manager.styles import inject_styles
 from sku_manager.ui.components import enable_global_spellcheck
 from sku_manager.ui.grid import blur_active_cell_before_click
@@ -116,6 +116,9 @@ def main() -> None:
         enable_global_spellcheck()
         blur_active_cell_before_click()
     sync_description_state()
+    # Must run before any page widgets are instantiated this run - see
+    # apply_pending_format_all()'s docstring.
+    apply_pending_format_all()
     with metrics.timer("sidebar_nav"):
         page = sidebar_nav()
     _maybe_restore_saved_work()

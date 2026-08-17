@@ -14,9 +14,13 @@ from sku_manager.services.category_mapping import (
     merge_template_into_specs,
 )
 from sku_manager.pages.specs import bump_specs_editor
-from sku_manager.services.text_rules import format_text
 from sku_manager.services.validation import LIMITS, char_count_status, item_warnings
-from sku_manager.state import clone_item_from_similar, current_item, set_description_state, sync_description_state
+from sku_manager.state import (
+    clone_item_from_similar,
+    current_item,
+    format_all_visible_text,
+    set_basic_info_state,
+)
 from sku_manager.ui.components import (
     brand_autocomplete,
     field_notes_editor,
@@ -25,7 +29,6 @@ from sku_manager.ui.components import (
     right_feedback_panel,
     source_video_panel,
 )
-from sku_manager.ui.grid import reset_stable_data_editor
 
 
 def _select_options(df, column: str) -> list[str]:
@@ -95,10 +98,10 @@ def _apply_similar_to(current_item_no: str, select_key: str) -> None:
     if clone_item_from_similar(current_item_no, source_item_no):
         # clone_item_from_similar() already updated `details` and cleared the
         # per-item widget keys, but Title / MFG Model / Warranty Months are
-        # bound by key= (see set_basic_info_state's docstring below) - push the
-        # cloned values straight into those widget keys here, in the on_click
-        # callback, before the widgets are re-instantiated, exactly like the
-        # Format button does via set_basic_info_state().
+        # bound by key= (see state.set_basic_info_state's docstring) - push
+        # the cloned values straight into those widget keys here, in the
+        # on_click callback, before the widgets are re-instantiated, exactly
+        # like the Format button does via set_basic_info_state().
         details = st.session_state.get("items", {}).get(current_item_no, {}).get("details", {})
         set_basic_info_state(current_item_no, details)
         st.session_state[f"warranty_months_{current_item_no}"] = details.get("warranty_months", "")
@@ -189,64 +192,6 @@ def _render_category_control(item: dict) -> None:
         )
     st.markdown('<div class="vo-field-row-gap">&#8203;</div>', unsafe_allow_html=True)
 
-
-def set_basic_info_state(item_no: str, details: dict) -> None:
-    """Push title/short title/MFG model into the text_input widgets' own
-    session_state keys. Those widgets are bound via `key=`, so once rendered
-    once, changing `details[...]` alone has no visible effect - the widget
-    keeps redrawing from its own stale session_state entry and overwrites
-    `details[...]` right back on the next rerun."""
-    st.session_state[f"title_{item_no}"] = details.get("title", "")
-    st.session_state[f"short_title_{item_no}"] = details.get("short_title", "")
-    st.session_state[f"mfg_model_{item_no}"] = details.get("mfg_model", "")
-
-
-def _format_all_callback(item: dict) -> None:
-    """on_click callback for "Format Visible Text": runs before the next
-    script run instantiates any widgets, so it's safe to write straight into
-    widget-bound session_state keys here (unlike doing it inline mid-script,
-    which raises StreamlitAPIException for already-instantiated widgets).
-
-    Title/Short Title/MFG Model are read from their own session_state widget
-    keys, not from `details[...]`: `details` is only refreshed by the
-    text_input's own script-body line, which hasn't run yet at callback time,
-    so it can still hold a stale pre-edit value if the field's own change
-    hasn't been through a rerun yet (e.g. you edit the field then immediately
-    click Format) - reading `details` here would silently reformat old text
-    instead of what's currently typed.
-    """
-    details = item["details"]
-    item_no = details["item_no"]
-    rules_df = st.session_state["special_rules_df"]
-
-    for key in ["title", "short_title", "mfg_model"]:
-        widget_key = f"{key}_{item_no}"
-        current_value = st.session_state.get(widget_key, details.get(key, ""))
-        details[key] = format_text(current_value, rules_df)
-    set_basic_info_state(item_no, details)
-
-    description_value = sync_description_state(item)
-    details["description"] = format_text(description_value, rules_df)
-    set_description_state(item_no, details["description"])
-
-    for entry in item.setdefault("includes", []):
-        if entry.get("text"):
-            entry["text"] = format_text(entry["text"], rules_df)
-    item["features"] = [format_text(str(f), rules_df) for f in item.get("features", [])]
-    item["highlights"] = [format_text(str(h), rules_df) for h in item.get("highlights", [])]
-    for spec in item.get("specs", []):
-        spec["Spec"] = format_text(str(spec.get("Spec", "") or ""), rules_df)
-        spec["Value"] = format_text(str(spec.get("Value", "") or ""), rules_df)
-
-    # stable_data_editor() intentionally skips remounting a grid whose widget
-    # was edited on the immediately-preceding rerun (to protect in-flight
-    # typing/pasting from being clobbered). That heuristic misfires here: if
-    # the user's last interaction was typing straight into one of these grids,
-    # this formatting pass would otherwise be invisible until some later,
-    # unrelated rerun. Force a fresh remount so the corrected text shows now.
-    reset_stable_data_editor(f"features_editor_{item_no}")
-    reset_stable_data_editor(f"highlights_editor_{item_no}")
-    reset_stable_data_editor(f"includes_editor_{item_no}")
 
 
 def _dv2_label(text: str, value: str | None = None, limit: int | None = None) -> None:
@@ -425,7 +370,7 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
             st.button(
                 "Format Visible Text", key=f"format_all_{details['item_no']}",
                 type="primary", use_container_width=True,
-                on_click=_format_all_callback, args=(item,),
+                on_click=format_all_visible_text, args=(item,),
             )
 
 
