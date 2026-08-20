@@ -62,6 +62,25 @@ div[data-testid="stAppViewBlockContainer"] {
   }
 }
 
+/* Common laptop panel width (1366x768 on ThinkPad L460/L480 and similar):
+   claw back sidebar/padding pixels since content width is tight, not spare. */
+@media (max-width: 1400px) {
+  section[data-testid="stSidebar"] {
+    width: 210px !important;
+    min-width: 210px !important;
+    max-width: 210px !important;
+  }
+
+  section[data-testid="stSidebar"] > div:first-child {
+    width: 210px !important;
+  }
+
+  div[data-testid="stMainBlockContainer"],
+  div[data-testid="stAppViewBlockContainer"] {
+    padding: 12px 16px 24px !important;
+  }
+}
+
 div[data-testid="stVerticalBlock"] { gap: 0.45rem !important; }
 div[data-testid="stVerticalBlock"] > div { gap: 0.35rem !important; }
 div[data-testid="stHorizontalBlock"] { gap: 0.75rem !important; }

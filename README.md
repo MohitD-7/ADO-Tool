@@ -2,6 +2,12 @@
 
 A modular Streamlit replacement for the legacy Excel/VBA SKU processing workbook.
 
+## Documentation
+
+Developer docs live in [docs/](docs/). Start with
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and read
+[docs/GOTCHAS.md](docs/GOTCHAS.md) before changing any page.
+
 ## Run Locally
 
 ```powershell

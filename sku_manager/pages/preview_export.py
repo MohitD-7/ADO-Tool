@@ -141,7 +141,7 @@ def render(show_header: bool = True) -> None:
 
 @st.dialog("Product Preview", width="large")
 def _fullscreen_preview_dialog(html: str) -> None:
-    components.html(html, height=760, scrolling=True)
+    components.html(html, height=520, scrolling=True)
 
 
 @st.dialog("Cannot submit - required fields missing")

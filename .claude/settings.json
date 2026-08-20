@@ -5,7 +5,24 @@
       "Bash(git commit -m ' *)",
       "Bash(python -c ' *)",
       "Bash(git push *)",
-      "Bash(python -c \"from sku_manager.pages import review; print\\('review import OK'\\)\")"
+      "Bash(python -c \"from sku_manager.pages import review; print\\('review import OK'\\)\")",
+      "Bash(git commit sku_manager/pages/general.py sku_manager/ui/components.py -m ' *)",
+      "Bash(rm -rf fake_saves)",
+      "Bash(python repro_autosave.py)",
+      "Bash(python -m py_compile sku_manager/ui/layout.py sku_manager/pages/preview_export.py)",
+      "Bash(python -m pytest -q)",
+      "Bash(python run_header.py)",
+      "Bash(git commit sku_manager/ui/layout.py sku_manager/pages/preview_export.py -m ' *)",
+      "Bash(git fetch *)",
+      "Bash(node -e ' *)",
+      "Bash(python _add_category.py)",
+      "Bash(python -c \"import json; json.load\\(open\\('sku_manager/data/reference_data.json', encoding='utf-8'\\)\\); print\\('JSON OK'\\)\")",
+      "Bash(powershell -NoProfile -Command 'Get-NetTCPConnection -LocalPort 8599 -State Listen -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }')",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(npx vitest *)",
+      "Bash(npm run *)",
+      "Bash(node -e \"console.log\\(Object.keys\\(require\\('next/navigation'\\)\\)\\)\")"
     ]
   }
 }

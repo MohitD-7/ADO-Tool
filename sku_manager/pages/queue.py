@@ -423,6 +423,6 @@ def _preview_dialog(item_no: str) -> None:
         sync_description_state(item)
     details = item.get("details", {})
     st.caption(f"SKU: {details.get('item_no', item_no)}")
-    components.html(render_html(item, st.session_state["html_template"]), height=760, scrolling=True)
+    components.html(render_html(item, st.session_state["html_template"]), height=520, scrolling=True)
 
 

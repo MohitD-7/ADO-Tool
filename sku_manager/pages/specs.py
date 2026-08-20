@@ -28,7 +28,7 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
     ino = details["item_no"]
     if show_header:
         page_header("Item Details Extraction", "Specifications", status=details.get("item_no"))
-    main, pane = st.columns([3.5, 1])
+    main, pane = st.columns([4.5, 1])
 
     with main:
         st.markdown("### Current Specifications")
@@ -61,14 +61,14 @@ def render(show_header: bool = True, show_links: bool = True) -> None:
                 key=editor_key,
                 hide_index=True,
                 column_config={
-                    "Value1 (Category)": st.column_config.TextColumn("Value1 (Category)", width="medium"),
+                    "Value1 (Category)": st.column_config.TextColumn("Value1 (Category)", width="small"),
                     "Value2 (Order)": st.column_config.NumberColumn(
                         "Value2 (Order)",
                         width="small",
                         step=10,
                         min_value=0,
                     ),
-                    "Value3 (Group)": st.column_config.TextColumn("Value3 (Group)", width="medium"),
+                    "Value3 (Group)": st.column_config.TextColumn("Value3 (Group)", width="small"),
                     "Value4 (Spec)": st.column_config.TextColumn("Value4 (Spec)", width="medium"),
                     "Value5 (Value)": st.column_config.TextColumn("Value5 (Value)", width="large"),
                 },

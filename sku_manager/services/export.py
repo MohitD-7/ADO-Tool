@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import csv
-from html import escape
+from html import escape, unescape
 from html.parser import HTMLParser
 from io import BytesIO
 import re
@@ -281,8 +281,11 @@ TEXT_COLUMNS = ["", "Field Name", "Item Number", "Value1", "Value2", "Value3", "
 def _flatten_cell(value) -> str:
     """Plain-text form of a cell: no embedded tabs/newlines, since text_bytes
     writes unquoted TSV where those characters would be mistaken for column
-    or row breaks."""
+    or row breaks. Also un-escapes HTML entities (e.g. the Description field,
+    which is stored as editor HTML with "&" escaped to "&amp;") so this
+    Notepad-friendly export shows the literal characters, not HTML markup."""
     text = "" if pd.isna(value) else str(value)
+    text = unescape(text)
     return text.replace("\t", " ").replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
 
 
