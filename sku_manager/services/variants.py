@@ -51,8 +51,10 @@ def parent_child_groups(queue_df: pd.DataFrame | None) -> list[dict]:
 def variant_completeness(queue_df: pd.DataFrame | None, variants: dict) -> tuple[bool, list[str]]:
     """Return (all_complete, problems) across every parent/child in the batch.
 
-    A batch is complete when every parent has at least one attribute and every
-    child has a non-empty value for each of the parent's attributes.
+    A parent with no attributes defined yet is treated as not started and is
+    skipped entirely (it simply won't appear in the export) rather than
+    blocking the download. Only a parent that has attributes defined but is
+    missing some child values counts as "incomplete" and blocks the download.
     """
     problems: list[str] = []
     groups = parent_child_groups(queue_df)
@@ -65,7 +67,7 @@ def variant_completeness(queue_df: pd.DataFrame | None, variants: dict) -> tuple
         attributes = [a for a in entry.get("attributes", []) if _clean(a)]
         values = entry.get("values", {})
         if not attributes:
-            problems.append(f"{psku}: no attributes defined yet.")
+            # Not started yet - skip rather than block the download.
             continue
         for child in group["children"]:
             csku = child["sku"]

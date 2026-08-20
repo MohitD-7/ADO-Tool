@@ -58,11 +58,13 @@ def test_completeness_all_filled():
     assert problems == []
 
 
-def test_completeness_missing_attribute():
+def test_completeness_untouched_parent_is_skipped():
+    # A parent with no attributes defined yet hasn't been started - it should
+    # be skipped (excluded from the export) rather than blocking the download.
     variants = {"P1": {"attributes": [], "values": {}}}
     complete, problems = variant_completeness(_pc_queue(), variants)
-    assert complete is False
-    assert any("no attributes" in p for p in problems)
+    assert complete is True
+    assert problems == []
 
 
 def test_completeness_missing_child_value():
@@ -76,6 +78,27 @@ def test_completeness_no_groups():
     complete, problems = variant_completeness(pd.DataFrame(), {})
     assert complete is False
     assert problems  # a non-empty explanation
+
+
+def test_completeness_one_parent_filled_other_untouched():
+    # Two parents: P1 fully filled, P2 never started. Should be downloadable -
+    # P2 is simply left out of the export, not treated as blocking.
+    queue = _queue(
+        [
+            {"ATR Type": "Parent (2)", "Item No": "P1", "Title": "Parent 1"},
+            {"ATR Type": "", "Item No": "C1", "Title": "Child A"},
+            {"ATR Type": "", "Item No": "C2", "Title": "Child B"},
+            {"ATR Type": "Parent (1)", "Item No": "P2", "Title": "Parent 2"},
+            {"ATR Type": "", "Item No": "C3", "Title": "Child C"},
+        ]
+    )
+    variants = {
+        "P1": {"attributes": ["Color"], "values": {"C1": {"Color": "Red"}, "C2": {"Color": "Blue"}}},
+        # P2 untouched - no attributes defined.
+    }
+    complete, problems = variant_completeness(queue, variants)
+    assert complete is True
+    assert problems == []
 
 
 # ── build_variant_df ─────────────────────────────────────────────────────────
