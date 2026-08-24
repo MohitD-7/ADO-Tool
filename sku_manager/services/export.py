@@ -24,18 +24,26 @@ def _child_item_nos(queue_df: pd.DataFrame) -> set[str]:
     }
 
 
+def _unescape_value(value):
+    """Decode HTML entities (&amp; -> & etc.) in string values so exported
+    rows show the literal characters, not markup - only Description is
+    genuinely HTML-sourced, but any field can pick up entities if pasted
+    from HTML-flavored clipboard content, so this applies uniformly."""
+    return unescape(value) if isinstance(value, str) else value
+
+
 def _row(field: str, item_no: str, value1="", value2="", value3="", value4="", value5="", comments: str = "", source: str = "") -> dict:
     return {
         "": "",
         "Field Name": field,
         "Item Number": item_no,
-        "Value1": value1,
-        "Value2": value2,
-        "Value3": value3,
-        "Value4": value4,
-        "Value5": value5,
-        "Comments": comments,
-        "Source": source,
+        "Value1": _unescape_value(value1),
+        "Value2": _unescape_value(value2),
+        "Value3": _unescape_value(value3),
+        "Value4": _unescape_value(value4),
+        "Value5": _unescape_value(value5),
+        "Comments": _unescape_value(comments),
+        "Source": _unescape_value(source),
     }
 
 

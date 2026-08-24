@@ -68,3 +68,22 @@ def test_read_standalone_labeling():
     df = pd.DataFrame({"Item No": ["A1"], "Title": ["Thing"], "Mfg Item": ["M1"]})
     result = read_queue_workbook(_excel_bytes(df))
     assert result.queue_df.iloc[0]["ATR Type"] == "Standalone"
+
+
+def test_read_duplicate_alias_columns_gives_friendly_message():
+    # "ATR" and "Relationship" both canonicalize to "ATR Type" - without a
+    # guard this used to crash with a raw pandas ValueError deep in a helper.
+    df = pd.DataFrame(
+        {
+            "Item No": ["A1"],
+            "Title": ["Thing"],
+            "Mfg Item": ["M1"],
+            "ATR": ["Parent"],
+            "Relationship": ["Parent"],
+        }
+    )
+    result = read_queue_workbook(_excel_bytes(df))
+    assert result.ok is False
+    assert "ATR" in result.message
+    assert "Relationship" in result.message
+    assert "ATR Type" in result.message

@@ -61,6 +61,33 @@ def canonicalize_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df.rename(columns=rename_map)
 
 
+def _duplicate_column_message(original_columns: list[str], canonical_columns: list[str]) -> str:
+    """Explain, in plain language, which uploaded headers collapse onto the
+    same recognized column so the user knows exactly what to fix.
+    """
+    from collections import Counter
+
+    counts = Counter(canonical_columns)
+    dup_names = [name for name, count in counts.items() if count > 1]
+    if not dup_names:
+        return ""
+
+    lines = []
+    for name in dup_names:
+        originals = [
+            orig
+            for orig, canon in zip(original_columns, canonical_columns)
+            if canon == name
+        ]
+        headers = ", ".join(f'"{o}"' for o in originals)
+        lines.append(f'- These columns are all being read as "{name}": {headers}.')
+    lines.append("Rename or delete the extra column(s) so each one appears only once, then re-upload.")
+    return (
+        "This file has more than one column that means the same thing, so it's not clear "
+        "which value to use:\n" + "\n".join(lines)
+    )
+
+
 def _clean(value) -> str:
     return str(value or "").strip()
 
@@ -159,6 +186,21 @@ def read_queue_workbook(file: BinaryIO, sheet_name: str | int = 0) -> WorkbookLo
         return WorkbookLoadResult(False, pd.DataFrame(), REQUIRED_COLUMNS, [], str(exc))
 
     original_columns = [str(col) for col in df.columns]
+    tracked = {*REQUIRED_COLUMNS, ATR_COLUMN, JIRA_COLUMN}
+    canonical_columns = [
+        ALIASES.get(col.strip().lower(), col) for col in original_columns
+    ]
+    # Only headers that map onto a column we actually read by name can cause
+    # a real conflict; give every other header a unique placeholder so it
+    # never falsely counts as a duplicate.
+    checked_columns = [
+        canon if canon in tracked else f"__other_{i}__"
+        for i, canon in enumerate(canonical_columns)
+    ]
+    dup_message = _duplicate_column_message(original_columns, checked_columns)
+    if dup_message:
+        return WorkbookLoadResult(False, pd.DataFrame(), [], original_columns, dup_message)
+
     df = canonicalize_columns(df)
     missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
     if missing:

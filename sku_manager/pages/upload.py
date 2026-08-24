@@ -55,10 +55,10 @@ def render() -> None:
         st.error("The uploaded file could not be used.")
         if result.missing_columns:
             st.write("Missing columns:", ", ".join(result.missing_columns))
-        if result.original_columns:
-            st.write("Columns found:", ", ".join(result.original_columns))
         if result.message:
-            st.code(result.message)
+            st.warning(result.message)
+        elif result.original_columns:
+            st.write("Columns found:", ", ".join(result.original_columns))
         return
 
     st.success(f"Loaded {len(result.queue_df)} SKUs. Click Start Batch, or review the preview below first.")
