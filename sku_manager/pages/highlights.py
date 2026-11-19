@@ -28,7 +28,12 @@ def render(show_header: bool = True, embedded: bool = False, show_links: bool = 
     with main:
         with st.expander("Highlights", expanded=False):
             if st.button("Copy Features", width="stretch", key=f"copy_features_to_highlights_{ino}"):
-                item["highlights"] = [str(feature) for feature in item.get("features", []) if str(feature).strip()]
+                item.setdefault("highlights", []).extend(
+                    str(feature)
+                    for feature in item.get("features", [])
+                    if str(feature).strip() and len(str(feature)) < 90
+                )
+                item["highlights"] = item["highlights"][:8]
                 st.rerun()
 
             st.markdown("### Current Highlights")
